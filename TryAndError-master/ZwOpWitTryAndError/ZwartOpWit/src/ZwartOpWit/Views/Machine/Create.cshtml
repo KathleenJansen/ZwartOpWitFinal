@@ -1,0 +1,20 @@
+﻿@model ZwartOpWit.Models.Viewmodels.MachineVM
+@{
+
+}
+<h1>Create</h1>
+<form asp-action="Create" asp-controller="Machine">
+    <div>
+        <div class="form-group">
+            <label asp-for="machine.Name">Machine name:</label>
+            <input asp-for="machine.Name" class="form-control" />
+            <span asp-validation-for="machine.Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="machine.DepartmentId">Department</label>
+            <select asp-for="machine.DepartmentId"  asp-items="@Model.selectDepartments" class="form-control"></select>
+            <span asp-validation-for="machine.DepartmentId" class="text-danger"></span>
+        </div>
+        <input type="submit" value="Add Machine" class="btn btn-default" />
+    </div>
+</form>

@@ -1,0 +1,34 @@
+﻿@{
+
+}
+<div>
+    <div>
+        <h2>Machines</h2>
+        <p><a asp-controller="Machine" asp-action="Create" class="btn btn-info">New Machine</a></p>
+    </div>
+    <div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Machine Name</th>
+                    <th>Department</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ foreach (var m in Model.machineList)
+            {
+                        <tr>
+                            <td>@m.Name</td>
+                            <td>@m.Department.Name</td>
+                            <td>
+                                <a asp-controller="Machine" asp-action="Read" asp-route-id="@m.Id" class="btn btn-default"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                <a asp-controller="Machine" asp-action="Update" asp-route-id="@m.Id" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a asp-controller="Machine" asp-action="Delete" asp-route-id="@m.Id" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span></a>    
+                            </td>
+                        </tr>
+                    }}
+            </tbody>
+        </table>
+    </div>
+</div>

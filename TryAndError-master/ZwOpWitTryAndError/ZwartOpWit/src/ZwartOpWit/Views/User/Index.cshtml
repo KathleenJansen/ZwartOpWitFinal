@@ -1,0 +1,35 @@
+﻿@model ZwartOpWit.Models.UserListVM
+@{
+
+}
+<div>
+    <div>
+        <h2>Userpage</h2>
+        <p><a asp-controller="User" asp-action="Create" class="btn btn-info">New User</a></p>
+    </div>
+    <div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ foreach (var u in Model.userList)
+            {
+                        <tr>
+                            <td>@u.Username</td>
+                            <td>@u.Email</td>
+                            <td>
+                                <a asp-controller="User" asp-action="Read" asp-route-id="@u.Id" class="btn btn-default"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                <a asp-controller="User" asp-action="Update" asp-route-id="@u.Id" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a asp-controller="User" asp-action="Delete" asp-route-id="@u.Id" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span></a>
+                            </td>
+                        </tr>
+                    }}
+            </tbody>
+        </table>
+    </div>
+</div>

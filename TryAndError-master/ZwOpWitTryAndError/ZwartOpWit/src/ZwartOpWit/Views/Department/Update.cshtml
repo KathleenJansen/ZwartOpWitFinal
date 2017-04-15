@@ -1,0 +1,24 @@
+﻿@model ZwartOpWit.Models.Viewmodels.DepartmentVM
+@{
+
+}
+<h1>Update</h1>
+<div>
+    @if (Model.department != null)
+    {
+        <form asp-action="Update" asp-controller="Department">
+            <div class="form-group">
+                <label asp-for="department.Name">Name:</label>
+                <input asp-for="department.Name" type="text" value="@Model.department.Name" class="form-control" />
+                <span asp-validation-for="department.Name" class="text-danger"></span>
+            </div>
+            <input asp-for="department.Id" type="hidden" value="@Model.department.Id" />
+            <input type="submit" value="Update Department" class="btn btn-default" />
+        </form>
+    }
+    else
+    {
+        <h2>No department found</h2>
+    }
+</div>
+

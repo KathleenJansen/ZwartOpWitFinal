@@ -1,0 +1,35 @@
+﻿@{
+}
+<h1>Jobs L-Stitch to do</h1>
+<div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>JobNumber</th>
+                <th>Quantity</th>
+                <th>PaperInside</th>
+                <th>PaperCover</th>
+                <th>Start</th>
+                <th>Out</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ foreach (var s in Model.stitchJobsList)
+                {
+                    <tr>
+                        <td>@s.JobNumber</td>
+                        <td>@s.Quantity</td>
+                        <td>@s.PaperBw</td>
+                        <td>@s.PaperCover</td>
+                        <td>
+                            <a asp-controller="Stitch" asp-action="Start" asp-route-id="@s.Id" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
+                        </td>
+                        <td>
+                            <a asp-controller="Stitch" asp-action="Out" asp-route-id="@s.Id" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

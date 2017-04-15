@@ -1,0 +1,33 @@
+﻿@{
+
+}
+<div>
+    <div>
+        <h2>Departments</h2>
+        <p><a asp-controller="Department" asp-action="Create" class="btn btn-info">New Department</a></p>
+    </div>
+    <div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Department Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ foreach (var d in Model.departmentList)
+            {
+                        <tr>
+                            <td>@d.Name</td>
+                            <td>
+                                <a asp-controller="Department" asp-action="Read" asp-route-id="@d.Id" class="btn btn-default"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                <a asp-controller="Department" asp-action="Update" asp-route-id="@d.Id" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a asp-controller="Department" asp-action="Delete" asp-route-id="@d.Id" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span></a>
+                            </td>
+                        </tr>
+                    }}
+            </tbody>
+        </table>
+    </div>
+</div>
+

@@ -1,0 +1,16 @@
+﻿@model ZwartOpWit.Models.Viewmodels.DepartmentVM
+@{
+
+}
+<h1>Create</h1>
+<form asp-action="Create" asp-controller="Department">
+    <div>
+        <div class="form-group">
+            <label asp-for="department.Name">Department name:</label>
+            <input asp-for="department.Name" class="form-control" />
+            <span asp-validation-for="department.Name" class="text-danger"></span>
+        </div>
+        <input type="submit" value="Add Department" class="btn btn-default" />
+    </div>
+</form>
+

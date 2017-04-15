@@ -1,0 +1,51 @@
+﻿@{
+
+}
+<h1> Jobs to do</h1>
+<div>
+    Delivery Date
+</div>
+<div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>JobNumber</th>
+                <th>Quantity</th>
+                <th>PaperInside</th>
+                <th>PaperCover</th>
+                <th>L-Stitch</th>
+                <th>U-Stitch72</th>
+                <th>U-Stitch48</th>
+                <th>i-Sitch</th>
+                <th>Out</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ foreach (var s in Model.stitchJobsList) {
+                    <tr>
+                        <td>@s.JobNumber</td>
+                        <td>@s.Quantity</td>
+                        <td>@s.PaperBw</td>
+                        <td>@s.PaperCover</td>
+                        <td>
+                            <a asp-controller="Stitch" asp-action="PlanStitch1" asp-route-id="@s.Id" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
+                        </td>
+                        <td>
+                            <a asp-controller="Stitch" asp-action="PlanStitch2" asp-route-id="@s.Id" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
+                        </td>
+                        <td>
+                            <a asp-controller="Stitch" asp-action="PlanStitch3" asp-route-id="@s.Id" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
+                        </td>
+                        <td>
+                            <a asp-controller="Stitch" asp-action="PlanStitch4" asp-route-id="@s.Id" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
+                        </td>
+                        <td>
+                            <a asp-controller="Stitch" asp-action="Out" asp-route-id="@s.Id" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
+                        </td>
+                    </tr>
+             }
+            }
+        </tbody>
+    </table>
+</div>
+

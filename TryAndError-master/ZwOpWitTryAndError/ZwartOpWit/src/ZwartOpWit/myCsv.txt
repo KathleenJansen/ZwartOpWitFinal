@@ -1,0 +1,33 @@
+﻿_k2_id_pg;_k2_job_number_xml;item_qty;flag_brochure;date_finished;description;item_afwerking;item_sit_naam
+95;451311-01;100,00 ;;22/02/2017;PitStop brochures ENG;08 blz.;A4 staand geniet - 08 blz. ;maco silk medium
+95;451311-02;100,00 ;;22/02/2017;PitStop Brochures FR;08 blz.;A4 staand geniet - 08 blz. ;maco silk medium
+95;451343-01;500,00 ;;22/02/2017;brochure 2017;20 blz.;A4 staand geniet - 20 blz. prestige ;offset medium
+95;451431-01;1000,00 ;;22/02/2017;hocus pocus expo;16 blz.;A5 staand geniet - 16 blz. prestige ;offset medium
+95;451435-01;5000,00 ;1;22/02/2017;CAL Laicité junior reprint;20 blz.;carre 200 geniet - 20 blz. ;prestige offset medium
+104;451435-02;5000,00 ;1;22/02/2017;CAL Laicité junior reprint;;2 x carre 200 ;offset 300 cover
+95;451588-01;600,00 ;;22/02/2017;"Brochure ""groepsuitstappen waasland""";;A5 staand geniet - 60 blz. ;maco silk light
+95;451749-01;500,00 ;1;22/02/2017;Erdo relocation | Diplomatic services;20 blz.;carre 100 geniet - 20 blz. ;maco silk medium 
+104;451749-02;500,00 ;1;22/02/2017;Erdo relocation | Diplomatic services;;2 x carre 100 ;maco silk 250 + MAT cover
+95;451939-01;2100,00 ;1;22/02/2017;JESbrochure pasen 2017;20 blz.;A5 staand geniet - 20 blz. ;maco silk light 
+104;451939-02;2100,00 ;1;22/02/2017;JESbrochure pasen 2017;;2 x A5 staand ;maco silk 250 cover
+95;452035-01;5000,00 ;;22/02/2017;150905_JH_gimeg;;A4 liggend geniet - 20 blz. ;maco silk 135
+95;452037-01;1000,00 ;1;22/02/2017;Programmaboekjes NL;20 blz.;A5 staand geniet - 20 blz. ;maco silk medium 
+104;452037-02;1000,00 ;1;22/02/2017;Programmaboekjes NL;;2 x A5 staand ;maco silk 250 cover
+95;452154-01;2000,00 ;;22/02/2017;Brochure 2017;24 blz.;A4 staand geniet - 24 blz. ;maco silk medium 
+95;452205-01;750,00 ;;22/02/2017;Huurderskrant Vilvoorde_maart 2017;20 blz.;A4 staand geniet - 20 blz. ;eco-cyclus silk light 
+95;452255-01;500,00 ;1;22/02/2017;20839-1 maco gloss-BL-665x930-sw;20 blz.;carre 100 geniet - 20 blz. ;maco silk medium  + cover maco silk + MAT laminaat
+104;452255-02;500,00 ;1;22/02/2017;COVER NIET DRUKKEN;;2 x carre 100 ;maco silk 250 + MAT cover
+95;452295-01;1500,00 ;;22/02/2017;Brochure;08 blz.;A5 staand geniet - 08 blz. ;maco silk light 
+95;452306-01;250,00 ;;22/02/2017;Gozz NL 02/2017;08 blz.;A5 staand geniet - 08 blz. ;maco silk normal 
+95;452306-02;250,00 ;;22/02/2017;Gozz EN 02/2017;08 blz.;A5 staand geniet - 08 blz. ;maco silk normal 
+95;452367-01;2000,00 ;;22/02/2017;AF limburg 20pp;20 blz.;A6 staand geniet - 20 blz. ;eco-cyclus silk light 
+95;452370-01;250,00 ;;22/02/2017;Drukwerk forum 2020;12 blz.;A4 staand geniet - 12 blz. ;maco silk normal 
+95;452386-01;250,00 ;1;22/02/2017;Tabakoloog Ellen Vandamme - Rookstop;;A5 staand geniet - 52 blz. ;maco silk light
+104;452386-02;250,00 ;1;22/02/2017;Tabakoloog Ellen Vandamme - Rookstop;;2 x A5 staand ;maco silk 250 + MAT cover
+95;452386-03;500,00 ;1;22/02/2017;Diëtiste Ellen Vandamme - Een gezonde maaltijd;32 blz.;A5 staand geniet - 32 blz. ;maco silk light 
+104;452386-04;500,00 ;1;22/02/2017;Diëtiste Ellen Vandamme - Een gezonde maaltijd;;2 x A5 staand ;maco silk 250 + MAT cover
+95;452386-05;500,00 ;1;22/02/2017;Diëtiste Ellen Vandamme - Gezond naar de winkel;24 blz.;A5 staand geniet - 24 blz. ;maco silk light 
+104;452386-06;500,00 ;1;22/02/2017;Diëtiste Ellen Vandamme - Gezond naar de winkel;;2 x A5 staand ;maco silk 250 + MAT cover
+95;452464-01;1000,00 ;;22/02/2017;Sint-Romboutscollege jaarlijks tijdschrift;12 blz.;A5 liggend geniet - 12 blz. ;maco silk medium 
+95;452498-01;500,00 ;1;22/02/2017;Brochure;08 blz.;carre 120 geniet - 08 blz. ;maco silk medium  + cover maco silk + MAT laminaat
+104;452498-02;500,00 ;1;22/02/2017;Brochure;;2 x carre 120 ;maco silk 250 + MAT cover

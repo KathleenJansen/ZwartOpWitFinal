@@ -1,0 +1,28 @@
+﻿@model ZwartOpWit.Models.Viewmodels.MachineVM
+@{
+
+}
+<h1>Update</h1>
+<div>
+    @if (Model.machine != null)
+    {
+        <form asp-action="Update" asp-controller="Machine">
+            <div class="form-group">
+                <label asp-for="machine.Name">Name:</label>
+                <input asp-for="machine.Name" type="text" value="@Model.machine.Name" class="form-control" />
+                <span asp-validation-for="machine.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="machine.DepartmentId">Department</label>
+                <select asp-for="machine.DepartmentId" asp-items="@Model.selectDepartments" class="form-control"></select>
+                <span asp-validation-for="machine.DepartmentId" class="text-danger"></span>
+            </div>      
+            <input type="hidden" asp-for="machine.Id" value="@Model.machine.Id" />     
+            <input type="submit" value="Update Machine" class="btn btn-default" />
+        </form>
+    }
+    else
+    {
+        <h2>No machine found</h2>
+    }
+</div>
