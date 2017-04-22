@@ -11,10 +11,10 @@ namespace ZwartOpWit.Controllers
     {
         public IActionResult Index()
         {
-            StitchJobsListVM stitchJobsListVM = new StitchJobsListVM();
-            stitchJobsListVM.date = DateTime.Today.ToString("yyyy-MM-dd");
+            JobListVM jobListVM = new JobListVM();
+            //stitchJobsListVM.date = DateTime.Today.ToString("yyyy-MM-dd");
 
-            return View(stitchJobsListVM);
+            return View(jobListVM);
         }
 
         //public IActionResult Stitch()

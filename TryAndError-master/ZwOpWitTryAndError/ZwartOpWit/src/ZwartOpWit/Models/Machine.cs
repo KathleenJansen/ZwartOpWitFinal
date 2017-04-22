@@ -11,7 +11,7 @@ namespace ZwartOpWit.Models
     {
         public Machine()
         {
-            Stiches = new List<Stitch>();
+            JobLines = new List<JobLine>();
         }
 
         public int Id { get; set; }
@@ -19,7 +19,7 @@ namespace ZwartOpWit.Models
         [Required]
         [StringLength(255, MinimumLength = 3)]
         public string Name { get; set; }
-        public  ICollection<Stitch> Stiches { get; set; }
+        public  ICollection<JobLine> JobLines { get; set; }
         public int DepartmentId { get; set; }
         [ForeignKey("DepartmentId")]
         public Department Department{ get; set; }

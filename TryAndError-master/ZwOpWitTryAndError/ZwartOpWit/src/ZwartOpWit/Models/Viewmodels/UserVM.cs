@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,6 +11,24 @@ namespace ZwartOpWit.Models
 {
     public class UserVM
     {
+        public UserVM()
+        { }
+        public UserVM(RoleManager<IdentityRole> _roleManager)
+        {
+            ApplicationRoles = _roleManager.Roles.Select(r => new SelectListItem
+            {
+                Text = r.Name,
+                Value = r.Id
+            }).ToList();
+        }
+
+        public UserVM(RoleManager<IdentityRole> _roleManager, UserManager<User> _userManager, User _user)
+        {
+            UserId = _user.Id;
+            Email = _user.Email;
+            ApplicationRoleId = _roleManager.Roles.SingleOrDefault(r => r.Name == _userManager.GetRolesAsync(_user).Result.Single()).Id;
+        }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
@@ -23,5 +44,10 @@ namespace ZwartOpWit.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        public List<SelectListItem> ApplicationRoles { get; set; }
+        [Display(Name = "Role")]
+        public string ApplicationRoleId { get; set; }
+        public string UserId { get; set; }
     }
 }

@@ -5,19 +5,18 @@ using System.Threading.Tasks;
 
 namespace ZwartOpWit.Models.Viewmodels
 {
-    public class StitchJobsListVM
+    public class JobListVM
     {
-        public List<Stitch> stitchJobsList { get; set; }
+        public List<Job> jobList { get; set; }
 
         public String date { get; set; }
 
-        public int StitchId { get; set; }
+        public int JobId { get; set; }
 
-        public StitchJobsListVM()
+        public JobListVM()
         {
-            stitchJobsList = new List<Stitch>();
+            jobList = new List<Job>();
             date = DateTime.Today.ToString();
-            StitchId = 1;
         }
     }
 }

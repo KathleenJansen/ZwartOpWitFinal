@@ -11,11 +11,11 @@ namespace ZwartOpWit.Models
     {
         public User()
         {
-            Stitches = new List<Stitch>();
-        }
+            TimeRegisterList = new List<TimeRegister>();
+            JobLineList = new List<JobLine>();
+        } 
 
-    //    public string Username { get; set; }
-
-        public List<Stitch> Stitches { get; set; }
+        public List<TimeRegister> TimeRegisterList { get; set; }
+        public List<JobLine> JobLineList { get; set; }
     }
 }

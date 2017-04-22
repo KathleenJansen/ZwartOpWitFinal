@@ -11,7 +11,6 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Username</th>
                     <th>Email</th>
                     <th>Action</th>
                 </tr>
@@ -20,7 +19,6 @@
                 @{ foreach (var u in Model.userList)
             {
                         <tr>
-                            <td>@u.Username</td>
                             <td>@u.Email</td>
                             <td>
                                 <a asp-controller="User" asp-action="Read" asp-route-id="@u.Id" class="btn btn-default"><span class="glyphicon glyphicon-eye-open"></span></a>

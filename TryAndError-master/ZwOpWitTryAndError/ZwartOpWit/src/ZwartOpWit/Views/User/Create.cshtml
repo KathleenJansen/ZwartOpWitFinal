@@ -3,7 +3,7 @@
 
 }
 <h1>Create</h1>
-<form asp-action="Create" asp-controller="User"  method="post" class="form-horizontal">
+<form asp-action="Create" asp-controller="User" method="post" class="form-horizontal">
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-group">
         <label asp-for="Email" class="col-md-2 control-label"></label>
@@ -27,8 +27,16 @@
         </div>
     </div>
     <div class="form-group">
+        <label asp-for="ApplicationRoleId" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <select asp-for="ApplicationRoleId" asp-items="@Model.ApplicationRoles" class="form-control">
+                <option>Please select</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <button type="submit" class="btn btn-default">Register</button>
+            <button type="submit" class="btn btn-default">Create</button>
         </div>
     </div>
 </form>

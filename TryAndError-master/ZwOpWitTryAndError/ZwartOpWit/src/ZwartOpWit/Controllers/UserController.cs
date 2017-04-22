@@ -7,6 +7,8 @@ using ZwartOpWit.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ZwartOpWit.Controllers
 {
@@ -14,24 +16,26 @@ namespace ZwartOpWit.Controllers
     {
         private readonly AppDBContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger _logger;
 
-        public UserController   (AppDBContext context,
+        public UserController(AppDBContext context,
                                 UserManager<User> userManager,
+                                RoleManager<IdentityRole> roleManager,
                                 ILoggerFactory loggerFactory)
         {
             _context = context;
             _userManager = userManager;
-            _logger = loggerFactory.CreateLogger<AccountController>();
-
+            _logger = loggerFactory.CreateLogger<UserController>();
+            _roleManager = roleManager;
         }
 
         [HttpGet]
         public ViewResult Index()
         {
             UserListVM userListVM = new UserListVM();
-            
-            userListVM.userList = _context.Users.ToList(); 
+
+            userListVM.userList = _context.Users.ToList();
 
             return View(userListVM);
         }
@@ -39,43 +43,44 @@ namespace ZwartOpWit.Controllers
         [HttpGet]
         public ViewResult Create()
         {
-            return View();
-        }
-
-        [HttpGet]
-        public ViewResult Read(string id)
-        {
-            UserVM userVM = new UserVM();
-            //userVM.user = _context.Users.FirstOrDefault(x => x.Id == id);
+            UserVM userVM = new UserVM(_roleManager);
 
             return View(userVM);
         }
 
         [HttpGet]
-        public ViewResult Update(string id)
+        public async Task<IActionResult> Read(string id)
         {
-            UserVM userVM = new UserVM();
-            //User user;
-            //userVM.user = _context.Users.FirstOrDefault(x => x.Id == id);
+            User user = await _userManager.FindByIdAsync(id);
+            UserVM userVM = new UserVM(_roleManager, _userManager, user);
+
             return View(userVM);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(UserVM model, string returnUrl = null)
         {
-            //if (_context.Users.Any(e => e.UserName == model.UserName))
-            //{
-            //    ModelState.AddModelError("Username", "Username is already in use.");
-                
-            //}
-
             if (ModelState.IsValid)
             {
+                IdentityRole applicationRole;
+
                 var user = new User { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(3, "User created a new account with password.");
+
+                    applicationRole = await _roleManager.FindByIdAsync(model.ApplicationRoleId);
+                    if (applicationRole != null)
+                    {
+                        IdentityResult roleResult = await _userManager.AddToRoleAsync(user, applicationRole.Name);
+                        if (roleResult.Succeeded)
+                        {
+                            return RedirectToAction("Index");
+                        }
+                    }
+
                 }
                 AddErrors(result);
             }
@@ -83,46 +88,69 @@ namespace ZwartOpWit.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
-        public IActionResult Update(User user)
+        [HttpGet]
+        public async Task<IActionResult> Update(string id)
         {
-            User originalUser;
-            UserVM userVM;
+            User user = await _userManager.FindByIdAsync(id);
+            UserVM userVM = new UserVM(_roleManager, _userManager, user);
 
-            userVM = new UserVM();
-            //originalUser = _context.Users.FirstOrDefault(e => e.Id == user.Id);
+            return View(userVM);
+        }
 
-            ////Check if user that needs to be updated exists
-            //if (originalUser == null)
-            //{
-            //    throw new Exception("No user found with id " + user.Id);
-            //}
-
-            ////Validate if another user already uses this username
-            //if (_context.Users.Any(e => e.Username == user.Username && e.Username != originalUser.Username))
-            //{
-            //    ModelState.AddModelError("user.Username", "Username is already in use.");
-            //}
-
-            if (!ModelState.IsValid)
+        [HttpPost]
+        public async Task<IActionResult> Update(string id, UserVM model)
+        {
+            if (ModelState.IsValid)
             {
-             //   userVM.user = user;
-                return View(userVM);
+                User user = await _userManager.FindByIdAsync(id);
+                if (user != null)
+                {
+                    user.Email = model.Email;
+                    string existingRole = _userManager.GetRolesAsync(user).Result.Single();
+                    string existingRoleId = _roleManager.Roles.Single(r => r.Name == existingRole).Id;
+                    IdentityResult result = await _userManager.UpdateAsync(user);
+                    if (result.Succeeded)
+                    {
+                        if (existingRoleId != model.ApplicationRoleId)
+                        {
+                            IdentityResult roleResult = await _userManager.RemoveFromRoleAsync(user, existingRole);
+                            if (roleResult.Succeeded)
+                            {
+                                IdentityRole applicationRole = await _roleManager.FindByIdAsync(model.ApplicationRoleId);
+                                if (applicationRole != null)
+                                {
+                                    IdentityResult newRoleResult = await _userManager.AddToRoleAsync(user, applicationRole.Name);
+                                    if (newRoleResult.Succeeded)
+                                    {
+                                        return RedirectToAction("Index");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
-            _context.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            _context.SaveChanges();
+
+
             return RedirectToAction("Index");
         }
 
-        [HttpGet]
-        public IActionResult Delete(string id)
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id)
         {
-            var original = _context.Users.FirstOrDefault(e => e.Id == id);
-            if (original != null)
+            if (!String.IsNullOrEmpty(id))
             {
-                _context.Users.Remove(original);
-                _context.SaveChanges();
+                User applicationUser = await _userManager.FindByIdAsync(id);
+                if (applicationUser != null)
+                {
+                    IdentityResult result = await _userManager.DeleteAsync(applicationUser);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                }
             }
+
             return RedirectToAction("Index");
         }
 
