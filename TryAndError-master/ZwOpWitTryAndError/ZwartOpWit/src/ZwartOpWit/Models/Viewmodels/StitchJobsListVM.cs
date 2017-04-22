@@ -9,9 +9,15 @@ namespace ZwartOpWit.Models.Viewmodels
     {
         public List<Stitch> stitchJobsList { get; set; }
 
+        public String date { get; set; }
+
+        public int StitchId { get; set; }
+
         public StitchJobsListVM()
         {
             stitchJobsList = new List<Stitch>();
+            date = DateTime.Today.ToString();
+            StitchId = 1;
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using ZwartOpWit.Models.Viewmodels;
 
 namespace ZwartOpWit.Controllers
 {
@@ -10,7 +11,10 @@ namespace ZwartOpWit.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            StitchJobsListVM stitchJobsListVM = new StitchJobsListVM();
+            stitchJobsListVM.date = DateTime.Today.ToString("yyyy-MM-dd");
+
+            return View(stitchJobsListVM);
         }
 
         //public IActionResult Stitch()

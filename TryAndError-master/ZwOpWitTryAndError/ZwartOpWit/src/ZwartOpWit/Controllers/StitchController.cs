@@ -19,72 +19,40 @@ namespace ZwartOpWit.Controllers
             _context = context;
         }
 
-        public IActionResult Index(int id)
+        public IActionResult Index(int id, DateTime date, int StitchId)
         {
             StitchJobsListVM stitchJobsListVM = new StitchJobsListVM();
-            stitchJobsListVM.stitchJobsList = _context.Stitches.Where(e => e.MachineId == id).Include(m => m.Machine).ToList();
+            stitchJobsListVM.stitchJobsList = _context.Stitches.Where(e => e.MachineId == StitchId && e.DeliveryDate == date).Include(m => m.Machine).ToList();
+
+            String formatted = date.ToString("yyyy-MM-dd");
+
+            stitchJobsListVM.date = formatted;
+            stitchJobsListVM.StitchId = 1;
             return View(stitchJobsListVM);
         }
-        public IActionResult Out(int id)
+        
+        public IActionResult PlanStitch(int id, DateTime date, int StitchId)
         {
-            Stitch s = new Stitch();
-            s = _context.Stitches.FirstOrDefault(e => e.Id == id);
-            s.MachineId = 1;
-            _context.Entry(s).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            _context.SaveChanges();
+            if (id != 0)
+            {
+                Stitch s = new Stitch();
+                s = _context.Stitches.FirstOrDefault(e => e.Id == id);
+                s.MachineId = StitchId;
+                _context.Entry(s).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                _context.SaveChanges();
+            }
 
             StitchJobsListVM stitchJobsListVM = new StitchJobsListVM();
-            stitchJobsListVM.stitchJobsList = _context.Stitches.Where(e => e.MachineId == 1).ToList();
-            return View("Index", stitchJobsListVM);
-        }
-        public IActionResult PlanStitch1(int id)
-        {
-            Stitch s = new Stitch();
-            s = _context.Stitches.FirstOrDefault(e => e.Id == id);
-            s.MachineId = 2;
-            _context.Entry(s).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            _context.SaveChanges();
+            stitchJobsListVM.stitchJobsList = _context.Stitches.Where(e => e.MachineId == StitchId && e.DeliveryDate == date).ToList();
 
-            StitchJobsListVM stitchJobsListVM = new StitchJobsListVM();
-            stitchJobsListVM.stitchJobsList = _context.Stitches.Where(e => e.MachineId == 2).ToList();
-            return View("Index", stitchJobsListVM);
-        }
-        public IActionResult PlanStitch2(int id)
-        {
-            Stitch s = new Stitch();
-            s = _context.Stitches.FirstOrDefault(e => e.Id == id);
-            s.MachineId = 3;
-            _context.Entry(s).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            _context.SaveChanges();
+            String formatted = date.ToString("yyyy-MM-dd");
 
-            StitchJobsListVM stitchJobsListVM = new StitchJobsListVM();
-            stitchJobsListVM.stitchJobsList = _context.Stitches.Where(e => e.MachineId == 3).ToList();
-            return View("Index", stitchJobsListVM);
-        }
-        public IActionResult PlanStitch3(int id)
-        {
-            Stitch s = new Stitch();
-            s = _context.Stitches.FirstOrDefault(e => e.Id == id);
-            s.MachineId = 4;
-            _context.Entry(s).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            _context.SaveChanges();
+            stitchJobsListVM.date = formatted;
+            stitchJobsListVM.StitchId = StitchId;
 
-            StitchJobsListVM stitchJobsListVM = new StitchJobsListVM();
-            stitchJobsListVM.stitchJobsList = _context.Stitches.Where(e => e.MachineId == 4).ToList();
             return View("Index", stitchJobsListVM);
         }
-        public IActionResult PlanStitch4(int id)
-        {
-            Stitch s = new Stitch();
-            s = _context.Stitches.FirstOrDefault(e => e.Id == id);
-            s.MachineId = 5;
-            _context.Entry(s).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            _context.SaveChanges();
-
-            StitchJobsListVM stitchJobsListVM = new StitchJobsListVM();
-            stitchJobsListVM.stitchJobsList = _context.Stitches.Where(e => e.MachineId == 5).ToList();
-            return View("Index", stitchJobsListVM);
-        }
+        
         public IActionResult Import()
         {
             using (StreamReader lezer = new StreamReader(new FileStream("myCsv.txt", FileMode.Open)))
@@ -104,7 +72,7 @@ namespace ZwartOpWit.Controllers
 
                     stitch.PaperBw = splits[8];
                     stitch.MachineId = 1;
-                    stitch.UserId = "1";
+                    stitch.UserId = "8ffe39f3-1f56-4155-bf48-af5544e318fd";
 
                     _context.Stitches.Add(stitch);
                 }
@@ -114,6 +82,16 @@ namespace ZwartOpWit.Controllers
             
 
             return RedirectToAction("Index", 1);
+        }
+        public IActionResult StartStitch()
+        {
+            StartStop Start = new StartStop();
+            Start.Start = DateTime.Today;
+            //_context.StartStops.Add(Start);
+            _context.SaveChanges();
+
+            StitchJobsListVM stitchJobsListVM = new StitchJobsListVM();
+            return View("StartStitch", stitchJobsListVM);
         }
     }
 }

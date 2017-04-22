@@ -1,0 +1,9 @@
+C:\Users\jo\Documents\ZwartOpWit\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\bin\Debug\netcoreapp1.1\ZwartOpWit.deps.json
+C:\Users\jo\Documents\ZwartOpWit\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\bin\Debug\netcoreapp1.1\ZwartOpWit.runtimeconfig.json
+C:\Users\jo\Documents\ZwartOpWit\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\bin\Debug\netcoreapp1.1\ZwartOpWit.runtimeconfig.dev.json
+C:\Users\jo\Documents\ZwartOpWit\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\bin\Debug\netcoreapp1.1\ZwartOpWit.dll
+C:\Users\jo\Documents\ZwartOpWit\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\bin\Debug\netcoreapp1.1\ZwartOpWit.pdb
+C:\Users\jo\Documents\ZwartOpWit\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\obj\Debug\netcoreapp1.1\ZwartOpWit.AssemblyInfo.cs
+C:\Users\jo\Documents\ZwartOpWit\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\obj\Debug\netcoreapp1.1\ZwartOpWit.dll
+C:\Users\jo\Documents\ZwartOpWit\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\obj\Debug\netcoreapp1.1\ZwartOpWit.pdb
+C:\Users\jo\Documents\ZwartOpWit\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\obj\Debug\netcoreapp1.1\ZwartOpWit.csprojResolveAssemblyReference.cache
