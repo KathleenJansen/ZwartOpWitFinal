@@ -8,9 +8,10 @@ using ZwartOpWit.Models;
 namespace ZwartOpWit.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20170423154410_Job2")]
+    partial class Job2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1");
@@ -145,6 +146,8 @@ namespace ZwartOpWit.Migrations
 
                     b.Property<DateTime>("DeliveryDate");
 
+                    b.Property<int>("Gram");
+
                     b.Property<int>("Heigth");
 
                     b.Property<string>("JobNumber");
@@ -169,21 +172,15 @@ namespace ZwartOpWit.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("DepartmentId");
-
                     b.Property<int>("JobId");
 
                     b.Property<int>("MachineId");
-
-                    b.Property<int>("MachineType");
 
                     b.Property<int>("Sequence");
 
                     b.Property<string>("UserId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DepartmentId");
 
                     b.HasIndex("JobId");
 
@@ -323,17 +320,12 @@ namespace ZwartOpWit.Migrations
 
             modelBuilder.Entity("ZwartOpWit.Models.JobLine", b =>
                 {
-                    b.HasOne("ZwartOpWit.Models.Department", "Department")
-                        .WithMany()
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("ZwartOpWit.Models.Job", "Job")
                         .WithMany("JobLineList")
                         .HasForeignKey("JobId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("ZwartOpWit.Models.Machine")
+                    b.HasOne("ZwartOpWit.Models.Machine", "Machine")
                         .WithMany("JobLines")
                         .HasForeignKey("MachineId")
                         .OnDelete(DeleteBehavior.Cascade);

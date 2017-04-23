@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ZwartOpWit.Models
 {
-    public enum JobLineTypes { Stitch, Typo, Fold, Score, Busch };
+    //public enum JobLineTypes { Stitch, Typo, Fold, Score, Busch };
     public class JobLine
     {
         public int Id { get; set; }
@@ -21,7 +21,12 @@ namespace ZwartOpWit.Models
         [ForeignKey("UserId")]
         public User User { get; set; }
         public string UserId { get; set; }
-        public JobLineTypes JobLineType { get; set; }
+        //public JobLineTypes JobLineType { get; set; }
         public int Sequence { get; set; }
+
+        [ForeignKey("DepartmentId")]
+        public int DepartmentId { get; set; }
+        public Department Department { get; set; }
+        public int MachineType { get; set; }
     }
 }
