@@ -1,4 +1,5 @@
-﻿@model ZwartOpWit.Models.Viewmodels.MachineVM
+﻿@using ZwartOpWit.Models
+@model ZwartOpWit.Models.Viewmodels.MachineVM
 @{
 
 }
@@ -9,6 +10,13 @@
             <label asp-for="machine.Name">Machine name:</label>
             <input asp-for="machine.Name" class="form-control" />
             <span asp-validation-for="machine.Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="machine.Type">Type:</label>
+            <select asp-for="machine.Type"
+                    asp-items="Html.GetEnumSelectList<MachineTypes>()" class="form-control">
+            </select> 
+            <span asp-validation-for="machine.Type" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="machine.DepartmentId">Department</label>

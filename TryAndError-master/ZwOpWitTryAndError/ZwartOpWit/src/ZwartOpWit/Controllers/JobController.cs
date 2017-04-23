@@ -92,7 +92,7 @@ namespace ZwartOpWit.Controllers
                     {
                         JobLine line = new JobLine();
 
-                        line.JobLineType = JobLineTypes.Stitch;
+                        line.MachineType = MachineTypes.Stitch;
 
                         _context.JobLines.Add(line);
                     }

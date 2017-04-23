@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 namespace ZwartOpWit.Models
 {
     /// <summary>
-    /// The entity framework context with a Employees DbSet
+    /// The entity framework context
     /// </summary>
     public class AppDBContext : IdentityDbContext<User>
     {
