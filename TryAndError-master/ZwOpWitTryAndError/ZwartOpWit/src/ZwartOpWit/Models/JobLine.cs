@@ -21,6 +21,11 @@ namespace ZwartOpWit.Models
         public User User { get; set; }
         public string UserId { get; set; }
         public MachineTypes MachineType { get; set; }
+        //public JobLineTypes JobLineType { get; set; }
         public int Sequence { get; set; }
+
+        [ForeignKey("DepartmentId")]
+        public int DepartmentId { get; set; }
+        public Department Department { get; set; }
     }
 }

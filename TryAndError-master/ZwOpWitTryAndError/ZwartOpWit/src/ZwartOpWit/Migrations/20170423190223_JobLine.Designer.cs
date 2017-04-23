@@ -8,9 +8,10 @@ using ZwartOpWit.Models;
 namespace ZwartOpWit.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20170423190223_JobLine")]
+    partial class JobLine
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1");
@@ -204,8 +205,6 @@ namespace ZwartOpWit.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255);
-
-                    b.Property<int>("Type");
 
                     b.HasKey("Id");
 

@@ -8,7 +8,6 @@ using ZwartOpWit.Models;
 using ZwartOpWit.Models.Viewmodels;
 using System.IO;
 
-
 namespace ZwartOpWit.Controllers
 {
     public class JobController : Controller
@@ -23,12 +22,16 @@ namespace ZwartOpWit.Controllers
         public IActionResult Index(DateTime date)
         {
             JobListVM jobListVM = new JobListVM();
-            //jobListVM.jobList = _context.Jobs.Where(e => e.DeliveryDate == date).ToList();
-            jobListVM.jobList = _context.Jobs.ToList();
+            jobListVM.jobList = _context.Jobs.Where(e => e.DeliveryDate == date).Include(l => l.JobLineList).ToList();
+            //jobListVM.jobList = _context.Jobs.ToList();
+
+           // var query = _context.JobLines.Join(_context.Jobs, e => e.DepartmentId, f => f.DeliveryDate, (e, f) => new { e = 1, f = date });
 
             String formatted = date.ToString("yyyy-MM-dd");
             
             jobListVM.date = formatted;
+
+            jobListVM.jobLineList = _context.JobLines.Where(e => e.DepartmentId == 1).Include(j => j.Job).ToList();
 
             return View(jobListVM);
         }
@@ -37,19 +40,24 @@ namespace ZwartOpWit.Controllers
         {
             //if (id != 0)
             //{
-            //    Stitch s = new Stitch();
-            //    s = _context.Stitches.FirstOrDefault(e => e.Id == id);
-            //    s.MachineId = StitchId;
+            //    Job j = new Job();
+            //    j = _context.Jobs.FirstOrDefault(e => e.Id == id);
+            //    j.MachineId = StitchId;
             //    _context.Entry(s).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             //    _context.SaveChanges();
             //}
 
+            
+
             JobListVM jobListVM = new JobListVM();
+            jobListVM.jobList = _context.Jobs.Where(e => e.DeliveryDate == date).Include(l => l.JobLineList).ToList();
             //stitchJobsListVM.stitchJobsList = _context.Stitches.Where(e => e.MachineId == StitchId && e.DeliveryDate == date).ToList();
 
-            //String formatted = date.ToString("yyyy-MM-dd");
+            
 
-            //stitchJobsListVM.date = formatted;
+            String formatted = date.ToString("yyyy-MM-dd");
+
+            jobListVM.date = formatted;
             //stitchJobsListVM.StitchId = StitchId;
 
             return View("Index", jobListVM);

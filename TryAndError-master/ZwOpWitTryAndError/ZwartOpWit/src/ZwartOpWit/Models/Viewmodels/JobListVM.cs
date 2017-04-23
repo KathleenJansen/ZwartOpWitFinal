@@ -9,13 +9,16 @@ namespace ZwartOpWit.Models.Viewmodels
     {
         public List<Job> jobList { get; set; }
 
-        public String date { get; set; }
+        public List<JobLine> jobLineList { get; set; }
+
+        public string date { get; set; }
 
         public int JobId { get; set; }
 
         public JobListVM()
         {
             jobList = new List<Job>();
+            jobLineList = new List<JobLine>();
             date = DateTime.Today.ToString();
         }
     }
