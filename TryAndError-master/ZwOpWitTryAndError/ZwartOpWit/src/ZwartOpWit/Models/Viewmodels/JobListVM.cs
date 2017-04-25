@@ -13,7 +13,11 @@ namespace ZwartOpWit.Models.Viewmodels
 
         public string date { get; set; }
 
-        public int JobId { get; set; }
+        public int jobId { get; set; }
+
+        public int departmentId { get; set; }
+
+        public int machineId { get; set; }
 
         public JobListVM()
         {

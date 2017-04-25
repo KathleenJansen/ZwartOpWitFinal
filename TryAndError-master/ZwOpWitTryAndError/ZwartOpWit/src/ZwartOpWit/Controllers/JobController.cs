@@ -22,10 +22,15 @@ namespace ZwartOpWit.Controllers
         public IActionResult Index(DateTime date)
         {
             JobListVM jobListVM = new JobListVM();
-            jobListVM.jobList = _context.Jobs.Where(e => e.DeliveryDate == date).Include(l => l.JobLineList).ToList();
+            jobListVM.jobLineList = _context.JobLines.Include(j => j.Job).Where(j => j.Job.DeliveryDate == date).Where(j => j.JobId == 98).ToList();
             //jobListVM.jobList = _context.Jobs.ToList();
 
-           // var query = _context.JobLines.Join(_context.Jobs, e => e.DepartmentId, f => f.DeliveryDate, (e, f) => new { e = 1, f = date });
+            // var query = _context.JobLines.Join(_context.Jobs, e => e.DepartmentId, f => f.DeliveryDate, (e, f) => new { e = 1, f = date });
+
+            if (DateTime.Equals(DateTime.MinValue, date))
+            {
+                date = DateTime.Today;
+            }
 
             String formatted = date.ToString("yyyy-MM-dd");
             
@@ -36,7 +41,25 @@ namespace ZwartOpWit.Controllers
             return View(jobListVM);
         }
 
-        public IActionResult PlanStitch(int id, DateTime date)
+        public IActionResult IndexStitch(DateTime date)
+        {
+            if (DateTime.Equals(DateTime.MinValue, date))
+            {
+                date = DateTime.Today;
+            }
+
+            JobListVM jobListVm = new JobListVM();
+            jobListVm.jobLineList = _context.JobLines.Include(j => j.Job).Where(j => j.Job.DeliveryDate == date).Where(j => j.DepartmentId == 1).ToList();
+
+            string formatted = date.ToString("yyyy-MM-dd");
+            jobListVm.date = formatted;
+            jobListVm.departmentId = 1;
+            jobListVm.machineId = 1;
+
+            return View("Index", jobListVm);
+        }
+
+        public IActionResult PlanStitch(int id, DateTime date, int machineId)
         {
             //if (id != 0)
             //{
@@ -47,20 +70,35 @@ namespace ZwartOpWit.Controllers
             //    _context.SaveChanges();
             //}
 
-            
+            if (id != 0)
+            {
+                JobLine j = new JobLine();
+                j = _context.JobLines.FirstOrDefault(e => e.Id == id);
+                j.MachineId = machineId;
+                _context.Entry(j).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                _context.SaveChanges();
+            }
 
-            JobListVM jobListVM = new JobListVM();
-            jobListVM.jobList = _context.Jobs.Where(e => e.DeliveryDate == date).Include(l => l.JobLineList).ToList();
+            if (DateTime.Equals(DateTime.MinValue, date))
+            {
+                date = DateTime.Today;
+            }
+
+            JobListVM jobListVm = new JobListVM();
+            jobListVm.jobLineList = _context.JobLines.Include(j => j.Job).Where(j => j.Job.DeliveryDate == date).Where(j => j.MachineId == machineId).ToList();
+
+            //jobListVM.jobList = _context.Jobs.Where(e => e.DeliveryDate == date).Include(l => l.JobLineList).ToList();
             //stitchJobsListVM.stitchJobsList = _context.Stitches.Where(e => e.MachineId == StitchId && e.DeliveryDate == date).ToList();
-
-            
 
             String formatted = date.ToString("yyyy-MM-dd");
 
-            jobListVM.date = formatted;
+            jobListVm.date = formatted;
+            jobListVm.machineId = machineId;
+            jobListVm.departmentId = 1;
+            
             //stitchJobsListVM.StitchId = StitchId;
 
-            return View("Index", jobListVM);
+            return View("Index", jobListVm);
         }
 
         public IActionResult Import()

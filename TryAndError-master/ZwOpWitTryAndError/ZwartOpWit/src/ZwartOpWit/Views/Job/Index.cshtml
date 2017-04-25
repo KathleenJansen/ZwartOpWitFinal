@@ -1,9 +1,9 @@
 ﻿@{
 
 }
-<h1> Jobs to do @Model.JobId</h1>
+<h1> Jobs to do @Model.jobId</h1>
 <div>
-    <form asp-controller="Job" asp-action="PlanStitch" asp-route-date="@Model.date" >
+    <form asp-controller="Job" asp-action="PlanStitch" asp-route-date="@Model.date" asp-route-machineId="@Model.machineId" >
         Delivery Date:
         <input type="date" name="date" value="@Model.date"/>
         <input type="submit"/> 
@@ -36,22 +36,22 @@
                         <td>@s.Job.PaperCover</td>
                         <td>@s.MachineId</td>
                         <td>
-                            <a asp-controller="Stitch" asp-action="StartStitch" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
+                            <a asp-controller="Job" asp-action="StartStitch" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
                         </td>
                         <td>
-                            <a asp-controller="Stitch" asp-action="PlanStitch" asp-route-id="@s.Id"  asp-route-date="@Model.date" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
+                            <a asp-controller="Job" asp-action="PlanStitch" asp-route-id="@s.Id"  asp-route-date="@Model.date" asp-route-machineId="2" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
                         </td>
                         <td>
-                            <a asp-controller="Stitch" asp-action="PlanStitch" asp-route-id="@s.Id" asp-route-date="@Model.date" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
+                            <a asp-controller="Job" asp-action="PlanStitch" asp-route-id="@s.Id" asp-route-date="@Model.date" asp-route-machineId="3" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
                         </td>
                         <td>
-                            <a asp-controller="Stitch" asp-action="PlanStitch" asp-route-id="@s.Id"asp-route-date="@Model.date" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
+                            <a asp-controller="Job" asp-action="PlanStitch" asp-route-id="@s.Id"asp-route-date="@Model.date" asp-route-machineId="4" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
                         </td>
                         <td>
-                            <a asp-controller="Stitch" asp-action="PlanStitch" asp-route-id="@s.Id" asp-route-date="@Model.date" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
+                            <a asp-controller="Job" asp-action="PlanStitch" asp-route-id="@s.Id" asp-route-date="@Model.date" asp-route-machineId="5" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
                         </td>
                         <td>
-                            <a asp-controller="Stitch" asp-action="PlanStitch" asp-route-id="@s.Id" asp-route-date="@Model.date" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
+                            <a asp-controller="Job" asp-action="PlanStitch" asp-route-id="@s.Id" asp-route-date="@Model.date" asp-route-machineId="1" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
                         </td>
                     </tr>
              }
