@@ -18,6 +18,7 @@ namespace ZwartOpWit.Controllers
         }
         public IActionResult Index()
         {
+            ViewBag.date = DateTime.Today.ToString("yyyy-MM-dd");
             return View();
         }
         public IActionResult Fold()

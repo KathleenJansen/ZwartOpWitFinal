@@ -1,6 +1,10 @@
 ﻿@{
 }
+@model ZwartOpWit.Models.Viewmodels.JobListVM
 <h1>Job is gestart</h1>
 <div>
-    <input type="submit" value="stop"/>
+    <form asp-controller="Job" asp-action="StopStitch" asp-route-id="@Model.jobId">
+        <input type="submit" value="stop"/>
+    </form>
+    
 </div>
