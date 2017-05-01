@@ -32,7 +32,7 @@
             </tr>
         </thead>
         <tbody>
-            @{ foreach (var s in Model.jobLineList) {
+            @{ foreach (var s in Model.jobLineListCalculatedTime) {
                     <tr>
                         <td>@s.Job.JobNumber / Id = @s.Id</td>
                         <td>@s.Job.Quantity</td>
@@ -40,7 +40,7 @@
                         <td>@s.Job.PaperBw</td>
                         <td>@s.Job.PaperCover</td>
                         <td>@s.MachineId</td>
-                        <td>@Model.plannedTime</td>
+                        <td>@s.CalculatedTime</td>
                         <td>
                             <a asp-controller="Job" asp-action="StartStitch" asp-route-id="@s.Id" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
                         </td>
