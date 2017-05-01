@@ -46,17 +46,8 @@ namespace ZwartOpWit.Controllers
             }
 
             JobListVM jobListVm = new JobListVM();
-            jobListVm.jobLineList = _context.JobLines.Include(j => j.Job).
-                Where(j => j.Job.DeliveryDate == date && j.JobReady == false).
-                Where(j => j.MachineId == 1).ToList();
-
-            string formatted = date.ToString("yyyy-MM-dd");
-            jobListVm.date = formatted;
-            jobListVm.departmentId = 1;
-            jobListVm.machineId = 1;
-
-
-            ViewBag.date = formatted;
+            jobListVm = CreateJobListViewModelByMachineId(date, 0);
+            ViewBag.date = jobListVm.date;
 
             return View("Index", jobListVm);
         }
@@ -190,14 +181,24 @@ namespace ZwartOpWit.Controllers
         {
             JobListVM viewModelJobs = new JobListVM();
 
-            viewModelJobs.jobLineList = _context.JobLines.Include(j => j.Job).
-                Where(j => j.Job.DeliveryDate == date && j.JobReady == false).
-                Where(j => j.MachineId == machineId).ToList();
+            if (machineId != 0)
+            {
+                viewModelJobs.jobLineList = _context.JobLines.Include(j => j.Job).
+                    Where(j => j.Job.DeliveryDate == date && j.JobReady == false).
+                    Where(j => j.MachineId == machineId).ToList();
+                viewModelJobs.machineName = _context.Machines.Where(e => e.Id == machineId).FirstOrDefault().Name;
+            }
+            else
+            {
+                viewModelJobs.jobLineList = _context.JobLines.Include(j => j.Job).
+                    Where(j => j.Job.DeliveryDate == date && j.JobReady == false).ToList();
+                viewModelJobs.machineName = "All Jobs";
+            }
 
             viewModelJobs.date = date.ToString("yyyy-MM-dd");
             viewModelJobs.machineId = machineId;
             viewModelJobs.departmentId = 1;
-            viewModelJobs.machineName = _context.Machines.Where(e => e.Id == machineId).FirstOrDefault().Name;
+            
             viewModelJobs.plannedTime = CalculatePlannedTime();
 
             return viewModelJobs;
