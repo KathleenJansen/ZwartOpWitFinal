@@ -30,7 +30,7 @@ namespace ZwartOpWit.Controllers
             }
 
             String formatted = date.ToString("yyyy-MM-dd");
-            
+
             jobListVm.date = formatted;
 
             jobListVm.jobLineList = _context.JobLines.Where(e => e.DepartmentId == 1).Include(j => j.Job).ToList();
@@ -46,7 +46,9 @@ namespace ZwartOpWit.Controllers
             }
 
             JobListVM jobListVm = new JobListVM();
-            jobListVm.jobLineList = _context.JobLines.Include(j => j.Job).Where(j => j.Job.DeliveryDate == date).Where(j => j.MachineId == 1).ToList();
+            jobListVm.jobLineList = _context.JobLines.Include(j => j.Job).
+                Where(j => j.Job.DeliveryDate == date && j.JobReady == false).
+                Where(j => j.MachineId == 1).ToList();
 
             string formatted = date.ToString("yyyy-MM-dd");
             jobListVm.date = formatted;
@@ -77,19 +79,9 @@ namespace ZwartOpWit.Controllers
             }
 
             JobListVM jobListVm = new JobListVM();
-            jobListVm.jobLineList = _context.JobLines.Include(j => j.Job).Where(j => j.Job.DeliveryDate == date).Where(j => j.MachineId == machineId).ToList();
-            
-            String formatted = date.ToString("yyyy-MM-dd");
 
-            jobListVm.date = formatted;
-            jobListVm.machineId = machineId;
-            jobListVm.departmentId = 1;
-
-            Machine m = _context.Machines.Where(e => e.Id == machineId).FirstOrDefault();
-
-            jobListVm.machineName = m.Name;
-
-            ViewBag.date = formatted;
+            jobListVm = CreateJobListViewModelByMachineId(date, machineId);
+            ViewBag.date = jobListVm.date; // viewBag aangemaakt om default.cshtml aan te spreken...(?)
 
             return View("Index", jobListVm);
         }
@@ -106,7 +98,7 @@ namespace ZwartOpWit.Controllers
                 {
                     lijn = lezer.ReadLine();
                     string[] splits = lijn.Split(';');
-                
+
 
                     //Check if job exists with current job number
                     job = _context.Jobs.Where(x => x.JobNumber == splits[1]).FirstOrDefault();
@@ -152,10 +144,10 @@ namespace ZwartOpWit.Controllers
             _context.TimeRegisters.Add(start);
             _context.SaveChanges();
 
+            int myNewId = start.Id;
+
             JobListVM jobListVm = new JobListVM();
-            TimeRegister t = new TimeRegister();
-            t = _context.TimeRegisters.Where(z => z.JobLineId == Id).FirstOrDefault();
-            jobListVm.jobId = t.Id;
+            jobListVm.jobId = start.Id;
 
             return View("StartStitch", jobListVm);
         }
@@ -163,12 +155,58 @@ namespace ZwartOpWit.Controllers
         public IActionResult StopStitch(int Id)
         {
             TimeRegister stop = new TimeRegister();
+            stop = _context.TimeRegisters.FirstOrDefault(e => e.Id == Id);
             stop.Stop = DateTime.Now;
-            stop.JobLineId = Id;
-            _context.TimeRegisters.Add(stop);
+            _context.Entry(stop).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             _context.SaveChanges();
 
-            return RedirectToAction("Index", 1);
+            JobListVM jobListVm = new JobListVM();
+            jobListVm.jobId = stop.JobLineId;
+
+            return View("JobReady", jobListVm);
+
+        }
+
+        public IActionResult JobReady(int id, bool yes)
+        {
+            JobLine jobLine = new JobLine();
+            jobLine = _context.JobLines.Include(j => j.Job).Where(j => j.Id == id).FirstOrDefault();
+            jobLine.JobReady = yes;
+            _context.Entry(jobLine).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _context.SaveChanges();
+
+            DateTime date = new DateTime();
+            date = jobLine.Job.DeliveryDate;
+
+            JobListVM jobListVm = new JobListVM();
+
+            jobListVm = CreateJobListViewModelByMachineId(date, jobLine.MachineId);
+            ViewBag.date = jobListVm.date;
+
+            return View("Index", jobListVm);
+        }
+
+        public JobListVM CreateJobListViewModelByMachineId(DateTime date, int machineId)
+        {
+            JobListVM viewModelJobs = new JobListVM();
+
+            viewModelJobs.jobLineList = _context.JobLines.Include(j => j.Job).
+                Where(j => j.Job.DeliveryDate == date && j.JobReady == false).
+                Where(j => j.MachineId == machineId).ToList();
+
+            viewModelJobs.date = date.ToString("yyyy-MM-dd");
+            viewModelJobs.machineId = machineId;
+            viewModelJobs.departmentId = 1;
+            viewModelJobs.machineName = _context.Machines.Where(e => e.Id == machineId).FirstOrDefault().Name;
+            viewModelJobs.plannedTime = CalculatePlannedTime();
+
+            return viewModelJobs;
+        }
+
+        public TimeSpan CalculatePlannedTime()
+        {
+            TimeSpan planned = new TimeSpan(1, 30,0);
+            return planned;
         }
     }
 }

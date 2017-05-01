@@ -23,6 +23,8 @@ namespace ZwartOpWit.Models.Viewmodels
 
         public string machineName { get; set; }
 
+        public TimeSpan plannedTime { get; set; }
+
         public JobListVM()
         {
             jobList = new List<Job>();

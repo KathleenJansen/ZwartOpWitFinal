@@ -8,7 +8,7 @@ using ZwartOpWit.Models;
 namespace ZwartOpWit.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20170423190223_JobLine")]
+    [Migration("20170501073859_JobLine")]
     partial class JobLine
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -174,6 +174,8 @@ namespace ZwartOpWit.Migrations
 
                     b.Property<int>("JobId");
 
+                    b.Property<bool>("JobReady");
+
                     b.Property<int>("MachineId");
 
                     b.Property<int>("MachineType");
@@ -205,6 +207,8 @@ namespace ZwartOpWit.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(255);
+
+                    b.Property<int>("Type");
 
                     b.HasKey("Id");
 
@@ -334,7 +338,7 @@ namespace ZwartOpWit.Migrations
                         .HasForeignKey("JobId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("ZwartOpWit.Models.Machine")
+                    b.HasOne("ZwartOpWit.Models.Machine", "Machine")
                         .WithMany("JobLines")
                         .HasForeignKey("MachineId")
                         .OnDelete(DeleteBehavior.Cascade);
