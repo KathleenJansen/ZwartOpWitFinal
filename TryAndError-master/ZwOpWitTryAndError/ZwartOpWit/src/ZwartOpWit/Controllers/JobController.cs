@@ -198,6 +198,7 @@ namespace ZwartOpWit.Controllers
             viewModelJobs.date = date.ToString("yyyy-MM-dd");
             viewModelJobs.machineId = machineId;
             viewModelJobs.departmentId = 1;
+            viewModelJobs.totalTime = new TimeSpan(0,0,0);
 
             foreach (JobLine j in viewModelJobs.jobLineList)
             {
@@ -217,6 +218,7 @@ namespace ZwartOpWit.Controllers
                 calc.JobReady = j.JobReady;
 
                 calc.CalculatedTime = CalculatePlannedTime(j);
+                viewModelJobs.totalTime += calc.CalculatedTime;
                 viewModelJobs.jobLineListCalculatedTime.Add(calc);
             }
 
