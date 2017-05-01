@@ -16,3 +16,4 @@ C:\ZwOpWitJo2\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\ob
 C:\ZwOpWitJo2\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\obj\Debug\netcoreapp1.1\ZwartOpWit.dll
 C:\ZwOpWitJo2\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\obj\Debug\netcoreapp1.1\ZwartOpWit.pdb
 C:\ZwOpWitJo2\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\obj\Debug\netcoreapp1.1\ZwartOpWit.csprojResolveAssemblyReference.cache
+C:\Users\jo\Documents\ZwartOpWit\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\bin\Debug\netcoreapp1.1\myCsv.txt

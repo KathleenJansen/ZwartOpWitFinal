@@ -96,6 +96,7 @@ namespace ZwartOpWit.Controllers
 
                     if (job == null)
                     {
+                        //Create Job
                         job = new Job();
 
                         job.DeliveryDate = Convert.ToDateTime(splits[4]);
@@ -105,19 +106,38 @@ namespace ZwartOpWit.Controllers
                         job.Quantity = Convert.ToInt16(aantal);
 
                         job.PaperBw = splits[8];
+                        job.Cover = 0;
+                        job.PaperCover = "no cover";
+                        job.Heigth = 297;
+                        job.Width = 210;
 
                         _context.Jobs.Add(job);
-                    }
 
-                    //Create joblines
-                    if (job != null)
-                    {
+                        //Create JobLine
                         JobLine line = new JobLine();
 
+                        line.JobId = job.Id;
+                        line.MachineId = 1;
+                        line.Sequence = 1;
+                        line.UserId = "2aff4902-2ab4-4e25-88fc-4765d661e8f2";
                         line.MachineType = MachineTypes.Stitch;
+                        line.DepartmentId = 1;
+                        line.JobReady = false;
 
                         _context.JobLines.Add(line);
                     }
+
+                    //Create joblines
+                    //if (job != null)
+                    //{
+                    //    JobLine line = new JobLine();
+
+                    //    line.JobId = job.Id;
+
+                    //    line.MachineType = MachineTypes.Stitch;
+
+                    //    _context.JobLines.Add(line);
+                    //}
                 }
             }
 
@@ -211,7 +231,7 @@ namespace ZwartOpWit.Controllers
                 calc.JobId = j.JobId;
                 calc.User = j.User;
                 calc.UserId = j.UserId;
-                calc.MachineType = j.MachineType;
+                //calc.MachineType = j.MachineType;
                 calc.Sequence = j.Sequence;
                 calc.Department = j.Department;
                 calc.DepartmentId = j.DepartmentId;
