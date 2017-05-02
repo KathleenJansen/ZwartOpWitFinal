@@ -1,0 +1,28 @@
+﻿@{
+
+}
+@using ZwartOpWit.Models
+@model ZwartOpWit.Models.Viewmodels.JobLineVM
+<h1>Edit Stitch Job</h1>
+<div>
+    <form asp-action="EditStitch">
+        Ordernummer: 
+        <input type="text" value="@Model.jobLine.Job.JobNumber" /><br/>
+        Papier bw: 
+        <input type="text" value="@Model.jobLine.Job.PaperBw"/><br/>
+        Leverdatum: 
+        <input type="text" value="@Model.jobLine.Job.DeliveryDate"/><br/>
+        Breedte: 
+        <input type="text" value="@Model.jobLine.Job.Width"/><br/>
+        Hoogte:
+        <input type="text" value="@Model.jobLine.Job.Heigth"/><br/>
+        Aantal Blz:
+        <input type="text" value="@Model.jobLine.Job.PageQuantity" /><br />
+        Machine:
+        <input type="text" value="@Model.jobLine.MachineId"/><br/>
+        Sequence:
+        <input type="text" value="@Model.jobLine.Sequence"/><br/>
+        JobReady:
+        <input type="text" value="@Model.jobLine.JobReady"/>
+    </form>
+</div>

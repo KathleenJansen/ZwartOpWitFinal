@@ -4,8 +4,8 @@
 <h1>Job is klaar??</h1>
 <div>
     <form asp-controller="Job" >
-        <input type="submit" value="Yes" asp-action="JobReady" asp-route-id="@Model.jobId" asp-route-yes ="true"/>
-        <input type="submit" value="No" asp-action="JobReady" asp-route-id="@Model.jobId" asp-route-yes ="false"/>
+        <input type="submit" value="Yes" asp-action="JobReady" asp-route-jobId="@Model.jobId" asp-route-yes ="true"/>
+        <input type="submit" value="No" asp-action="JobReady" asp-route-jobId="@Model.jobId" asp-route-yes ="false"/>
     </form>
     
 </div>

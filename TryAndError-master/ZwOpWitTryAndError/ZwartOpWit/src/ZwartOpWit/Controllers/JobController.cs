@@ -52,13 +52,31 @@ namespace ZwartOpWit.Controllers
             return View("Index", jobListVm);
         }
 
-        public IActionResult PlanStitch(int id, DateTime date, int machineId)
+        public IActionResult ReadStitch(int jobId)
+        {
+            JobLineVM jobVm = new JobLineVM();
+
+            JobLine jobLine = new JobLine();
+
+            jobLine = _context.JobLines.Include(j => j.Job).FirstOrDefault(j => j.Id == jobId);
+
+            jobVm.jobLine = jobLine;
+
+            TimeRegister time = new TimeRegister();
+
+            time = _context.TimeRegisters.Include(j => j.JobLine).FirstOrDefault(j => j.JobLineId == jobId);
+
+
+            return View("ReadStitch", jobVm);
+        }
+
+        public IActionResult PlanStitch(int jobId, DateTime date, int machineId)
         {
 
-            if (id != 0)
+            if (jobId != 0)
             {
                 JobLine j = new JobLine();
-                j = _context.JobLines.FirstOrDefault(e => e.Id == id);
+                j = _context.JobLines.FirstOrDefault(e => e.Id == jobId);
                 j.MachineId = machineId;
                 _context.Entry(j).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 _context.SaveChanges();
@@ -147,11 +165,11 @@ namespace ZwartOpWit.Controllers
             return RedirectToAction("Index", 1);
         }
 
-        public IActionResult StartStitch(int Id)
+        public IActionResult StartStitch(int jobId)
         {
             TimeRegister start = new TimeRegister();
             start.Start = DateTime.Now;
-            start.JobLineId = Id;
+            start.JobLineId = jobId;
             _context.TimeRegisters.Add(start);
             _context.SaveChanges();
 
@@ -163,10 +181,10 @@ namespace ZwartOpWit.Controllers
             return View("StartStitch", jobListVm);
         }
 
-        public IActionResult StopStitch(int Id)
+        public IActionResult StopStitch(int jobId)
         {
             TimeRegister stop = new TimeRegister();
-            stop = _context.TimeRegisters.FirstOrDefault(e => e.Id == Id);
+            stop = _context.TimeRegisters.FirstOrDefault(e => e.Id == jobId);
             stop.Stop = DateTime.Now;
             _context.Entry(stop).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             _context.SaveChanges();
@@ -178,10 +196,10 @@ namespace ZwartOpWit.Controllers
 
         }
 
-        public IActionResult JobReady(int id, bool yes)
+        public IActionResult JobReady(int jobId, bool yes)
         {
             JobLine jobLine = new JobLine();
-            jobLine = _context.JobLines.Include(j => j.Job).Where(j => j.Id == id).FirstOrDefault();
+            jobLine = _context.JobLines.Include(j => j.Job).Where(j => j.Id == jobId).FirstOrDefault();
             jobLine.JobReady = yes;
             _context.Entry(jobLine).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             _context.SaveChanges();
@@ -231,7 +249,7 @@ namespace ZwartOpWit.Controllers
                 calc.JobId = j.JobId;
                 calc.User = j.User;
                 calc.UserId = j.UserId;
-                //calc.MachineType = j.MachineType;
+                calc.MachineType = j.MachineType;
                 calc.Sequence = j.Sequence;
                 calc.Department = j.Department;
                 calc.DepartmentId = j.DepartmentId;
