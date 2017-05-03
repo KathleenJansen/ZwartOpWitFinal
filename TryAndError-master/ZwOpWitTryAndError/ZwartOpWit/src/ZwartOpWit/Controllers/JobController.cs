@@ -66,8 +66,36 @@ namespace ZwartOpWit.Controllers
 
             time = _context.TimeRegisters.Include(j => j.JobLine).FirstOrDefault(j => j.JobLineId == jobId);
 
+            jobVm.date = jobLine.Job.DeliveryDate.ToString("yyyy-MM-dd");
+
 
             return View("ReadStitch", jobVm);
+        }
+
+        public IActionResult EditStitch(int jobLineId, string jobNr, string paperBw, DateTime date, 
+            string width, string heigth, string pageQuantity, string machineId, string sequence, string jobReady)
+        {
+            Job myJob = new Job();
+            JobLine myJobLine = new JobLine();
+
+            myJobLine = _context.JobLines.Include(e => e.Job).FirstOrDefault(e => e.Id == jobLineId);
+            myJob = _context.Jobs.FirstOrDefault(j => j.Id == myJobLine.Job.Id);
+
+            myJob.JobNumber = jobNr;
+            myJob.PaperBw = paperBw;
+            myJob.DeliveryDate = date;
+            myJob.Width = int.Parse(width);
+            myJob.Heigth = int.Parse(heigth);
+            myJob.PageQuantity = int.Parse(pageQuantity);
+            myJobLine.MachineId = int.Parse(machineId);
+            myJobLine.Sequence = int.Parse(sequence);
+            //myJobLine.JobReady = bool.Parse(JobReady);
+
+            _context.Entry(myJob).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _context.Entry(myJobLine).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _context.SaveChanges();
+
+            return View("Index");
         }
 
         public IActionResult PlanStitch(int jobId, DateTime date, int machineId)

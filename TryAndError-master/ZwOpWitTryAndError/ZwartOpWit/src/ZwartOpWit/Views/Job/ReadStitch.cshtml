@@ -5,24 +5,26 @@
 @model ZwartOpWit.Models.Viewmodels.JobLineVM
 <h1>Edit Stitch Job</h1>
 <div>
-    <form asp-action="EditStitch">
+    <form asp-controller="Job" asp-action="EditStitch">
+        <input type="hidden" value="@Model.jobLine.Id" name="jobLineId"/>
         Ordernummer: 
-        <input type="text" value="@Model.jobLine.Job.JobNumber" /><br/>
+        <input type="text" value="@Model.jobLine.Job.JobNumber" name="JobNr"/><br/>
         Papier bw: 
-        <input type="text" value="@Model.jobLine.Job.PaperBw"/><br/>
+        <input type="text" value="@Model.jobLine.Job.PaperBw" name="PaperBw"/><br/>
         Leverdatum: 
-        <input type="text" value="@Model.jobLine.Job.DeliveryDate"/><br/>
+        <input type="date" value="@Model.date" name="date"/><br/>
         Breedte: 
-        <input type="text" value="@Model.jobLine.Job.Width"/><br/>
+        <input type="text" value="@Model.jobLine.Job.Width" name="width"/><br/>
         Hoogte:
-        <input type="text" value="@Model.jobLine.Job.Heigth"/><br/>
+        <input type="text" value="@Model.jobLine.Job.Heigth" name="heigth"/><br/>
         Aantal Blz:
-        <input type="text" value="@Model.jobLine.Job.PageQuantity" /><br />
+        <input type="text" value="@Model.jobLine.Job.PageQuantity" name="pageQuantity"/><br />
         Machine:
-        <input type="text" value="@Model.jobLine.MachineId"/><br/>
+        <input type="text" value="@Model.jobLine.MachineId" name="machineId"/><br/>
         Sequence:
-        <input type="text" value="@Model.jobLine.Sequence"/><br/>
+        <input type="text" value="@Model.jobLine.Sequence" name="sequence"/><br/>
         JobReady:
-        <input type="text" value="@Model.jobLine.JobReady"/>
+        <input type="text" value="@Model.jobLine.JobReady" name="jobReady"/><br/>
+        <input type="submit" value="stuur"/>
     </form>
 </div>
