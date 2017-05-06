@@ -173,6 +173,8 @@ namespace ZwartOpWit.Migrations
 
                     b.Property<int>("JobId");
 
+                    b.Property<bool>("JobReady");
+
                     b.Property<int>("MachineId");
 
                     b.Property<int>("MachineType");
@@ -335,7 +337,7 @@ namespace ZwartOpWit.Migrations
                         .HasForeignKey("JobId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("ZwartOpWit.Models.Machine")
+                    b.HasOne("ZwartOpWit.Models.Machine", "Machine")
                         .WithMany("JobLines")
                         .HasForeignKey("MachineId")
                         .OnDelete(DeleteBehavior.Cascade);
