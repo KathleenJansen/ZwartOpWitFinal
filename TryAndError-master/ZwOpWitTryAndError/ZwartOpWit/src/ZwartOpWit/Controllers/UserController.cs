@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using ZwartOpWit.Helpers;
 
 namespace ZwartOpWit.Controllers
 {
@@ -31,13 +33,45 @@ namespace ZwartOpWit.Controllers
         }
 
         [HttpGet]
-        public ViewResult Index()
+        public async Task<IActionResult> Index( string sortOrder,
+                                                string currentFilter,
+                                                string searchString,
+                                                int? page)
         {
-            UserListVM userListVM = new UserListVM();
+            ViewData["CurrentSort"]     = sortOrder;
+            ViewData["EmailSortParm"]   = String.IsNullOrEmpty(sortOrder) ? "email_desc" : "";
+            ViewData["CurrentFilter"]   = searchString;
 
-            userListVM.userList = _context.Users.ToList();
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
 
-            return View(userListVM);
+            var users = from u in _context.Users
+                           select u;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                users = users.Where(s => s.Email.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "email_desc":
+                    users = users.OrderByDescending(u => u.Email);
+                    break;
+                default:
+                    users = users.OrderBy(u => u.Email);
+                    break;
+            }
+             
+            int pageSize = 3;
+   
+            return View(await PaginatedList<User>.CreateAsync(users.AsNoTracking(), page ?? 1, pageSize));
         }
 
         [HttpGet]
