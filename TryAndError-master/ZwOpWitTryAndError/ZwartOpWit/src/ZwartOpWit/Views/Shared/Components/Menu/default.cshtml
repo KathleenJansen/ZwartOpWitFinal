@@ -20,18 +20,18 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@machineType.ToString()<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a asp-area="" asp-controller="Job" asp-action="Index" asp-route-machineType="@machineType">Todo</a></li>
-                                <li><a asp-area="" asp-controller="Job" asp-action="Index" asp-route-machineType="@machineType">No machine</a></li> 
+                                <li><a asp-area="" asp-controller="Job" asp-action="Index" asp-route-filterMachineType="@machineType">Todo</a></li>
+                                <li><a asp-area="" asp-controller="Job" asp-action="Index" asp-route-filterMachineType="@machineType">No machine</a></li> 
                                 @if (Model.machineList.Where(x => x.Type == machineType).ToList().Count != 0)
                                 {
                                     <li role="separator" class="divider"></li>
                                     @foreach (var machine in Model.machineList.Where(x => x.Type == machineType).ToList())
                                     {
-                                        <li><a asp-area="" asp-controller="Job" asp-action="Index" asp-route-machineId="@machine.Id">@machine.Name</a></li>
+                                        <li><a asp-area="" asp-controller="Job" asp-action="Index" asp-route-filterMachineId="@machine.Id">@machine.Name</a></li>
                                     }
                                     <li role="separator" class="divider"></li>
                                 }
-                                <li><a asp.area="" asp-controller="Job" asp-action="Import">Import</a></li>
+                                <li><a asp.area="" asp-controller="Job" asp-action="Import"  asp-route-machineType="@machineType">Import</a></li>
                             </ul>
                         </li>
                     }

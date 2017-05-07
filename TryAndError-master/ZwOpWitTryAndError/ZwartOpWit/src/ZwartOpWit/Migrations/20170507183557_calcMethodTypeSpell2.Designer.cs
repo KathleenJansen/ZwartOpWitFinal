@@ -8,9 +8,10 @@ using ZwartOpWit.Models;
 namespace ZwartOpWit.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20170507183557_calcMethodTypeSpell2")]
+    partial class calcMethodTypeSpell2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1");

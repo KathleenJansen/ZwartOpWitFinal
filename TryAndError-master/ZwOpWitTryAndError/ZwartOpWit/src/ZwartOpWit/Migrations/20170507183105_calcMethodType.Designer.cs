@@ -8,9 +8,10 @@ using ZwartOpWit.Models;
 namespace ZwartOpWit.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20170507183105_calcMethodType")]
+    partial class calcMethodType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.1");
@@ -203,8 +204,6 @@ namespace ZwartOpWit.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("CalculationMethod");
-
                     b.Property<int>("DepartmentId");
 
                     b.Property<string>("Name")
@@ -224,6 +223,8 @@ namespace ZwartOpWit.Migrations
                     b.Property<double>("SetupTimeStationFactor");
 
                     b.Property<int>("Type");
+
+                    b.Property<int>("calculactionMethod");
 
                     b.HasKey("Id");
 

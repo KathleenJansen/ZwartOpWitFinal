@@ -5,18 +5,17 @@
     var nextDisabled = !Model.jobLineList.HasNextPage ? "disabled" : "";
 }
 
-<h1> Jobs to do @Model.machineName</h1>
+<h1> Jobs to do</h1>
 <div>
-    <form asp-controller="Job" asp-action="Index" method="get" asp-route-machineId="@Model.machineId" asp-route-machineType="@Model.machineType" asp-route-currentFilter="@Model.CurrentFilter">
+    <form asp-controller="Job" asp-action="Index" method="get" asp-route-filterMachineId="@Model.filterMachineId" asp-route-filterMachineType="@Model.filterMachineType" asp-route-currentFilter="@Model.CurrentFilter">
         Delivery Date:
-        <input type="date" name="jobFilterDateTime" value="@Model.jobFilterDateTime"/>
+        <input type="date" name="filterDateTime" value="@Model.filterDateTime"/>
         <input type="submit"/> 
-        <p>@Model.jobFilterDateTime</p>
     </form>
-    <form asp-controller="Job"  asp-action="Index" method="get" asp-route-machineId="@Model.machineId" asp-route-jobFilterDateTime="@Model.jobFilterDateTime" asp-route-machineType="@Model.machineType" asp-route-currentFilter="@Model.CurrentFilter">
+    <form asp-controller="Job"  asp-action="Index" method="get" asp-route-filterMachineId="@Model.filterMachineId" asp-route-jobFilterDateTime="@Model.filterDateTime" asp-route-filterMachineType="@Model.filterMachineType" asp-route-currentFilter="@Model.CurrentFilter">
         <div class="form-actions no-color">
             <p>
-                Find by name: <input type="text" name="SearchString" value="@Model.CurrentFilter" />jobFilterDateTime
+                Find by name: <input type="text" name="SearchString" value="@Model.CurrentFilter" />
                 <input type="submit" value="Search" class="btn btn-default" /> |
                 <a asp-action="Index">Back to Full List</a>
             </p>
@@ -24,75 +23,75 @@
     </form>
 </div>
 <div>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th><a asp-action="Index" asp-route-sortOrder="@Model.JobNumberSortParm"  asp-route-currentFilter="@Model.CurrentFilter" asp-route-jobFilterDateTime="@Model.jobFilterDateTime" asp-route-machineId="@Model.machineId" asp-route-machineType="@Model.machineType">JobNumber</a></th>
-                <th><a asp-action="Index" asp-route-sortOrder="@Model.QuantitySortParm" asp-route-currentFilter="@Model.CurrentFilter" asp-route-jobFilterDateTime="@Model.jobFilterDateTime" asp-route-machineId="@Model.machineId" asp-route-machineType="@Model.machineType">Quantity</a></th>
-                <th><a asp-action="Index" asp-route-sortOrder="@Model.PageQuantitySortParm" asp-route-currentFilter="@Model.CurrentFilter" asp-route-jobFilterDateTime="@Model.jobFilterDateTime" asp-route-machineId="@Model.machineId" asp-route-machineType="@Model.machineType">Pages</a></th>
-                <th>PaperInside</th>
-                <th>PaperCover</th>
-                <th>Machine</th>
-                <th>Time</th>
-                <th>Start this Job</th>
-                <th>L-Stitch</th>
-                <th>U-Stitch72</th>
-                <th>U-Stitch48</th>
-                <th>i-Sitch</th>
-                <th>Out</th>
-                <th>Edit</th>
-            </tr>
-        </thead>
-        <tbody>
-            @{ foreach (var s in Model.jobLineList) {
-                    <tr>
-                        <td>@s.Job.JobNumber / Id = @s.Id</td>
-                        <td>@s.Job.Quantity</td>
-                        <td>@s.Job.PageQuantity</td>
-                        <td>@s.Job.PaperBw</td>
-                        <td>@s.Job.PaperCover</td>
-                        <td>@s.MachineId</td>
-                        <td>@s.CalculatedTime</td>
-                        <td>
-                            <a asp-controller="Job" asp-action="StartStitch" asp-route-jobId="@s.Id" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
-                        </td>
-                        <td>
-                            <a asp-controller="Job" asp-action="PlanStitch" asp-route-jobId="@s.Id"  asp-route-jobFilterDateTime="@Model.jobFilterDateTime" asp-route-machineId="2" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
-                        </td>
-                        <td>
-                            <a asp-controller="Job" asp-action="PlanStitch" asp-route-jobId="@s.Id" asp-route-jobFilterDateTime="@Model.jobFilterDateTime" asp-route-machineId="3" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
-                        </td>
-                        <td>
-                            <a asp-controller="Job" asp-action="PlanStitch" asp-route-jobId="@s.Id"asp-route-jobFilterDateTime="@Model.jobFilterDateTime" asp-route-machineId="4" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
-                        </td>
-                        <td>
-                            <a asp-controller="Job" asp-action="PlanStitch" asp-route-jobId="@s.Id" asp-route-jobFilterDateTime="@Model.jobFilterDateTime" asp-route-machineId="5" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
-                        </td>
-                        <td>
-                            <a asp-controller="Job" asp-action="PlanStitch" asp-route-jobId="@s.Id" asp-route-jobFilterDateTime="@Model.jobFilterDateTime" asp-route-machineId="1" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
-                        </td>
-                        <td>
-                            <a asp-controller="Job" asp-action="ReadStitch" asp-route-jobId="@s.Id" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
-                        </td>
-                    </tr>
-             }
-            }
-        </tbody>
-    </table>
-    <a asp-action="Index"
-       asp-route-sortOrder="@ViewData["CurrentSort"]"
-       asp-route-page="@(Model.jobLineList.PageIndex - 1)"
-       asp-route-currentFilter="@ViewData["CurrentFilter"]"
-       class="btn btn-default @prevDisabled">
-        Previous
-    </a>
-    <a asp-action="Index"
-       asp-route-sortOrder="@ViewData["CurrentSort"]"
-       asp-route-page="@(Model.jobLineList.PageIndex + 1)"
-       asp-route-currentFilter="@ViewData["CurrentFilter"]"
-       class="btn btn-default @nextDisabled">
-        Next
-    </a>
+    @if (@Model.jobLineList.Count() == 0)
+    {
+        <p>No jobs found for these filter settings</p>
+    }
+    else
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th><a asp-action="Index" asp-route-sortOrder="@Model.JobNumberSortParm" asp-route-currentFilter="@Model.CurrentFilter" asp-route-jobFilterDateTime="@Model.filterDateTime" asp-route-filterMachineId="@Model.filterMachineId" asp-route-filterMachineType="@Model.filterMachineType">JobNumber</a></th>
+                    <th><a asp-action="Index" asp-route-sortOrder="@Model.QuantitySortParm" asp-route-currentFilter="@Model.CurrentFilter" asp-route-jobFilterDateTime="@Model.filterDateTime" asp-route-filterMachineId="@Model.filterMachineId" asp-route-filterMachineType="@Model.filterMachineType">Quantity</a></th>
+                    <th><a asp-action="Index" asp-route-sortOrder="@Model.PageQuantitySortParm" asp-route-currentFilter="@Model.CurrentFilter" asp-route-jobFilterDateTime="@Model.filterDateTime" asp-route-filterMachineId="@Model.filterMachineId" asp-route-filterMachineType="@Model.filterMachineType">Pages</a></th>
+                    <th>PaperInside</th>
+                    <th>PaperCover</th>
+                    <th>Machine</th>
+                    <th>Time</th>
+                    <th>Start this Job</th>
+                    @foreach (var machine in Model.machineList)
+                {
+                        <th>@machine.Name</th>
+                    }
+                    <th>Out</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ foreach (var jobLine in Model.jobLineList)
+                    {
+                        <tr>
+                            <td>@jobLine.Job.JobNumber / Id = @jobLine.Id</td>
+                            <td>@jobLine.Job.Quantity</td>
+                            <td>@jobLine.Job.PageQuantity</td>
+                            <td>@jobLine.Job.PaperBw</td>
+                            <td>@jobLine.Job.PaperCover</td>
+                            <td>@jobLine.MachineId</td>
+                            <td>@jobLine.CalculatedTime</td>
+                            <td>
+                                <a asp-controller="Job" asp-action="StartStitch" asp-route-jobId="@jobLine.Id" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
+                            </td>
+                            @foreach (var machine in Model.machineList)
+                            {
+                                <td>
+                                    <a asp-controller="Job" asp-action="AssignJobLine" asp-route-jobLineId="@jobLine.Id" asp-route-machineId="@machine.Id" asp-route-filterMachineId="@Model.filterMachineId" asp-route-filterMachineType="@Model.filterMachineType" asp-route-currentFilter="@Model.CurrentFilter" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
+                                </td>
+                            }
+                            <td>
+                                <a asp-controller="Job" asp-action="ReadStitch" asp-route-jobId="@jobLine.Id" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <a asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-page="@(Model.jobLineList.PageIndex - 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn btn-default @prevDisabled">
+            Previous
+        </a>
+        <a asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-page="@(Model.jobLineList.PageIndex + 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn btn-default @nextDisabled">
+            Next
+        </a>
+                    }
+   
 </div>
 <p>Totaaltijd = @Model.totalTime</p>
 

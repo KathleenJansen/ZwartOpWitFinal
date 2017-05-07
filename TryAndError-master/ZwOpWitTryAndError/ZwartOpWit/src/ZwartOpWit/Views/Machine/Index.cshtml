@@ -12,6 +12,7 @@
             <thead>
                 <tr>
                     <th>Machine Name</th>
+                    <th>Calculation method</th>
                     <th>Type</th>
                     <th>Department</th>
                     <th>Action</th>
@@ -22,6 +23,7 @@
             {
                         <tr>
                             <td>@m.Name</td>
+                            <td>@m.CalculationMethod.ToString()</td>
                             <td>@m.Type.ToString()</td>
                             <td>@m.Department.Name</td>
                             <td>

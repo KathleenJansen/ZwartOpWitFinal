@@ -1,0 +1,13 @@
+@model ZwartOpWit.Models.Viewmodels.JobImportVM
+@{
+    ViewData["Title"] = "View";
+}
+
+<h1>Import </h1>
+<form method="post" asp-action="Filter" asp-controller="Job" enctype="multipart/form-data">
+    <div class="form-group">
+        <input type="file" name="files" multiple class="form-control" />
+    </div>
+    <input type="submit" value="Upload" class="btn btn-default" />
+</form>
+

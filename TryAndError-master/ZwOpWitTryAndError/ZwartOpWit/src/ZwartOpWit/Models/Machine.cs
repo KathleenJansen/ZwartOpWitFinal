@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 namespace ZwartOpWit.Models
 {
     public enum MachineTypes { Stitch, Typo, Fold, Score, Busch };
+    public enum CalculationMethodTypes { None, StichMain, Always5000Ticks, Always1Hour }
+
     public class Machine
     {
         public Machine()
@@ -30,5 +32,6 @@ namespace ZwartOpWit.Models
         public Double RunTimeTo1000SpeedStationFactor { get; set; }
         public Double RunTimeFrom1000Speed { get; set; }
         public Double RunTimeFrom1000SpeedStationFactor { get; set; }
+        public CalculationMethodTypes CalculationMethod { get; set; }
     }
 }

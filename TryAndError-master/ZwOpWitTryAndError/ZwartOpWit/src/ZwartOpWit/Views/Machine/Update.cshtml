@@ -14,6 +14,12 @@
                 <span asp-validation-for="machine.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="machine.CalculationMethod">Calculation method:</label>
+                <select asp-for="machine.CalculationMethod"
+                        asp-items="Html.GetEnumSelectList<CalculationMethodTypes>()" class="form-control"></select>
+                <span asp-validation-for="machine.CalculationMethod" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="machine.Type">Type:</label>
                 <select asp-for="machine.Type"
                         asp-items="Html.GetEnumSelectList<MachineTypes>()" class="form-control"></select>
