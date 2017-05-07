@@ -19,6 +19,12 @@ namespace ZwartOpWit.Helpers
             this.AddRange(items);
         }
 
+        public PaginatedList()
+        {
+            PageIndex = 0;
+            TotalPages = 0;
+        }
+
         public bool HasPreviousPage
         {
             get

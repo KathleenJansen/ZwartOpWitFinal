@@ -23,6 +23,31 @@
             <select asp-for="machine.DepartmentId"  asp-items="@Model.selectDepartments" class="form-control"></select>
             <span asp-validation-for="machine.DepartmentId" class="text-danger"></span>
         </div>
+        <div class="form-group">
+            <label asp-for="machine.SetupTime">Setup Time:</label>
+            <input asp-for="machine.SetupTime" class="form-control" />
+            <span asp-validation-for="machine.SetupTime" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="machine.RunTimeTo1000Speed">Runtime to 1000:</label>
+            <input asp-for="machine.RunTimeTo1000Speed" class="form-control" />
+            <span asp-validation-for="machine.RunTimeTo1000Speed" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="machine.RunTimeTo1000SpeedStationFactor">Runtime to 1000 station factor:</label>
+            <input asp-for="machine.RunTimeTo1000SpeedStationFactor" class="form-control" />
+            <span asp-validation-for="machine.RunTimeTo1000SpeedStationFactor" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="machine.RunTimeFrom1000Speed">Runtime from 1000:</label>
+            <input asp-for="machine.RunTimeFrom1000Speed" class="form-control" />
+            <span asp-validation-for="machine.RunTimeFrom1000Speed" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="machine.RunTimeFrom1000SpeedStationFactor">Runtime from 1000 station factor:</label>
+            <input asp-for="machine.RunTimeFrom1000SpeedStationFactor" class="form-control" />
+            <span asp-validation-for="machine.RunTimeFrom1000SpeedStationFactor" class="text-danger"></span>
+        </div>
         <input type="submit" value="Add Machine" class="btn btn-default" />
     </div>
 </form>

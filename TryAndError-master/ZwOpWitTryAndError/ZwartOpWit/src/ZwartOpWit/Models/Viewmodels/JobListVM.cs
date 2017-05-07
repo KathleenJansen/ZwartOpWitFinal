@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ZwartOpWit.Helpers;
 
 namespace ZwartOpWit.Models.Viewmodels
 {
-    public class JobListVM
+    public class JobListVM : IndexBaseVM
     {
-        public List<Job> jobList { get; set; }
+       // public List<Job> jobList { get; set; }
 
-        public List<JobLine> jobLineList { get; set; }
+        public PaginatedList<JobLine> jobLineList { get; set; }
 
         public List<Machine> machineList { get; set; }
 
-        public string date { get; set; }
+        public string jobFilterDateTime { get; set; }
 
         public int jobId { get; set; }
 
@@ -27,9 +28,14 @@ namespace ZwartOpWit.Models.Viewmodels
 
         public JobListVM()
         {
-            jobList = new List<Job>();
-            jobLineList = new List<JobLine>();
-            date = DateTime.Today.ToString();
+            //jobList = new List<Job>();
+            jobLineList = new PaginatedList<JobLine>();
+            jobFilterDateTime = DateTime.Today.ToString();
         }
+
+        public String JobNumberSortParm { get; set; }
+        public String PageQuantitySortParm { get; set; }
+        public String QuantitySortParm { get; set; }
+        public MachineTypes machineType { get; set; }
     }
 }

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ZwartOpWit.Helpers;
+using ZwartOpWit.Models.Viewmodels;
 
 namespace ZwartOpWit.Controllers
 {
@@ -20,6 +21,7 @@ namespace ZwartOpWit.Controllers
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ILogger _logger;
+        const int PageSize = 3;
 
         public UserController(AppDBContext context,
                                 UserManager<User> userManager,
@@ -38,17 +40,15 @@ namespace ZwartOpWit.Controllers
                                                 string searchString,
                                                 int? page)
         {
-            ViewData["CurrentSort"]     = sortOrder;
-            ViewData["EmailSortParm"]   = String.IsNullOrEmpty(sortOrder) ? "email_desc" : "";
-            ViewData["CurrentFilter"]   = searchString;
+            UserListVM userListVM = new UserListVM();
 
-            if (searchString != null)
+            userListVM.CurrentSort      = sortOrder;
+            userListVM.CurrentFilter    = searchString;
+            userListVM.EmailSortParm    = String.IsNullOrEmpty(sortOrder) ? "email_desc" : "";
+
+            if (searchString != currentFilter)
             {
                 page = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
             }
 
             var users = from u in _context.Users
@@ -68,10 +68,10 @@ namespace ZwartOpWit.Controllers
                     users = users.OrderBy(u => u.Email);
                     break;
             }
-             
-            int pageSize = 3;
-   
-            return View(await PaginatedList<User>.CreateAsync(users.AsNoTracking(), page ?? 1, pageSize));
+
+            userListVM.userList = await PaginatedList<User>.CreateAsync(users.AsNoTracking(), page ?? 1, PageSize);
+
+            return View(userListVM);
         }
 
         [HttpGet]

@@ -16,6 +16,7 @@ namespace ZwartOpWit.Controllers
     {
         //Constant to determine session filter date time
         const string SessionKeyJobFilterDatetime = "JobFilterDatetime";
+        const int PageSize = 10;
 
         private readonly AppDBContext _context;
 
@@ -23,53 +24,90 @@ namespace ZwartOpWit.Controllers
         {
             _context = context;
         }
-
-        private DateTime getJobFilterDateTime()
+        [HttpGet]
+        public async Task<IActionResult> Index( string sortOrder,
+                                                string currentFilter,
+                                                string searchString,
+                                                int? page,
+                                                int machineId,
+                                                MachineTypes machineType,
+                                                DateTime jobFilterDateTime)
         {
-            String jobFilterDateTimeString = HttpContext.Session.GetString(SessionKeyJobFilterDatetime);
-            DateTime jobFilterDateTime;
-
-            if (String.IsNullOrEmpty(jobFilterDateTimeString))
-            {
-                jobFilterDateTime = DateTime.Today;
-            }
-            else
-            {
-                jobFilterDateTime = DateTime.Parse(jobFilterDateTimeString);
-            }
-
-            HttpContext.Session.SetString(SessionKeyJobFilterDatetime, jobFilterDateTime.ToString());
-
-            return jobFilterDateTime;
-        }
-
-        public IActionResult Index()
-        {
-            DateTime jobFilterDateTime = this.getJobFilterDateTime();
-
             JobListVM jobListVm = new JobListVM();
-            jobListVm.jobLineList = _context.JobLines.Include(j => j.Job).Where(j => j.Job.DeliveryDate == jobFilterDateTime).ToList();
+            jobFilterDateTime   = this.handleJobFilterDateTime(jobFilterDateTime);
 
-            jobListVm.date = jobFilterDateTime.ToString();
+            jobListVm.CurrentSort           = sortOrder;
+            jobListVm .CurrentFilter        = searchString;
+            jobListVm.JobNumberSortParm     = String.IsNullOrEmpty(sortOrder) ? "jobNumber_desc" : "";
+            jobListVm.QuantitySortParm      = sortOrder == "quantity" ? "quantity_desc" : "quantity";
+            jobListVm.PageQuantitySortParm  = sortOrder == "pageQuantity" ? "pageQuantity_desc" : "pageQuantity";
 
-            jobListVm.jobLineList = _context.JobLines.Where(e => e.DepartmentId == 1).Include(j => j.Job).ToList();
+            if (searchString != currentFilter)
+            {
+                page = 1;
+            }
+
+            var joblines = _context.JobLines.Include(j => j.Job).AsQueryable();
+
+            //Add filters
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                joblines = joblines.Where(jl => jl.Job.JobNumber.Contains(searchString));
+            }
+
+            //Machine type filter is set
+            if (System.Enum.IsDefined(typeof(MachineTypes), machineType))
+            {
+                joblines = joblines.Where(jl => jl.MachineType == machineType);
+            }
+
+            //Machine id is set
+            if (machineId != 0)
+            {
+                joblines = joblines.Where(jl => jl.MachineId == machineId);
+            }
+
+            //Filter on date
+            if (jobFilterDateTime != DateTime.MinValue)
+            {
+                joblines = joblines.Where(jl => jl.Job.DeliveryDate == jobFilterDateTime);
+            }
+
+            //< th > PaperInside </ th >
+            //< th > PaperCover </ th >
+            //< th > Machine </ th >
+            //< th > Time </ th >
+
+            switch (sortOrder)
+            {
+                case "jobNumber_desc":
+                    joblines = joblines.OrderByDescending(u => u.Job.JobNumber);
+                    break;
+                case "quantity":
+                    joblines = joblines.OrderBy(jl => jl.Job.Quantity);
+                    break;
+                case "quantity_desc":
+                    joblines = joblines.OrderByDescending(jl => jl.Job.Quantity);
+                    break;
+
+                case "pageQuantity":
+                    joblines = joblines.OrderBy(jl => jl.Job.PageQuantity);
+                    break;
+                case "pageQuantity_desc":
+                    joblines = joblines.OrderByDescending(jl => jl.Job.PageQuantity);
+                    break;
+                default:
+                    joblines = joblines.OrderBy(u => u.Job.JobNumber);
+                    break;
+            }
+
+            jobListVm.jobFilterDateTime = jobFilterDateTime.ToString("yyyy-MM-dd");
+            jobListVm.jobLineList = await PaginatedList<JobLine>.CreateAsync(joblines.AsNoTracking(), page ?? 1, PageSize);
 
             return View(jobListVm);
         }
 
-        public IActionResult IndexStitch(DateTime date)
-        {
-            if (DateTime.Equals(DateTime.MinValue, date))
-            {
-                date = DateTime.Today;
-            }
-
-            JobListVM jobListVm = new JobListVM();
-            jobListVm = CreateJobListViewModelByMachineId(date, 0);
-            ViewBag.date = jobListVm.date;
-
-            return View("Index", jobListVm);
-        }
+   
 
         public IActionResult ReadStitch(int jobId)
         {
@@ -137,7 +175,7 @@ namespace ZwartOpWit.Controllers
             JobListVM jobListVm = new JobListVM();
 
             jobListVm = CreateJobListViewModelByMachineId(date, machineId);
-            ViewBag.date = jobListVm.date; // viewBag aangemaakt om default.cshtml aan te spreken...(?)
+            ViewBag.date = jobListVm.jobFilterDateTime; // viewBag aangemaakt om default.cshtml aan te spreken...(?)
 
             return View("Index", jobListVm);
         }
@@ -257,7 +295,7 @@ namespace ZwartOpWit.Controllers
             JobListVM jobListVm = new JobListVM();
 
             jobListVm = CreateJobListViewModelByMachineId(date, jobLine.MachineId);
-            ViewBag.date = jobListVm.date;
+            ViewBag.date = jobListVm.jobFilterDateTime;
 
             return View("Index", jobListVm);
         }
@@ -267,21 +305,21 @@ namespace ZwartOpWit.Controllers
             JobListVM viewModelJobs = new JobListVM();
             PlannedTimeCalculator plannedTimeCalculator = new PlannedTimeCalculator(_context);
 
-            if (machineId != 0)
-            {
-                viewModelJobs.jobLineList = _context.JobLines.Include(j => j.Job).
-                    Where(j => j.Job.DeliveryDate == date && j.Completed == false).
-                    Where(j => j.MachineId == machineId).ToList();
-                viewModelJobs.machineName = _context.Machines.Where(e => e.Id == machineId).FirstOrDefault().Name;
-            }
-            else
-            {
-                viewModelJobs.jobLineList = _context.JobLines.Include(j => j.Job).
-                    Where(j => j.Job.DeliveryDate == date && j.Completed == false).ToList();
-                viewModelJobs.machineName = "All Jobs";
-            }
+            //if (machineId != 0)
+            //{
+            //    viewModelJobs.jobLineList = _context.JobLines.Include(j => j.Job).
+            //        Where(j => j.Job.DeliveryDate == date && j.Completed == false).
+            //        Where(j => j.MachineId == machineId).ToList();
+            //    viewModelJobs.machineName = _context.Machines.Where(e => e.Id == machineId).FirstOrDefault().Name;
+            //}
+            //else
+            //{
+            //    viewModelJobs.jobLineList = _context.JobLines.Include(j => j.Job).
+            //        Where(j => j.Job.DeliveryDate == date && j.Completed == false).ToList();
+            //    viewModelJobs.machineName = "All Jobs";
+            //}
 
-            viewModelJobs.date = date.ToString();
+            viewModelJobs.jobFilterDateTime = date.ToString();
             viewModelJobs.machineId = machineId;
             viewModelJobs.departmentId = 1;
             viewModelJobs.totalTime = new TimeSpan(0,0,0);
@@ -294,6 +332,37 @@ namespace ZwartOpWit.Controllers
             }
 
             return viewModelJobs;
+        }
+
+        private DateTime handleJobFilterDateTime()
+        {
+           return this.handleJobFilterDateTime(DateTime.MinValue);
+        }
+
+        private DateTime handleJobFilterDateTime(DateTime jobFilterDateTime)
+        {
+            String jobFilterDateTimeString = String.Empty;
+
+            if (jobFilterDateTime == DateTime.MinValue)
+            {
+                if (HttpContext.Session != null)
+                {
+                    jobFilterDateTimeString = HttpContext.Session.GetString(SessionKeyJobFilterDatetime);
+                    if (!String.IsNullOrEmpty(jobFilterDateTimeString))
+                    {
+                        jobFilterDateTime = DateTime.Parse(jobFilterDateTimeString);
+                    }
+                }
+            }
+
+            if(jobFilterDateTime == DateTime.MinValue)
+            {
+                jobFilterDateTime = DateTime.Today;
+            }
+          
+            HttpContext.Session.SetString(SessionKeyJobFilterDatetime, jobFilterDateTime.ToString());
+
+            return jobFilterDateTime;
         }
     }
 }
