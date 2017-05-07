@@ -23,11 +23,10 @@ namespace ZwartOpWit.Models
         public MachineTypes MachineType { get; set; }
         //public JobLineTypes JobLineType { get; set; }
         public int Sequence { get; set; }
-
         [ForeignKey("DepartmentId")]
         public int DepartmentId { get; set; }
         public Department Department { get; set; }
-
-        public bool JobReady { get; set; }
+        public bool Completed { get; set; }
+        public TimeSpan CalculatedTime { get; set; }
     }
 }

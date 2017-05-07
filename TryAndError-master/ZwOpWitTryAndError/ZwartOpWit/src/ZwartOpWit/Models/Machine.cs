@@ -10,7 +10,6 @@ namespace ZwartOpWit.Models
     public enum MachineTypes { Stitch, Typo, Fold, Score, Busch };
     public class Machine
     {
-
         public Machine()
         {
             JobLines = new List<JobLine>();
@@ -25,6 +24,11 @@ namespace ZwartOpWit.Models
         [ForeignKey("DepartmentId")]
         public Department Department{ get; set; }
         public MachineTypes Type { get; set; }
-
+        public Double SetupTime { get; set; }
+        public Double SetupTimeStationFactor { get; set; }
+        public Double RunTimeTo1000Speed { get; set; }
+        public Double RunTimeTo1000SpeedStationFactor { get; set; }
+        public Double RunTimeFrom1000Speed { get; set; }
+        public Double RunTimeFrom1000SpeedStationFactor { get; set; }
     }
 }

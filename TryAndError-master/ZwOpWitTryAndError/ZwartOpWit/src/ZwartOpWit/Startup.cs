@@ -35,8 +35,10 @@ namespace ZwartOpWit
             // Add framework services.
             services.AddMvc();
             
+            //Connection string ophalen (Zie appsettings.json)
             var sqlConnectionString = Configuration.GetConnectionString("ConnectionString");
 
+            //Add entity framework service
             services.AddEntityFramework().AddDbContext<AppDBContext>(options =>
                 options.UseMySQL(
                     sqlConnectionString,
@@ -44,6 +46,7 @@ namespace ZwartOpWit
                 )
             );
 
+            //Add identity service
             services.AddIdentity<User, IdentityRole>()
               .AddEntityFrameworkStores<AppDBContext>()
               .AddDefaultTokenProviders();
@@ -51,6 +54,16 @@ namespace ZwartOpWit
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            // Adds a default in-memory implementation of IDistributedCache.
+            services.AddDistributedMemoryCache();
+
+            //Add session services
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(120);
+                options.CookieHttpOnly = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -79,6 +92,8 @@ namespace ZwartOpWit
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            app.UseSession();
         }
     }
 }

@@ -7,11 +7,16 @@ using System.Threading.Tasks;
 using ZwartOpWit.Models;
 using ZwartOpWit.Models.Viewmodels;
 using System.IO;
+using Microsoft.AspNetCore.Http;
+using ZwartOpWit.Helpers;
 
 namespace ZwartOpWit.Controllers
 {
     public class JobController : Controller
     {
+        //Constant to determine session filter date time
+        const string SessionKeyJobFilterDatetime = "JobFilterDatetime";
+
         private readonly AppDBContext _context;
 
         public JobController(AppDBContext context)
@@ -19,19 +24,33 @@ namespace ZwartOpWit.Controllers
             _context = context;
         }
 
-        public IActionResult Index(DateTime date)
+        private DateTime getJobFilterDateTime()
         {
-            JobListVM jobListVm = new JobListVM();
-            jobListVm.jobLineList = _context.JobLines.Include(j => j.Job).Where(j => j.Job.DeliveryDate == date).Where(j => j.JobId == 98).ToList();
+            String jobFilterDateTimeString = HttpContext.Session.GetString(SessionKeyJobFilterDatetime);
+            DateTime jobFilterDateTime;
 
-            if (DateTime.Equals(DateTime.MinValue, date))
+            if (String.IsNullOrEmpty(jobFilterDateTimeString))
             {
-                date = DateTime.Today;
+                jobFilterDateTime = DateTime.Today;
+            }
+            else
+            {
+                jobFilterDateTime = DateTime.Parse(jobFilterDateTimeString);
             }
 
-            String formatted = date.ToString("yyyy-MM-dd");
+            HttpContext.Session.SetString(SessionKeyJobFilterDatetime, jobFilterDateTime.ToString());
 
-            jobListVm.date = formatted;
+            return jobFilterDateTime;
+        }
+
+        public IActionResult Index()
+        {
+            DateTime jobFilterDateTime = this.getJobFilterDateTime();
+
+            JobListVM jobListVm = new JobListVM();
+            jobListVm.jobLineList = _context.JobLines.Include(j => j.Job).Where(j => j.Job.DeliveryDate == jobFilterDateTime).ToList();
+
+            jobListVm.date = jobFilterDateTime.ToString();
 
             jobListVm.jobLineList = _context.JobLines.Where(e => e.DepartmentId == 1).Include(j => j.Job).ToList();
 
@@ -100,7 +119,7 @@ namespace ZwartOpWit.Controllers
 
         public IActionResult PlanStitch(int jobId, DateTime date, int machineId)
         {
-
+            
             if (jobId != 0)
             {
                 JobLine j = new JobLine();
@@ -168,7 +187,7 @@ namespace ZwartOpWit.Controllers
                         line.UserId = "2aff4902-2ab4-4e25-88fc-4765d661e8f2";
                         line.MachineType = MachineTypes.Stitch;
                         line.DepartmentId = 1;
-                        line.JobReady = false;
+                        line.Completed = false;
 
                         _context.JobLines.Add(line);
                     }
@@ -228,7 +247,7 @@ namespace ZwartOpWit.Controllers
         {
             JobLine jobLine = new JobLine();
             jobLine = _context.JobLines.Include(j => j.Job).Where(j => j.Id == jobId).FirstOrDefault();
-            jobLine.JobReady = yes;
+            jobLine.Completed = true;
             _context.Entry(jobLine).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             _context.SaveChanges();
 
@@ -246,80 +265,35 @@ namespace ZwartOpWit.Controllers
         public JobListVM CreateJobListViewModelByMachineId(DateTime date, int machineId)
         {
             JobListVM viewModelJobs = new JobListVM();
+            PlannedTimeCalculator plannedTimeCalculator = new PlannedTimeCalculator(_context);
 
             if (machineId != 0)
             {
                 viewModelJobs.jobLineList = _context.JobLines.Include(j => j.Job).
-                    Where(j => j.Job.DeliveryDate == date && j.JobReady == false).
+                    Where(j => j.Job.DeliveryDate == date && j.Completed == false).
                     Where(j => j.MachineId == machineId).ToList();
                 viewModelJobs.machineName = _context.Machines.Where(e => e.Id == machineId).FirstOrDefault().Name;
             }
             else
             {
                 viewModelJobs.jobLineList = _context.JobLines.Include(j => j.Job).
-                    Where(j => j.Job.DeliveryDate == date && j.JobReady == false).ToList();
+                    Where(j => j.Job.DeliveryDate == date && j.Completed == false).ToList();
                 viewModelJobs.machineName = "All Jobs";
             }
 
-            viewModelJobs.date = date.ToString("yyyy-MM-dd");
+            viewModelJobs.date = date.ToString();
             viewModelJobs.machineId = machineId;
             viewModelJobs.departmentId = 1;
             viewModelJobs.totalTime = new TimeSpan(0,0,0);
 
             foreach (JobLine j in viewModelJobs.jobLineList)
             {
-                JobLineCalculatedTime calc = new JobLineCalculatedTime();
-
-                calc.Id = j.Id;
-                calc.Machine = j.Machine;
-                calc.MachineId = j.MachineId;
-                calc.Job = j.Job;
-                calc.JobId = j.JobId;
-                calc.User = j.User;
-                calc.UserId = j.UserId;
-                calc.MachineType = j.MachineType;
-                calc.Sequence = j.Sequence;
-                calc.Department = j.Department;
-                calc.DepartmentId = j.DepartmentId;
-                calc.JobReady = j.JobReady;
-
-                calc.CalculatedTime = CalculatePlannedTime(j);
-                viewModelJobs.totalTime += calc.CalculatedTime;
-                viewModelJobs.jobLineListCalculatedTime.Add(calc);
+                j.CalculatedTime = plannedTimeCalculator.CalculatePlannedTimeStich(j);
+                viewModelJobs.totalTime += j.CalculatedTime;
+                viewModelJobs.jobLineList.Add(j);
             }
 
             return viewModelJobs;
-        }
-
-        public TimeSpan CalculatePlannedTime(JobLine line)
-        {
-            int stations = line.Job.PageQuantity/4;
-            int quantity = line.Job.Quantity;
-
-            double instelMachine = 0.18 + (stations * 0.02);
-            double startDraai1000 = 0.268 + (stations * 0.0224);
-            double doorDraai1000 = 0.241 + (stations * 0.0163);
-            double quantityDoorDraai = quantity - 1000;
-            double centiTime = instelMachine + startDraai1000 + (doorDraai1000 * quantityDoorDraai / 1000);
-
-            int hour = 0;
-            int minute = 0;
-            int second = 0;
-
-            if (centiTime >= 1)
-            {
-                hour = 1;
-                centiTime--;
-            }
-
-            double centiMinute = centiTime % 1;
-            minute = (int)Math.Round(centiMinute * 60);
-
-            double centiSecond = (centiMinute * 60) - minute;
-            second = (int)Math.Round(centiSecond * 60);
-
-            TimeSpan planned = new TimeSpan(hour, minute, second);
-            return planned;
         }
     }
 }

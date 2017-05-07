@@ -3,6 +3,7 @@
 }
 @using ZwartOpWit.Models
 @model ZwartOpWit.Models.Viewmodels.JobListVM
+
 <h1> Jobs to do @Model.machineName</h1>
 <div>
     <form asp-controller="Job" asp-action="PlanStitch" asp-route-date="@Model.date" asp-route-machineId="@Model.machineId" >
@@ -33,7 +34,7 @@
             </tr>
         </thead>
         <tbody>
-            @{ foreach (var s in Model.jobLineListCalculatedTime) {
+            @{ foreach (var s in Model.jobLineList) {
                     <tr>
                         <td>@s.Job.JobNumber / Id = @s.Id</td>
                         <td>@s.Job.Quantity</td>

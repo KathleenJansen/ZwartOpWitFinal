@@ -11,8 +11,6 @@ namespace ZwartOpWit.Models.Viewmodels
 
         public List<JobLine> jobLineList { get; set; }
 
-        public List<JobLineCalculatedTime> jobLineListCalculatedTime { get; set; }
-
         public List<Machine> machineList { get; set; }
 
         public string date { get; set; }
@@ -31,7 +29,6 @@ namespace ZwartOpWit.Models.Viewmodels
         {
             jobList = new List<Job>();
             jobLineList = new List<JobLine>();
-            jobLineListCalculatedTime = new List<JobLineCalculatedTime>();
             date = DateTime.Today.ToString();
         }
     }
