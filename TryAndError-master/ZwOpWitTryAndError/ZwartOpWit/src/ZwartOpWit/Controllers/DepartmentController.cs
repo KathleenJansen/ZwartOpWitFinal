@@ -5,12 +5,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using ZwartOpWit.Models;
 using ZwartOpWit.Models.Viewmodels;
+using ZwartOpWit.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace ZwartOpWit.Controllers
 {
     public class DepartmentController: Controller
     {
         private readonly AppDBContext _context;
+        const int PageSize = 3;
 
         public DepartmentController(AppDBContext context)
         {
@@ -18,10 +21,39 @@ namespace ZwartOpWit.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index( string sortOrder,
+                                                string currentFilter,
+                                                string searchString,
+                                                int? page)
         {
             DepartmentListVM departmentListVM = new DepartmentListVM();
-            departmentListVM.departmentList = _context.Departments.ToList();
+            departmentListVM.currentSort = sortOrder;
+            departmentListVM.currentFilter = searchString;
+            departmentListVM.nameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+
+            if (searchString != currentFilter)
+            {
+                page = 1;
+            }
+
+            var departments = _context.Departments.AsQueryable();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                departments = departments.Where(s => s.Name.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    departments = departments.OrderByDescending(u => u.Name);
+                    break;
+                default:
+                    departments = departments.OrderBy(u => u.Name);
+                    break;
+            }
+
+            departmentListVM.departmentList = await PaginatedList<Department>.CreateAsync(departments.AsNoTracking(), page ?? 1, PageSize);
 
             return View(departmentListVM);
         }

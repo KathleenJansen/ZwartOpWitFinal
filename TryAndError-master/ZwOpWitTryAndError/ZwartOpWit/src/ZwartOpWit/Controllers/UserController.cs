@@ -42,9 +42,9 @@ namespace ZwartOpWit.Controllers
         {
             UserListVM userListVM = new UserListVM();
 
-            userListVM.CurrentSort      = sortOrder;
-            userListVM.CurrentFilter    = searchString;
-            userListVM.EmailSortParm    = String.IsNullOrEmpty(sortOrder) ? "email_desc" : "";
+            userListVM.currentSort      = sortOrder;
+            userListVM.currentFilter    = searchString;
+            userListVM.emailSortParm    = String.IsNullOrEmpty(sortOrder) ? "email_desc" : "";
 
             if (searchString != currentFilter)
             {

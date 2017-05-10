@@ -1,17 +1,30 @@
-﻿@{
-
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model ZwartOpWit.Models.Viewmodels.DepartmentListVM
+@{
+    var prevDisabled = !Model.departmentList.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.departmentList.HasNextPage ? "disabled" : "";
 }
 <div>
     <div>
-        <h2>Departments</h2>
-        <p><a asp-controller="Department" asp-action="Create" class="btn btn-info">New Department</a></p>
+        <h2>@Localizer["Title"]</h2>
+        <p><a asp-controller="Department" asp-action="Create" class="btn btn-info">@Localizer["New"]</a></p>
     </div>
+    <form asp-action="Index" method="get">
+        <div class="form-actions no-color">
+            <p>
+                @Localizer["FindByName"]: <input type="text" name="SearchString" value="@Model.currentFilter" />
+                <input type="submit" value="@Localizer["Search"]" class="btn btn-default" /> |
+                <a asp-action="Index">@Localizer["BackToFullList"]</a>
+            </p>
+        </div>
+    </form>
     <div>
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Department Name</th>
-                    <th>Action</th>
+                    <th><a asp-action="Index" asp-route-sortOrder="@Model.nameSortParm" asp-route-currentFilter="@Model.currentFilter">@Localizer["DepartmentName"]</a></th>
+                    <th>@Localizer["Action"]</th>
                 </tr>
             </thead>
             <tbody>
@@ -28,6 +41,20 @@
                     }}
             </tbody>
         </table>
+        <a asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-page="@(Model.departmentList.PageIndex - 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn btn-default @prevDisabled">
+            @Localizer["Previous"]
+        </a>
+        <a asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-page="@(Model.departmentList.PageIndex + 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn btn-default @nextDisabled">
+            @Localizer["Next"]
+        </a>
     </div>
 </div>
 

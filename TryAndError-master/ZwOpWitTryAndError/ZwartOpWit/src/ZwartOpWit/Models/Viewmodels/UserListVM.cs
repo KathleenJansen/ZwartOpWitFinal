@@ -15,6 +15,6 @@ namespace ZwartOpWit.Models.Viewmodels
             userList = new PaginatedList<User>();
         }
 
-        public String EmailSortParm { get; set; }
+        public String emailSortParm { get; set; }
     }
 }

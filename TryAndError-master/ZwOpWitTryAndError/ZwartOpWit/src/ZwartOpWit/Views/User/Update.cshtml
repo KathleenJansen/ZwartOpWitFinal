@@ -1,9 +1,11 @@
-﻿@model ZwartOpWit.Models.UserVM
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model ZwartOpWit.Models.UserVM
 
 @{
 
 }
-<h1>Update</h1>
+<h1>@Localizer["Update"]</h1>
 <div>
     @if (Model.UserId != null)
     {
@@ -25,12 +27,13 @@
                 </div>
             </div>
             <input asp-for="UserId" type="hidden" value="@Model.UserId" />
-            <input type="submit" value="Update User" class="btn btn-default" />
+            <a class="btn btn-default" asp-area="" asp-controller="User" asp-action="Index">@Localizer["Back"]</a>
+            <input type="submit" value="@Localizer["Update"]" class="btn btn-default" />
         </form>
     }
     else
     {
-        <h2>No user found</h2>
+        <h2>@Localizer["NoUserFound"]</h2>
     }
 </div>
 

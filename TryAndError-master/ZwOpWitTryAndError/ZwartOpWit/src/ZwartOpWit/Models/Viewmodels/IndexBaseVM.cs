@@ -7,7 +7,7 @@ namespace ZwartOpWit.Models.Viewmodels
 {
     public class IndexBaseVM
     {
-        public String CurrentSort { get; set; }
-        public String CurrentFilter { get; set; }
+        public String currentSort { get; set; }
+        public String currentFilter { get; set; }
     }
 }

@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model ZwartOpWit.Models.Viewmodels.TimeRegisterVM
+@{
+
+}
+<h1>@Localizer["Create"]</h1>
+<form asp-action="Create" asp-controller="TimeRegister">
+    <div>
+        <div class="form-group">
+            <label asp-for="timeRegister.JobLine.JobId">@Localizer["JobId"]:</label>
+            <input asp-for="timeRegister.JobLine.JobId" type="text" value="@Model.timeRegister.JobLine.JobId" class="form-control" />
+            <span asp-validation-for="timeRegister.JobLine.JobId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="timeRegister.User.UserName">@Localizer["UserName"]:</label>
+            <input asp-for="timeRegister.User.UserName" type="text" value="@Model.timeRegister.User.UserName" class="form-control" />
+            <span asp-validation-for="timeRegister.User.UserName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="timeRegister.Start">@Localizer["StartTime"]:</label>
+            <input asp-for="timeRegister.Start" type="text" value="@Model.timeRegister.Start" class="form-control" />
+            <span asp-validation-for="timeRegister.Start" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="timeRegister.Stop">@Localizer["StopTime"]:</label>
+            <input asp-for="timeRegister.Stop" type="text" value="@Model.timeRegister.Stop" class="form-control" />
+            <span asp-validation-for="timeRegister.Stop" class="text-danger"></span>
+        </div>
+        <a class="btn btn-default" asp-area="" asp-controller="TimeRegister" asp-action="Index">@Localizer["Back"]</a>
+        <input type="submit" value="@Localizer["Add"]" class="btn btn-default" />
+    </div>
+</form>
+

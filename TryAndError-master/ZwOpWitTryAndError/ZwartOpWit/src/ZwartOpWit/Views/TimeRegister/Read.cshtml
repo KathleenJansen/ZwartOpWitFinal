@@ -1,0 +1,29 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model ZwartOpWit.Models.Viewmodels.TimeRegisterVM
+@{
+
+}
+<h1>@Localizer["Read"]</h1>
+<div>
+    <table class="table table-condensed">
+        <tr>
+            <td>@Localizer["JobId"]</td>
+            <td>@Model.timeRegister.JobLine.JobId</td>
+        </tr>
+        <tr>
+            <td>@Localizer["UserName"]</td>
+            <td>@Model.timeRegister.User.UserName</td>
+        </tr>
+        <tr>
+            <td>@Localizer["StartTime"]</td>
+            <td>@Model.timeRegister.Start</td>
+        </tr>
+        <tr>
+            <td>@Localizer["StopTime"]</td>
+            <td>@Model.timeRegister.Stop</td>
+        </tr>
+    </table>
+    <a class="btn btn-default" asp-area="" asp-controller="TimeRegister" asp-action="Index">@Localizer["Back"]</a>
+</div>
+

@@ -7,22 +7,72 @@ using System.Linq;
 using System.Threading.Tasks;
 using ZwartOpWit.Models;
 using ZwartOpWit.Models.Viewmodels;
+using ZwartOpWit.Helpers;
 
 namespace ZwartOpWit.Controllers
 {
     public class MachineController: Controller
     {
         private readonly AppDBContext _context;
+        const int PageSize = 3;
 
         public MachineController(AppDBContext context)
         {
             _context = context;
         }
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index(string sortOrder,
+                                                 string currentFilter,
+                                                 string searchString,
+                                                 int? page)
         {
-            MachineListVM machinelistVM = new MachineListVM();
-            machinelistVM.machineList = _context.Machines.Include(m => m.Department).ToList();
-            return View(machinelistVM);
+            MachineListVM machineListVm = new MachineListVM();
+
+            machineListVm.currentSort = sortOrder;
+            machineListVm.currentFilter = searchString;
+            machineListVm.nameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            machineListVm.calculationMethodSortParm = sortOrder == "calcMethod" ? "calcMethod_desc" : "calcMethod";
+            machineListVm.typeSortParm = sortOrder == "type" ? "type_desc" : "type";
+            machineListVm.departmentSortParm = sortOrder == "department" ? "department_desc" : "department";
+
+            if (searchString != currentFilter)
+            {
+                page = 1;
+            }
+
+            var machines = _context.Machines.Include(m => m.Department).AsQueryable();
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    machines = machines.OrderByDescending(m => m.Name);
+                    break;
+                case "calcMethod":
+                    machines = machines.OrderBy(m => m.CalculationMethod);
+                    break;
+                case "calcMethod_desc":
+                    machines = machines.OrderByDescending(m => m.CalculationMethod);
+                    break;
+                case "type":
+                    machines = machines.OrderBy(m => m.Type);
+                    break;
+                case "type_desc":
+                    machines = machines.OrderByDescending(m => m.Type);
+                    break;
+                case "department":
+                    machines = machines.OrderBy(m => m.Department.Name);
+                    break;
+                case "department_desc":
+                    machines = machines.OrderByDescending(m => m.Department.Name);
+                    break;
+                default:
+                    machines = machines.OrderBy(m => m.Name);
+                    break;
+            }
+
+            machineListVm.machineList = await PaginatedList<Machine>.CreateAsync(machines.AsNoTracking(), page ?? 1, PageSize);
+
+            return View(machineListVm);
         }
         [HttpGet]
         public ViewResult Create()

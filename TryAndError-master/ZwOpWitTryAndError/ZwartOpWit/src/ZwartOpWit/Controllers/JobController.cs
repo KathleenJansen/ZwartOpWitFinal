@@ -36,11 +36,11 @@ namespace ZwartOpWit.Controllers
             JobListVM jobListVm = new JobListVM();
             filterDateTime = handleJobFilterDateTime(filterDateTime);
 
-            jobListVm.CurrentSort           = sortOrder;
-            jobListVm .CurrentFilter        = searchString;
-            jobListVm.JobNumberSortParm     = String.IsNullOrEmpty(sortOrder) ? "jobNumber_desc" : "";
-            jobListVm.QuantitySortParm      = sortOrder == "quantity" ? "quantity_desc" : "quantity";
-            jobListVm.PageQuantitySortParm  = sortOrder == "pageQuantity" ? "pageQuantity_desc" : "pageQuantity";
+            jobListVm.currentSort           = sortOrder;
+            jobListVm.currentFilter        = searchString;
+            jobListVm.jobNumberSortParm     = String.IsNullOrEmpty(sortOrder) ? "jobNumber_desc" : "";
+            jobListVm.quantitySortParm      = sortOrder == "quantity" ? "quantity_desc" : "quantity";
+            jobListVm.pageQuantitySortParm  = sortOrder == "pageQuantity" ? "pageQuantity_desc" : "pageQuantity";
 
             if (searchString != currentFilter)
             {
@@ -75,11 +75,6 @@ namespace ZwartOpWit.Controllers
             {
                 joblines = joblines.Where(jl => jl.Job.DeliveryDate == filterDateTime);
             }
-
-            //< th > PaperInside </ th >
-            //< th > PaperCover </ th >
-            //< th > Machine </ th >
-            //< th > Time </ th >
 
             switch (sortOrder)
             {

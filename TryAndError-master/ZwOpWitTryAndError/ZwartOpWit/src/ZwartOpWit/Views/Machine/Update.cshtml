@@ -1,66 +1,69 @@
 ﻿@using ZwartOpWit.Models
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @model ZwartOpWit.Models.Viewmodels.MachineVM
 @{
 
 }
-<h1>Update</h1>
+<h1>@Localizer["Update"]</h1>
 <div>
     @if (Model.machine != null)
     {
         <form asp-action="Update" asp-controller="Machine">
             <div class="form-group">
-                <label asp-for="machine.Name">Name:</label>
+                <label asp-for="machine.Name">@Localizer["MachineName"]:</label>
                 <input asp-for="machine.Name" type="text" value="@Model.machine.Name" class="form-control" />
                 <span asp-validation-for="machine.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="machine.CalculationMethod">Calculation method:</label>
-                <select asp-for="machine.CalculationMethod"
-                        asp-items="Html.GetEnumSelectList<CalculationMethodTypes>()" class="form-control"></select>
-                <span asp-validation-for="machine.CalculationMethod" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="machine.Type">Type:</label>
+                <label asp-for="machine.Type">@Localizer["Type"]:</label>
                 <select asp-for="machine.Type"
                         asp-items="Html.GetEnumSelectList<MachineTypes>()" class="form-control"></select>
                 <span asp-validation-for="machine.Type" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="machine.DepartmentId">Department</label>
+                <label asp-for="machine.CalculationMethod">@Localizer["Calculation method"]:</label>
+                <select asp-for="machine.CalculationMethod"
+                        asp-items="Html.GetEnumSelectList<CalculationMethodTypes>()" class="form-control"></select>
+                <span asp-validation-for="machine.CalculationMethod" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="machine.DepartmentId">@Localizer["Department"]:</label>
                 <select asp-for="machine.DepartmentId" asp-items="@Model.selectDepartments" class="form-control"></select>
                 <span asp-validation-for="machine.DepartmentId" class="text-danger"></span>
             </div>   
             <div class="form-group">
-                <label asp-for="machine.SetupTime">Setup Time:</label>
+                <label asp-for="machine.SetupTime">@Localizer["SetupTime"]:</label>
                 <input asp-for="machine.SetupTime" class="form-control" />
                 <span asp-validation-for="machine.SetupTime" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="machine.RunTimeTo1000Speed">Runtime to 1000:</label>
+                <label asp-for="machine.RunTimeTo1000Speed">@Localizer["RunTimeTo1000"]:</label>
                 <input asp-for="machine.RunTimeTo1000Speed" class="form-control" />
                 <span asp-validation-for="machine.RunTimeTo1000Speed" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="machine.RunTimeTo1000SpeedStationFactor">Runtime to 1000 station factor:</label>
+                <label asp-for="machine.RunTimeTo1000SpeedStationFactor">@Localizer["RunTimeTo1000Factor"]:</label>
                 <input asp-for="machine.RunTimeTo1000SpeedStationFactor" class="form-control" />
                 <span asp-validation-for="machine.RunTimeTo1000SpeedStationFactor" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="machine.RunTimeFrom1000Speed">Runtime from 1000:</label>
+                <label asp-for="machine.RunTimeFrom1000Speed">@Localizer["RuntimeFrom1000"]:</label>
                 <input asp-for="machine.RunTimeFrom1000Speed" class="form-control" />
                 <span asp-validation-for="machine.RunTimeFrom1000Speed" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="machine.RunTimeFrom1000SpeedStationFactor">Runtime from 1000 station factor:</label>
+                <label asp-for="machine.RunTimeFrom1000SpeedStationFactor">@Localizer["RuntimeFrom1000Factor"]:</label>
                 <input asp-for="machine.RunTimeFrom1000SpeedStationFactor" class="form-control" />
                 <span asp-validation-for="machine.RunTimeFrom1000SpeedStationFactor" class="text-danger"></span>
             </div>
-            <input type="hidden" asp-for="machine.Id" value="@Model.machine.Id" />     
-            <input type="submit" value="Update Machine" class="btn btn-default" />
+            <input type="hidden" asp-for="machine.Id" value="@Model.machine.Id" />   
+            <a class="btn btn-default" asp-area="" asp-controller="Machine" asp-action="Index">@Localizer["Back"]</a>
+            <input type="submit" value="@Localizer["Update"]" class="btn btn-default" />
         </form>
     }
     else
     {
-        <h2>No machine found</h2>
+        <h2>@Localizer["NoMachineFound"]</h2>
     }
 </div>

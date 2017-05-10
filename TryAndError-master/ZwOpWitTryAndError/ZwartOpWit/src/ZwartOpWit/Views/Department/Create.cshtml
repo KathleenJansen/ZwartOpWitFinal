@@ -1,16 +1,19 @@
-﻿@model ZwartOpWit.Models.Viewmodels.DepartmentVM
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model ZwartOpWit.Models.Viewmodels.DepartmentVM
 @{
 
 }
-<h1>Create</h1>
+<h1>@Localizer["Create"]</h1>
 <form asp-action="Create" asp-controller="Department">
     <div>
         <div class="form-group">
-            <label asp-for="department.Name">Department name:</label>
+            <label asp-for="department.Name">@Localizer["DepartmentName"]:</label>
             <input asp-for="department.Name" class="form-control" />
             <span asp-validation-for="department.Name" class="text-danger"></span>
         </div>
-        <input type="submit" value="Add Department" class="btn btn-default" />
+        <a class="btn btn-default" asp-area="" asp-controller="Department" asp-action="Index">@Localizer["Back"]</a>
+        <input type="submit" value="@Localizer["Add"]" class="btn btn-default" />
     </div>
 </form>
 

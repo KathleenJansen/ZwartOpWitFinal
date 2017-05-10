@@ -56,8 +56,8 @@
           "en/ZwartOpWit.resources.dll": {
             "locale": "en"
           },
-          "nl-BE/ZwartOpWit.resources.dll": {
-            "locale": "nl-BE"
+          "nl/ZwartOpWit.resources.dll": {
+            "locale": "nl"
           }
         },
         "compile": {

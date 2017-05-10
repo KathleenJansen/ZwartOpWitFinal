@@ -1,5 +1,7 @@
 ﻿@using ZwartOpWit.Models
+@using Microsoft.AspNetCore.Mvc.Localization
 @model ZwartOpWit.Models.Viewmodels.MenuVM
+@inject IViewLocalizer Localizer
 <div class="navbar navbar-inverse navbar-default">
     <div class="container">
         <div class="navbar-header">
@@ -20,8 +22,8 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@machineType.ToString()<span class="caret"></span></a>
                             <ul class="dropdown-menu">
-                                <li><a asp-area="" asp-controller="Job" asp-action="Index" asp-route-filterMachineType="@machineType">Todo</a></li>
-                                <li><a asp-area="" asp-controller="Job" asp-action="Index" asp-route-filterMachineType="@machineType">No machine</a></li> 
+                                <li><a asp-area="" asp-controller="Job" asp-action="Index" asp-route-filterMachineType="@machineType">@Localizer["ToDo"]</a></li>
+                                <li><a asp-area="" asp-controller="Job" asp-action="Index" asp-route-filterMachineType="@machineType">@Localizer["NoMachine"]</a></li> 
                                 @if (Model.machineList.Where(x => x.Type == machineType).ToList().Count != 0)
                                 {
                                     <li role="separator" class="divider"></li>
@@ -31,21 +33,14 @@
                                     }
                                     <li role="separator" class="divider"></li>
                                 }
-                                <li><a asp.area="" asp-controller="Job" asp-action="Import"  asp-route-machineType="@machineType">Import</a></li>
+                                <li><a asp.area="" asp-controller="Job" asp-action="Import"  asp-route-machineType="@machineType">@Localizer["Import"]</a></li>
                             </ul>
                         </li>
                     }
                 }
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin Only <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a asp-area="" asp-controller="User" asp-action="Index">Users</a></li>
-                        <li><a asp-area="" asp-controller="Machine" asp-action="Index">Machines</a></li>
-                        <li><a asp-area="" asp-controller="Department" asp-action="Index">Departments</a></li>
-                    </ul>
-                </li>
             </ul>
             @await Html.PartialAsync("_LoginPartial")
+            @await Html.PartialAsync("_SelectLanguagePartial")
         </div>
     </div>
 </div>

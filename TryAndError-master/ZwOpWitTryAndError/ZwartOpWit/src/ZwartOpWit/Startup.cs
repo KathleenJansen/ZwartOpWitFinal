@@ -20,6 +20,19 @@ namespace ZwartOpWit
 {
     public class Startup
     {
+        public static string defaultCulture = "nl-BE";
+
+        public static List<CultureInfo> supportedCultures
+        {
+            get
+            {
+                return new List<CultureInfo> {
+                    new CultureInfo("nl-BE"),
+                    new CultureInfo("en-US")
+                };
+            }
+        }
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -69,20 +82,27 @@ namespace ZwartOpWit
             });
 
             //Translation services
-            services.AddLocalization(options => options.ResourcesPath = "Resources");
-            services.AddMvc()
-              .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
-              .AddDataAnnotationsLocalization();
+            services
+             .AddLocalization(options => options.ResourcesPath = "Resources")
+             .AddMvc()
+             .AddViewLocalization()
+             .AddDataAnnotationsLocalization();
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireEmployeeRole", policy => policy.RequireRole("Employee"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            var supportedCultures = new[]
-            {
-                new CultureInfo("en-US"),
-                new CultureInfo("nl-BE"),
-            };
+
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -97,19 +117,19 @@ namespace ZwartOpWit
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseStaticFiles();
-
-            app.UseIdentity();
-
-            app.UseSession();
-
+            //Translations
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
-                DefaultRequestCulture = new RequestCulture("nl-BE"),
+                DefaultRequestCulture = new RequestCulture(defaultCulture),
+                // Formatting numbers, dates, etc.
                 SupportedCultures = supportedCultures,
+                // UI strings that we have localized.
                 SupportedUICultures = supportedCultures
             });
 
+            app.UseStaticFiles();
+            app.UseIdentity();
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

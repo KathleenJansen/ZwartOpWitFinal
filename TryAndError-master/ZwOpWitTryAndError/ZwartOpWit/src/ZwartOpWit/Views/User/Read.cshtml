@@ -1,14 +1,17 @@
-﻿@model ZwartOpWit.Models.UserVM
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model ZwartOpWit.Models.UserVM
 @{
 
 }
-<h1>Read</h1>
+<h1>@Localizer["Read"]</h1>
 <div>
     <table class="table table-condensed">
         <tr>
-            <td>Email</td>
+            <td>@Localizer["Email"]</td>
             <td>@Model.Email</td>
         </tr>
     </table>
+    <a class="btn btn-default" asp-area="" asp-controller="User" asp-action="Index">@Localizer["Back"]</a>
 </div>
 
