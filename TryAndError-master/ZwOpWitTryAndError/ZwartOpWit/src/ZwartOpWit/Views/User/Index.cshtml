@@ -1,4 +1,6 @@
-﻿@model ZwartOpWit.Models.Viewmodels.UserListVM
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model ZwartOpWit.Models.Viewmodels.UserListVM
 @{
     ViewData["Title"] = "Index";
     var prevDisabled = !Model.userList.HasPreviousPage ? "disabled" : "";
@@ -6,6 +8,7 @@
 }
 <div>
     <div>
+        <h1>@Localizer["Test"]</h1>
         <h2>Userpage</h2>
         <p><a asp-controller="User" asp-action="Create" class="btn btn-info">New User</a></p>
 
@@ -57,4 +60,5 @@
             Next
         </a>
     </div>
+    @await Html.PartialAsync("_SelectLanguagePartial")
 </div>

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using ZwartOpWit.Models;
 using ZwartOpWit.Models.Viewmodels;
@@ -18,35 +20,18 @@ namespace ZwartOpWit.Controllers
         }
         public IActionResult Index()
         {
-            ViewBag.date = DateTime.Today.ToString("yyyy-MM-dd");
             return View();
         }
-        public IActionResult Fold()
+        [HttpPost]
+        public IActionResult SetLanguage(string culture, string returnUrl)
         {
-            ViewData["Message"] = "Your Fold page.";
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+            );
 
-            return View();
-        }
-
-        public IActionResult Typo()
-        {
-            ViewData["Message"] = "Your Typo page.";
-
-            return View();
-        }
-
-        public IActionResult Score()
-        {
-            ViewData["Message"] = "Your Score page";
-
-            return View();
-        }
-
-        public IActionResult Bush()
-        {
-            ViewData["Message"] = "Your Bush page.";
-
-            return View();
+            return LocalRedirect(returnUrl);
         }
 
         public IActionResult Error()

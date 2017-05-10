@@ -59,4 +59,14 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Views.User.Index.nl-BE.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>View.User.Index.nl-BE.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Views.User.Index.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

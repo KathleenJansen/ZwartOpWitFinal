@@ -18,3 +18,10 @@ C:\ZwOpWitJo2\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\ob
 C:\Users\jo\Documents\ZwartOpWit\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\bin\Debug\netcoreapp1.1\myCsv.txt
 C:\ZwOpWitJo2\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\bin\Debug\netcoreapp1.1\myCsv.txt
 C:\ZwOpWitJo2\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\obj\Debug\netcoreapp1.1\ZwartOpWit.csprojResolveAssemblyReference.cache
+C:\ZwOpWitJo2\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\bin\Debug\netcoreapp1.1\en\ZwartOpWit.resources.dll
+C:\ZwOpWitJo2\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\obj\Debug\netcoreapp1.1\ZwartOpWit.csproj.GenerateResource.Cache
+C:\ZwOpWitJo2\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\obj\Debug\netcoreapp1.1\en\ZwartOpWit.resources.dll
+C:\ZwOpWitJo2\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\obj\Debug\netcoreapp1.1\ZwartOpWit.Resources.Views.User.Index.en.resources
+C:\ZwOpWitJo2\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\bin\Debug\netcoreapp1.1\nl-BE\ZwartOpWit.resources.dll
+C:\ZwOpWitJo2\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\obj\Debug\netcoreapp1.1\nl-BE\ZwartOpWit.resources.dll
+C:\ZwOpWitJo2\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\obj\Debug\netcoreapp1.1\ZwartOpWit.Resources.Views.User.Index.nl-BE.resources

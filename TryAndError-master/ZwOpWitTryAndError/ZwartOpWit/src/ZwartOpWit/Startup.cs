@@ -12,6 +12,9 @@ using MySQL.Data.Entity.Extensions;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using ZwartOpWit.Models.Services;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 
 namespace ZwartOpWit
 {
@@ -64,11 +67,23 @@ namespace ZwartOpWit
                 options.IdleTimeout = TimeSpan.FromSeconds(120);
                 options.CookieHttpOnly = true;
             });
+
+            //Translation services
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+            services.AddMvc()
+              .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+              .AddDataAnnotationsLocalization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            var supportedCultures = new[]
+            {
+                new CultureInfo("en-US"),
+                new CultureInfo("nl-BE"),
+            };
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
@@ -87,6 +102,13 @@ namespace ZwartOpWit
             app.UseIdentity();
 
             app.UseSession();
+
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("nl-BE"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures
+            });
 
             app.UseMvc(routes =>
             {
