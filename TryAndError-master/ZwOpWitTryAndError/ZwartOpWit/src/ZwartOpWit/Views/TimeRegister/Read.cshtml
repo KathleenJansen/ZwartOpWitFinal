@@ -13,7 +13,12 @@
         </tr>
         <tr>
             <td>@Localizer["UserName"]</td>
-            <td>@Model.timeRegister.User.UserName</td>
+            <td>
+                @if (Model.timeRegister.User != null)
+                {
+                    @Model.timeRegister.User.UserName
+                }
+            </td>
         </tr>
         <tr>
             <td>@Localizer["StartTime"]</td>

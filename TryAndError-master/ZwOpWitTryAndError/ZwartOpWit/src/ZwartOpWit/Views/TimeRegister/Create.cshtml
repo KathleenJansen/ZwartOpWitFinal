@@ -9,12 +9,12 @@
     <div>
         <div class="form-group">
             <label asp-for="timeRegister.JobLine.JobId">@Localizer["JobId"]:</label>
-            <input asp-for="timeRegister.JobLine.JobId" type="text" value="@Model.timeRegister.JobLine.JobId" class="form-control" />
+            <select asp-for="timeRegister.JobLine.JobId" asp-items="@Model.selectJobs" class="form-control"></select>
             <span asp-validation-for="timeRegister.JobLine.JobId" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="timeRegister.User.UserName">@Localizer["UserName"]:</label>
-            <input asp-for="timeRegister.User.UserName" type="text" value="@Model.timeRegister.User.UserName" class="form-control" />
+            <select asp-for="timeRegister.User.UserName" asp-items="@Model.selectUsers" class="form-control"></select>
             <span asp-validation-for="timeRegister.User.UserName" class="text-danger"></span>
         </div>
         <div class="form-group">

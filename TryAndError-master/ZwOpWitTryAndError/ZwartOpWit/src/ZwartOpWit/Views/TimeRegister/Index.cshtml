@@ -35,13 +35,13 @@
             {
                         <tr>
                             <td>@d.JobLine.JobId</td>
-                            <td>@d.User.UserName</td>
+                            <td>@d.UserId</td>
                             <td>@d.Start</td>
                             <td>@d.Stop</td>
                             <td>
-                                <a asp-controller="Department" asp-action="Read" asp-route-id="@d.Id" class="btn btn-default"><span class="glyphicon glyphicon-eye-open"></span></a>
-                                <a asp-controller="Department" asp-action="Update" asp-route-id="@d.Id" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span></a>
-                                <a asp-controller="Department" asp-action="Delete" asp-route-id="@d.Id" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span></a>
+                                <a asp-controller="TimeRegister" asp-action="Read" asp-route-id="@d.Id" class="btn btn-default"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                <a asp-controller="TimeRegister" asp-action="Update" asp-route-id="@d.Id" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <a asp-controller="TimeRegister" asp-action="Delete" asp-route-id="@d.Id" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span></a>
                             </td>
                         </tr>
                     }}

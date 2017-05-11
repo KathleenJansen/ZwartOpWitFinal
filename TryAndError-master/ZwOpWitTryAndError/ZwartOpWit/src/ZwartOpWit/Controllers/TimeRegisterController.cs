@@ -7,6 +7,7 @@ using ZwartOpWit.Models;
 using ZwartOpWit.Models.Viewmodels;
 using ZwartOpWit.Helpers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ZwartOpWit.Controllers
 {
@@ -39,7 +40,8 @@ namespace ZwartOpWit.Controllers
                 page = 1;
             }
 
-            var timeRegisters = _context.TimeRegisters.Include(u => u.User).Include(jl => jl.JobLine).AsQueryable();
+            var timeRegisters = _context.TimeRegisters.Include(u => u.User).AsQueryable();
+            timeRegisters = _context.TimeRegisters.Include(jl => jl.JobLine).AsQueryable();
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -53,10 +55,10 @@ namespace ZwartOpWit.Controllers
                     timeRegisters = timeRegisters.OrderByDescending(u => u.JobLine.JobId);
                     break;
                 case "userName":
-                    timeRegisters = timeRegisters.OrderBy(m => m.User.UserName);
+                    timeRegisters = timeRegisters.OrderBy(m => m.User.Email);
                     break;
                 case "userName_desc":
-                    timeRegisters = timeRegisters.OrderByDescending(m => m.User.UserName);
+                    timeRegisters = timeRegisters.OrderByDescending(m => m.User.Email);
                     break;
                 case "startTime":
                     timeRegisters = timeRegisters.OrderBy(m => m.Start);
@@ -83,7 +85,10 @@ namespace ZwartOpWit.Controllers
         [HttpGet]
         public ViewResult Create()
         {
-            return View();
+            TimeRegisterVM timeRegisterVM = new TimeRegisterVM();
+            timeRegisterVM.selectJobs = _context.Jobs.Select(x => new SelectListItem() { Text = x.JobNumber, Value = x.Id.ToString() }).ToList();
+            timeRegisterVM.selectUsers = _context.Users.Select(x => new SelectListItem() { Text = x.UserName, Value = x.Id.ToString() }).ToList();
+            return View(timeRegisterVM);
         }
 
         [HttpPost]
@@ -98,7 +103,9 @@ namespace ZwartOpWit.Controllers
         public ViewResult Update(int id)
         {
             TimeRegisterVM timeRegisterVM = new TimeRegisterVM();
-            timeRegisterVM.timeRegister = _context.TimeRegisters.FirstOrDefault(x => x.Id == id);
+            timeRegisterVM.timeRegister = _context.TimeRegisters.Include(jl => jl.JobLine).Include(u => u.User).FirstOrDefault(x => x.Id == id);
+            timeRegisterVM.selectJobs = _context.Jobs.Select(x => new SelectListItem() { Text = x.JobNumber, Value = x.Id.ToString() }).ToList();
+            timeRegisterVM.selectUsers = _context.Users.Select(x => new SelectListItem() { Text = x.UserName, Value = x.Id.ToString() }).ToList();
             return View(timeRegisterVM);
         }
 
@@ -126,7 +133,7 @@ namespace ZwartOpWit.Controllers
         public ViewResult Read(int id)
         {
             TimeRegisterVM timeRegisterVM = new TimeRegisterVM();
-            timeRegisterVM.timeRegister = _context.TimeRegisters.FirstOrDefault(x => x.Id == id);
+            timeRegisterVM.timeRegister = _context.TimeRegisters.Include(jl => jl.JobLine).Include(u => u.User).FirstOrDefault(x => x.Id == id);
             return View(timeRegisterVM);
         }
     }

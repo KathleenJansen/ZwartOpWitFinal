@@ -9,6 +9,7 @@ using ZwartOpWit.Models.Viewmodels;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using ZwartOpWit.Helpers;
+using Microsoft.AspNetCore.Identity;
 
 namespace ZwartOpWit.Controllers
 {
@@ -19,10 +20,13 @@ namespace ZwartOpWit.Controllers
         const int PageSize = 10;
 
         private readonly AppDBContext _context;
+        private readonly UserManager<User> _userManager;
 
-        public JobController(AppDBContext context)
+        public JobController(AppDBContext context,
+                                UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
         [HttpGet]
         public async Task<IActionResult> Index( string sortOrder,
@@ -123,51 +127,6 @@ namespace ZwartOpWit.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult ReadStitch(int jobId)
-        {
-            JobLineVM jobVm = new JobLineVM();
-
-            JobLine jobLine = new JobLine();
-
-            jobLine = _context.JobLines.Include(j => j.Job).FirstOrDefault(j => j.Id == jobId);
-
-            jobVm.jobLine = jobLine;
-
-            TimeRegister time = new TimeRegister();
-
-            time = _context.TimeRegisters.Include(j => j.JobLine).FirstOrDefault(j => j.JobLineId == jobId);
-
-            jobVm.date = jobLine.Job.DeliveryDate.ToString("yyyy-MM-dd");
-
-
-            return View("ReadStitch", jobVm);
-        }
-
-        public IActionResult EditStitch(int jobLineId, string jobNr, string paperBw, DateTime date, 
-            string width, string heigth, string pageQuantity, string machineId, string sequence, string jobReady)
-        {
-            Job myJob = new Job();
-            JobLine myJobLine = new JobLine();
-
-            myJobLine = _context.JobLines.Include(e => e.Job).FirstOrDefault(e => e.Id == jobLineId);
-            myJob = _context.Jobs.FirstOrDefault(j => j.Id == myJobLine.Job.Id);
-
-            myJob.JobNumber = jobNr;
-            myJob.PaperBw = paperBw;
-            myJob.DeliveryDate = date;
-            myJob.Width = int.Parse(width);
-            myJob.Heigth = int.Parse(heigth);
-            myJob.PageQuantity = int.Parse(pageQuantity);
-            myJobLine.MachineId = int.Parse(machineId);
-            myJobLine.Sequence = int.Parse(sequence);
-            //myJobLine.JobReady = bool.Parse(JobReady);
-
-            _context.Entry(myJob).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            _context.Entry(myJobLine).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            _context.SaveChanges();
-
-            return View("Index");
-        }
 
         public IActionResult AssignJobLine( int jobLineId, 
                                             int machineId, 
@@ -256,11 +215,13 @@ namespace ZwartOpWit.Controllers
             _context.SaveChanges();
         }
 
-        public IActionResult StartStitch(int jobId)
+        public async Task<IActionResult> StartStitchAsync(int jobId)
         {
             TimeRegister start = new TimeRegister();
             start.Start = DateTime.Now;
             start.JobLineId = jobId;
+            start.User = await _userManager.GetUserAsync(User);
+
             _context.TimeRegisters.Add(start);
             _context.SaveChanges();
 

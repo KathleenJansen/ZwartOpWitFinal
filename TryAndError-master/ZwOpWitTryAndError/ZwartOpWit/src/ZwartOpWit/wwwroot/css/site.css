@@ -52,3 +52,10 @@ header{
     width: 100%;
 }
 
+
+.admin-navbar {
+    display: inline-block;
+    float: none;
+    text-align:center;
+}
+
