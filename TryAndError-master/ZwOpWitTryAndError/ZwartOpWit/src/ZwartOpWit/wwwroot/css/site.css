@@ -53,9 +53,41 @@ header{
 }
 
 
-.admin-navbar {
-    display: inline-block;
-    float: none;
-    text-align:center;
+
+
+.login-content {
+    background-color: #82CDE4;
+    color: white;
+    margin-top: 10%;
+    border-radius: 25px;
+    padding: 10px;
 }
 
+.login-logo {
+    display: block;
+    margin: auto;
+    text-align:center;
+    padding-top:20px;
+}
+
+.login-form label {
+    text-align:right;
+    clear:both;
+    float:left;
+    margin-right:25%;
+    width: 25%;
+    
+}
+
+.login-form input[type=text],
+.login-form input[type=email],
+.login-form input[type=password],
+.login-form input[type=number],
+.login-form select,
+.login-form textarea {
+    width: 73%;
+}
+
+.form-right {
+    float:right;
+}

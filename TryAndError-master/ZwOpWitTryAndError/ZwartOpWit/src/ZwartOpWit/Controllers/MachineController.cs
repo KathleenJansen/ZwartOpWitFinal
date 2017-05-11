@@ -42,6 +42,12 @@ namespace ZwartOpWit.Controllers
 
             var machines = _context.Machines.Include(m => m.Department).AsQueryable();
 
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                machines = machines.Where(s => s.Name.Contains(searchString));
+            }
+
             switch (sortOrder)
             {
                 case "name_desc":

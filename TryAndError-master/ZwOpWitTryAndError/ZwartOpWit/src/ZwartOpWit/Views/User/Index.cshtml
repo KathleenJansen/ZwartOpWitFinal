@@ -15,7 +15,7 @@
     <form asp-action="Index" method="get">
         <div class="form-actions no-color">
             <p>
-                @Localizer["FindByName"]<input type="text" name="SearchString" value="@Model.currentFilter" />
+                @Localizer["FindByName"]: <input type="text" name="SearchString" value="@Model.currentFilter" />
                 <input type="submit" value="@Localizer["Search"]" class="btn btn-default" /> |
                 <a asp-action="Index">@Localizer["BackToFullList"]</a>
             </p>

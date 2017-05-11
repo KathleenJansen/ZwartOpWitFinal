@@ -60,6 +60,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Resources\Views.Account.Login.nl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Views.Account.Login.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Views.TimeRegister.Create.nl.resx">
       <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
