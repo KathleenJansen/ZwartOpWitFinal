@@ -225,9 +225,10 @@ namespace ZwartOpWit.Controllers
             _context.TimeRegisters.Add(start);
             _context.SaveChanges();
 
-            int myNewId = start.Id;
-
             JobListVM jobListVm = new JobListVM();
+
+           
+            jobListVm.jobId = start.Id;
 
             return View("StartStitch", jobListVm);
         }
@@ -241,6 +242,7 @@ namespace ZwartOpWit.Controllers
             _context.SaveChanges();
 
             JobListVM jobListVm = new JobListVM();
+            jobListVm.jobId = stop.JobLineId;
 
             return View("JobReady", jobListVm);
 
@@ -250,14 +252,21 @@ namespace ZwartOpWit.Controllers
         {
             JobLine jobLine = new JobLine();
             jobLine = _context.JobLines.Include(j => j.Job).Where(j => j.Id == jobId).FirstOrDefault();
-            jobLine.Completed = true;
+            jobLine.Completed = yes;
             _context.Entry(jobLine).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             _context.SaveChanges();
 
             DateTime date = new DateTime();
             date = jobLine.Job.DeliveryDate;
 
-            return View();
+            JobListVM jobListVm = new JobListVM();
+            
+            //OK, hard to handle from here
+
+            //jobListVm = CreateJobListViewModelByMachineId(date, jobLine.MachineId);
+            //ViewBag.date = jobListVm.date;
+
+            return View("Index", jobListVm);
         }
 
         public TimeSpan calculateTotalTime(int machineId, MachineTypes machineType, string searchString)

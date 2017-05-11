@@ -30,6 +30,8 @@ namespace ZwartOpWit.Models.Viewmodels
             filterDateTime = DateTime.Today.ToString();
         }
 
+        public int jobId { get; set; }
+
       
     }
 }

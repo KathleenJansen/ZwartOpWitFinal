@@ -60,7 +60,7 @@
                             <td>@jobLine.MachineId</td>
                             <td>@jobLine.CalculatedTime</td>
                             <td>
-                                <a asp-controller="Job" asp-action="StartStitch" asp-route-jobId="@jobLine.Id" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
+                                <a asp-controller="Job" asp-action="StartStitchAsync" asp-route-jobId="@jobLine.Id" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
                             </td>
                             @foreach (var machine in Model.machineList)
                             {
