@@ -1,0 +1,4 @@
+﻿_k2_id_pg;_k2_job_number_xml;item_qty;flag_brochure;date_finished;description;item_afwerking;item_sit_naam
+95;131113-01;1000;;18/05/2017;PitStop brochures ENG;48 blz.;A4 staand geniet - 08 blz. ;maco silk medium
+95;131312-02;10000;;18/05/2017;PitStop Brochures FR;24 blz.;A4 staand geniet - 08 blz. ;maco silk medium
+95;131343-01;5000;;18/05/2017;brochure 2017;16 blz.;A4 staand geniet - 20 blz. prestige ;offset medium

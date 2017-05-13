@@ -2,29 +2,56 @@
 
 }
 @using ZwartOpWit.Models
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @model ZwartOpWit.Models.Viewmodels.JobLineVM
+
 <h1>Edit Stitch Job</h1>
 <div>
-    <form asp-controller="Job" asp-action="EditStitch">
-        <input type="hidden" value="@Model.jobLine.Id" name="jobLineId"/>
-        Ordernummer: 
-        <input type="text" value="@Model.jobLine.Job.JobNumber" name="JobNr"/><br/>
-        Papier bw: 
-        <input type="text" value="@Model.jobLine.Job.PaperBw" name="PaperBw"/><br/>
-        Leverdatum: 
-        <input type="date" value="@Model.date" name="date"/><br/>
-        Breedte: 
-        <input type="text" value="@Model.jobLine.Job.Width" name="width"/><br/>
-        Hoogte:
-        <input type="text" value="@Model.jobLine.Job.Heigth" name="heigth"/><br/>
-        Aantal Blz:
-        <input type="text" value="@Model.jobLine.Job.PageQuantity" name="pageQuantity"/><br />
-        Machine:
-        <input type="text" value="@Model.jobLine.MachineId" name="machineId"/><br/>
-        Sequence:
-        <input type="text" value="@Model.jobLine.Sequence" name="sequence"/><br/>
-        JobReady:
-        <input type="text" value="@Model.jobLine.JobReady" name="jobReady"/><br/>
-        <input type="submit" value="stuur"/>
+    <form asp-controller="Job" asp-action="Update">
+        <input type="hidden" value="@Model.jobLine.Id" asp-for="jobLine.Id" />
+        <div class="form-group">
+            <label asp-for="jobLine.Job.JobNumber">Ordernummer</label>
+            <input type="text" value="@Model.jobLine.Job.JobNumber" asp-for="jobLine.Job.JobNumber" class="form-control" />
+            <span class="text-danger" asp-validation-for="jobLine.Job.JobNumber"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="jobLine.Job.PaperBw">Papier bw</label>
+            <input type="text" value="@Model.jobLine.Job.PaperBw" asp-for="jobLine.Job.PaperBw" name="PaperBw" class="form-control" />
+            <span asp-validation-for="jobLine.Job.PaperBw" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="jobLine.Job.DeliveryDate">Leverdatum</label>
+            <input type="text" value="@Model.jobLine.Job.DeliveryDate" asp-for="jobLine.Job.DeliveryDate" class="form-control" />
+            <span asp-validation-for="jobLine.Job.DeliveryDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="jobLine.Job.Width">Breedte</label>
+            <input type="text" value="@Model.jobLine.Job.Width" asp-for="jobLine.Job.Width" class="form-control" />
+            <span asp-validation-for="jobLine.Job.Width" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="jobLine.Job.pageQuantity">Hoogte</label>
+            <input type="text" value="@Model.jobLine.Job.PageQuantity" asp-for="jobLine.Job.pageQuantity" class="form-control" />
+            <span asp-validation-for="jobLine.Job.pageQuantity" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="jobLine.Job.machineId">Machine</label>
+            <input type="text" value="@Model.jobLine.MachineId" asp-for="jobLine.Job.machineId" class="form-control" />
+            <span asp-validation-for="jobLine.Job.machineId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="jobLine.Job.sequence">Sequence</label>
+            <input type="text" value="@Model.jobLine.Sequence" asp-for="jobLine.Job.sequence" class="form-control" />
+            <span asp-validation-for="jobLine.Job.sequence" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="jobLine.Job.completed">JobsDone</label>
+            <input type="text" value="@Model.jobLine.Completed.ToString()" asp-for="jobLine.Job.completed" class="form-control" />
+            <span asp-validation-for="jobLine.Job.completed" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Update" />
+        </div>
     </form>
 </div>

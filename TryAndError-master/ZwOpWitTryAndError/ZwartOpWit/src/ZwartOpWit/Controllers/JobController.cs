@@ -32,7 +32,7 @@ namespace ZwartOpWit.Controllers
             _environment = envivornment;
         }
         [HttpGet]
-        public async Task<IActionResult> Index( string sortOrder,
+        public async Task<IActionResult> Index(string sortOrder,
                                                 string currentFilter,
                                                 string searchString,
                                                 int? page,
@@ -43,18 +43,18 @@ namespace ZwartOpWit.Controllers
             JobListVM jobListVm = new JobListVM();
             filterDateTime = handleJobFilterDateTime(filterDateTime);
 
-            jobListVm.currentSort           = sortOrder;
-            jobListVm.currentFilter        = searchString;
-            jobListVm.jobNumberSortParm     = String.IsNullOrEmpty(sortOrder) ? "jobNumber_desc" : "";
-            jobListVm.quantitySortParm      = sortOrder == "quantity" ? "quantity_desc" : "quantity";
-            jobListVm.pageQuantitySortParm  = sortOrder == "pageQuantity" ? "pageQuantity_desc" : "pageQuantity";
+            jobListVm.currentSort = sortOrder;
+            jobListVm.currentFilter = searchString;
+            jobListVm.jobNumberSortParm = String.IsNullOrEmpty(sortOrder) ? "jobNumber_desc" : "";
+            jobListVm.quantitySortParm = sortOrder == "quantity" ? "quantity_desc" : "quantity";
+            jobListVm.pageQuantitySortParm = sortOrder == "pageQuantity" ? "pageQuantity_desc" : "pageQuantity";
 
             if (searchString != currentFilter)
             {
                 page = 1;
             }
 
-            var joblines = _context.JobLines.Include(j => j.Job).AsQueryable();
+            var joblines = _context.JobLines.Include(j => j.Job).Include(j => j.Machine).AsQueryable();
             var machineList = _context.Machines.AsQueryable();
 
             //Add filters
@@ -110,6 +110,7 @@ namespace ZwartOpWit.Controllers
             jobListVm.filterDateTime = filterDateTime.ToString("yyyy-MM-dd");
             jobListVm.jobLineList = await PaginatedList<JobLine>.CreateAsync(joblines.AsNoTracking(), page ?? 1, PageSize);
 
+
             return View(jobListVm);
         }
 
@@ -131,8 +132,8 @@ namespace ZwartOpWit.Controllers
         }
 
 
-        public IActionResult AssignJobLine( int jobLineId, 
-                                            int machineId, 
+        public IActionResult AssignJobLine(int jobLineId,
+                                            int machineId,
                                             string sortOrder,
                                             string currentFilter,
                                             string searchString,
@@ -161,23 +162,23 @@ namespace ZwartOpWit.Controllers
                         new { sortOrder = sortOrder, currentFilter = currentFilter, searchString = searchString, page = page, filterMachineId = filterMachineId, filterMachineType = filterMachineType, filterDateTime = filterDateTime });
         }
 
-        public void doImport(MachineTypes machineType, IFormFile myFile)
+        public IActionResult doImport(MachineTypes machineType, IFormFile files)
         {
             var uploads = Path.Combine(_environment.ContentRootPath, "uploads");
 
-            using (var fileStream = new FileStream(Path.Combine(uploads, myFile.FileName), FileMode.Create))
+            using (var fileStream = new FileStream(Path.Combine(uploads, files.FileName), FileMode.Create))
             {
-                myFile.CopyToAsync(fileStream);
+                files.CopyToAsync(fileStream);
             }
 
             Job job;
-            string  currentLine;
+            string currentLine;
             string[] splitArray;
             JobLine jobLine;
 
             List<string> lines = new List<string>();
 
-            using (StreamReader reader = new StreamReader(new FileStream(Path.Combine(uploads, myFile.FileName), FileMode.Open)))
+            using (StreamReader reader = new StreamReader(new FileStream(Path.Combine(uploads, files.FileName), FileMode.Open)))
             {
                 currentLine = reader.ReadLine();
 
@@ -195,11 +196,13 @@ namespace ZwartOpWit.Controllers
                 //Check if job exists with current job number
                 job = _context.Jobs.FirstOrDefault(z => z.JobNumber == splitArray[1]);
 
+                //Create Job & JobLine
                 if (job == null)
                 {
+                    //Create Job
                     job = new Job();
 
-                    job.DeliveryDate = DateTime.ParseExact(splitArray[4],"dd/MM/yyyy",null);
+                    job.DeliveryDate = DateTime.ParseExact(splitArray[4], "dd/MM/yyyy", null);
                     job.JobNumber = splitArray[1];
 
                     double aantal = double.Parse(splitArray[2]);
@@ -210,25 +213,31 @@ namespace ZwartOpWit.Controllers
                     job.PaperCover = "no cover";
                     job.Heigth = 297;
                     job.Width = 210;
+                    job.PageQuantity = int.Parse(splitArray[6].Remove(2));
 
                     _context.Jobs.Add(job);
+
+                    //Create JobLine
+                    jobLine = new JobLine();
+
+                    jobLine.JobId = job.Id;
+                    jobLine.Job = job;
+                    jobLine.MachineId = 1;
+                    jobLine.Sequence = 1;
+                    jobLine.UserId = _userManager.GetUserId(User);
+                    //jobLine.UserId = "2aff4902-2ab4-4e25-88fc-4765d661e8f2";
+                    jobLine.MachineType = MachineTypes.Stitch;
+                    jobLine.DepartmentId = 1;
+                    jobLine.Completed = false;
+                    jobLine.CalculatedTime = CalculatePlannedTime(jobLine);
+
+                    _context.JobLines.Add(jobLine);
                 }
-
-                //Create JobLine
-                jobLine = new JobLine();
-
-                jobLine.JobId = job.Id;
-                jobLine.MachineId = 1;
-                jobLine.Sequence = 1;
-                jobLine.UserId = "2aff4902-2ab4-4e25-88fc-4765d661e8f2";
-                jobLine.MachineType = MachineTypes.Stitch;
-                jobLine.DepartmentId = 1;
-                jobLine.Completed = false;
-
-                _context.JobLines.Add(jobLine);
             }
 
             _context.SaveChanges();
+
+            return RedirectToAction("Index");
             
         }
 
@@ -273,17 +282,17 @@ namespace ZwartOpWit.Controllers
             _context.Entry(jobLine).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             _context.SaveChanges();
 
-            DateTime date = new DateTime();
-            date = jobLine.Job.DeliveryDate;
+            //DateTime date = new DateTime();
+            //date = jobLine.Job.DeliveryDate;
 
-            JobListVM jobListVm = new JobListVM();
-            
+            //JobListVM jobListVm = new JobListVM();
+
             //OK, hard to handle from here
 
             //jobListVm = CreateJobListViewModelByMachineId(date, jobLine.MachineId);
             //ViewBag.date = jobListVm.date;
 
-            return View("Index", jobListVm);
+            return RedirectToAction("Index");
         }
 
         public TimeSpan calculateTotalTime(int machineId, MachineTypes machineType, string searchString)
@@ -324,6 +333,51 @@ namespace ZwartOpWit.Controllers
             HttpContext.Session.SetString(SessionKeyJobFilterDatetime, jobFilterDateTime.ToString());
 
             return jobFilterDateTime;
+        }
+
+        public TimeSpan CalculatePlannedTime(JobLine line)
+        {
+            Machine mach = _context.Machines.FirstOrDefault(m => m.Id == line.MachineId);
+
+            int stations = line.Job.PageQuantity / 4;
+            int quantity = line.Job.Quantity;
+            
+            double instelMachine = mach.SetupTime + (stations * mach.SetupTimeStationFactor);
+            double startDraai1000 = mach.RunTimeTo1000Speed + (stations * mach.RunTimeTo1000SpeedStationFactor);
+            double doorDraai1000 = mach.RunTimeFrom1000Speed + (stations * mach.RunTimeFrom1000SpeedStationFactor);
+            double quantityDoorDraai = quantity - 1000;
+            double centiTime = instelMachine + startDraai1000 + (doorDraai1000 * quantityDoorDraai / 1000);
+            
+            int hour = 0;
+            int minute = 0;
+            int second = 0;
+            if (centiTime >= 1)
+            {
+                hour = 1;
+                centiTime--;
+            }
+            
+            double centiMinute = centiTime % 1;
+            minute = (int)Math.Round(centiMinute * 60);
+            
+            double centiSecond = (centiMinute * 60) - minute;
+            second = (int)Math.Round(centiSecond * 60);
+            
+            TimeSpan planned = new TimeSpan(hour, minute, second);
+            return planned;
+        }
+
+        public IActionResult ReadStitch(int jobId)
+        {
+            JobLineVM jobLineVm = new JobLineVM();
+            jobLineVm.jobLine = _context.JobLines.Include(j => j.Job).FirstOrDefault(j => j.Id == jobId);
+
+            return View("ReadStitch", jobLineVm);
+        }
+
+        public IActionResult UpdateStitch(JobLine jobLine)
+        {
+            return View("Index");
         }
     }
 }

@@ -41,7 +41,7 @@
                     <th>Time</th>
                     <th>Start this Job</th>
                     @foreach (var machine in Model.machineList)
-                {
+                    {
                         <th>@machine.Name</th>
                     }
                     <th>Out</th>
@@ -57,7 +57,7 @@
                             <td>@jobLine.Job.PageQuantity</td>
                             <td>@jobLine.Job.PaperBw</td>
                             <td>@jobLine.Job.PaperCover</td>
-                            <td>@jobLine.MachineId</td>
+                            <td>@jobLine.Machine.Name</td>
                             <td>@jobLine.CalculatedTime</td>
                             <td>
                                 <a asp-controller="Job" asp-action="StartStitchAsync" asp-route-jobId="@jobLine.Id" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
@@ -68,6 +68,9 @@
                                     <a asp-controller="Job" asp-action="AssignJobLine" asp-route-jobLineId="@jobLine.Id" asp-route-machineId="@machine.Id" asp-route-filterMachineId="@Model.filterMachineId" asp-route-filterMachineType="@Model.filterMachineType" asp-route-currentFilter="@Model.currentFilter" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
                                 </td>
                             }
+                            <td>
+                                <a asp-controller="Job" asp-action="AssignJobLine" asp-route-jobLineId="@jobLine.Id" asp-route-machineId="1" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
+                            </td>
                             <td>
                                 <a asp-controller="Job" asp-action="ReadStitch" asp-route-jobId="@jobLine.Id" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
                             </td>
