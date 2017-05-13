@@ -10,6 +10,7 @@ using System.IO;
 using Microsoft.AspNetCore.Http;
 using ZwartOpWit.Helpers;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Hosting;
 
 namespace ZwartOpWit.Controllers
 {
@@ -21,12 +22,14 @@ namespace ZwartOpWit.Controllers
 
         private readonly AppDBContext _context;
         private readonly UserManager<User> _userManager;
+        private IHostingEnvironment _environment;
 
         public JobController(AppDBContext context,
-                                UserManager<User> userManager)
+                                UserManager<User> userManager, IHostingEnvironment envivornment)
         {
             _context = context;
             _userManager = userManager;
+            _environment = envivornment;
         }
         [HttpGet]
         public async Task<IActionResult> Index( string sortOrder,
@@ -158,61 +161,75 @@ namespace ZwartOpWit.Controllers
                         new { sortOrder = sortOrder, currentFilter = currentFilter, searchString = searchString, page = page, filterMachineId = filterMachineId, filterMachineType = filterMachineType, filterDateTime = filterDateTime });
         }
 
-        public void doImport(MachineTypes machineType, string fileName)
+        public void doImport(MachineTypes machineType, IFormFile myFile)
         {
+            var uploads = Path.Combine(_environment.ContentRootPath, "uploads");
+
+            using (var fileStream = new FileStream(Path.Combine(uploads, myFile.FileName), FileMode.Create))
+            {
+                myFile.CopyToAsync(fileStream);
+            }
+
             Job job;
             string  currentLine;
             string[] splitArray;
             JobLine jobLine;
 
-            using (StreamReader reader = new StreamReader(new FileStream(fileName, FileMode.Open)))
+            List<string> lines = new List<string>();
+
+            using (StreamReader reader = new StreamReader(new FileStream(Path.Combine(uploads, myFile.FileName), FileMode.Open)))
             {
                 currentLine = reader.ReadLine();
 
                 while (!reader.EndOfStream)
                 {
                     currentLine = reader.ReadLine();
-                    splitArray = currentLine.Split(';');
-
-                    //Check if job exists with current job number
-                    job = _context.Jobs.Where(x => x.JobNumber == splitArray[1]).FirstOrDefault();
-
-                    //If job does not exists create a new one
-                    if (job == null)
-                    {
-                        job = new Job();
-
-                        job.DeliveryDate = Convert.ToDateTime(splitArray[4]);
-                        job.JobNumber = splitArray[1];
-
-                        double aantal = double.Parse(splitArray[2]);
-                        job.Quantity = Convert.ToInt16(aantal);
-
-                        job.PaperBw = splitArray[8];
-                        job.Cover = 0;
-                        job.PaperCover = "no cover";
-                        job.Heigth = 297;
-                        job.Width = 210;
-
-                        _context.Jobs.Add(job);
-                    }
-
-                    //Create JobLine
-                    jobLine = new JobLine();
-
-                    jobLine.JobId = job.Id;
-                    jobLine.MachineId = 1;
-                    jobLine.Sequence = 1;
-                    jobLine.UserId = "2aff4902-2ab4-4e25-88fc-4765d661e8f2";
-                    jobLine.MachineType = MachineTypes.Stitch;
-                    jobLine.DepartmentId = 1;
-                    jobLine.Completed = false;
-
-                    _context.JobLines.Add(jobLine);
+                    lines.Add(currentLine);
                 }
             }
 
+            foreach (string line in lines)
+            {
+                splitArray = line.Split(';');
+
+                //Check if job exists with current job number
+                job = _context.Jobs.FirstOrDefault(z => z.JobNumber == splitArray[1]);
+
+                if (job == null)
+                {
+                    job = new Job();
+
+                    job.DeliveryDate = DateTime.ParseExact(splitArray[4],"dd/MM/yyyy",null);
+                    job.JobNumber = splitArray[1];
+
+                    double aantal = double.Parse(splitArray[2]);
+                    job.Quantity = Convert.ToInt16(aantal);
+
+                    job.PaperBw = splitArray[8];
+                    job.Cover = 0;
+                    job.PaperCover = "no cover";
+                    job.Heigth = 297;
+                    job.Width = 210;
+
+                    _context.Jobs.Add(job);
+                }
+
+                //Create JobLine
+                jobLine = new JobLine();
+
+                jobLine.JobId = job.Id;
+                jobLine.MachineId = 1;
+                jobLine.Sequence = 1;
+                jobLine.UserId = "2aff4902-2ab4-4e25-88fc-4765d661e8f2";
+                jobLine.MachineType = MachineTypes.Stitch;
+                jobLine.DepartmentId = 1;
+                jobLine.Completed = false;
+
+                _context.JobLines.Add(jobLine);
+            }
+
             _context.SaveChanges();
+            
         }
 
         public async Task<IActionResult> StartStitchAsync(int jobId)
