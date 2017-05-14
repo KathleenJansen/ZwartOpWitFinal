@@ -109,7 +109,7 @@ namespace ZwartOpWit.Controllers
             jobListVm.machineList = machineList.ToList();
             jobListVm.filterDateTime = filterDateTime.ToString("yyyy-MM-dd");
             jobListVm.jobLineList = await PaginatedList<JobLine>.CreateAsync(joblines.AsNoTracking(), page ?? 1, PageSize);
-
+            jobListVm.totalTime = calculateTotalTime(filterMachineId, filterDateTime);
 
             return View(jobListVm);
         }
@@ -295,14 +295,34 @@ namespace ZwartOpWit.Controllers
             return RedirectToAction("Index");
         }
 
-        public TimeSpan calculateTotalTime(int machineId, MachineTypes machineType, string searchString)
+        public TimeSpan calculateTotalTime(int machineId, DateTime deliveryDate)
         {
-            TimeSpan totalTime;
+            List<JobLine> jobLines = new List<JobLine>();
+            TimeSpan totalTime = new TimeSpan(0, 0, 3);
 
-            
+            if (machineId != 0)
+            {
+                jobLines = _context.JobLines.Include(j => j.Job).Where(j => j.MachineId == machineId && j.Job.DeliveryDate == deliveryDate).ToList();
+            }
+            else
+            {
+                jobLines = _context.JobLines.Include(j => j.Job).Where(j => j.Job.DeliveryDate == deliveryDate).ToList();
+            }
+
+            foreach (JobLine line in jobLines)
+            {
+                totalTime += line.CalculatedTime;
+            }
 
             return totalTime;
         }
+
+        //public TimeSpan calculateTotalTime(int machineId, MachineTypes machineType, string searchString)
+        //{
+        //    TimeSpan totalTime = new TimeSpan(1,1,1);
+
+        //    return totalTime;
+        //}
 
         private DateTime handleJobFilterDateTime()
         {
