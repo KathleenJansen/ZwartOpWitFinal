@@ -23,6 +23,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@machineType.ToString()<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a asp-area="" asp-controller="Job" asp-action="Index" asp-route-filterMachineType="@machineType">@Localizer["ToDo"]</a></li>
+                                <li><a asp-area="" asp.controller="Job" asp-action="Index" asp-route-filterMachineType="@machineType" asp-route-completed="true">Jobs Done</a></li>
                                 <li><a asp-area="" asp-controller="Job" asp-action="Index" asp-route-filterMachineType="@machineType">@Localizer["NoMachine"]</a></li> 
                                 @if (Model.machineList.Where(x => x.Type == machineType).ToList().Count != 0)
                                 {

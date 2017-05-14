@@ -5,7 +5,7 @@
     var nextDisabled = !Model.jobLineList.HasNextPage ? "disabled" : "";
 }
 
-<h1> Jobs to do on @Model.filterMachineType</h1>
+
 <div>
     <form asp-controller="Job" asp-action="Index" method="get" asp-route-filterMachineId="@Model.filterMachineId" asp-route-filterMachineType="@Model.filterMachineType" asp-route-currentFilter="@Model.currentFilter">
         Delivery Date:
@@ -22,6 +22,7 @@
         </div>
     </form>
 </div>
+<h1> Jobs to do on @Model.filterMachineType</h1>
 <div>
     @if (@Model.jobLineList.Count() == 0)
     {

@@ -38,7 +38,8 @@ namespace ZwartOpWit.Controllers
                                                 int? page,
                                                 int filterMachineId,
                                                 MachineTypes filterMachineType,
-                                                DateTime filterDateTime)
+                                                DateTime filterDateTime,
+                                                bool completed)
         {
             JobListVM jobListVm = new JobListVM();
             filterDateTime = handleJobFilterDateTime(filterDateTime);
@@ -77,10 +78,10 @@ namespace ZwartOpWit.Controllers
                 machineList = machineList.Where(m => m.Id == filterMachineId);
             }
 
-            //Filter on date
+            //Filter on date & completed
             if (filterDateTime != DateTime.MinValue)
             {
-                joblines = joblines.Where(jl => jl.Job.DeliveryDate == filterDateTime);
+                joblines = joblines.Where(jl => jl.Job.DeliveryDate == filterDateTime && jl.Completed == completed);
             }
 
             switch (sortOrder)
@@ -391,13 +392,18 @@ namespace ZwartOpWit.Controllers
         {
             JobLineVM jobLineVm = new JobLineVM();
             jobLineVm.jobLine = _context.JobLines.Include(j => j.Job).FirstOrDefault(j => j.Id == jobId);
+            jobLineVm.date = jobLineVm.jobLine.Job.DeliveryDate.ToString("yyyy-MM-dd");
 
             return View("ReadStitch", jobLineVm);
         }
 
         public IActionResult UpdateStitch(JobLine jobLine)
         {
-            return View("Index");
+            Job job = jobLine.Job;
+            _context.Entry(job).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            //_context.Entry(jobLine).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }
