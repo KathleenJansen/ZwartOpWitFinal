@@ -10,7 +10,7 @@
 <h1>Edit Stitch Job</h1>
 <div>
     <form asp-controller="Job" asp-action="UpdateStitch">
-        <input type="hidden" value="@Model.jobLine.Id" name="Id" asp-for="jobLine.Id" />
+        <input type="hidden" value="@Model.jobLine.Id" name="Id"/>
         <input type="hidden" value="@Model.jobLine.Job.Id" name="Job.Id"
         <div class="form-group">
             <label>Ordernummer</label>
