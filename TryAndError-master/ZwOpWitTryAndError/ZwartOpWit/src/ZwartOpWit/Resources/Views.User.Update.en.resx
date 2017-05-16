@@ -126,6 +126,9 @@
   <data name="NoUserFound" xml:space="preserve">
     <value>No user found</value>
   </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Reset Password</value>
+  </data>
   <data name="Update" xml:space="preserve">
     <value>Update</value>
   </data>

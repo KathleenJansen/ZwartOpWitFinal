@@ -117,19 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Back" xml:space="preserve">
-    <value>Terug</value>
+  <data name="Import" xml:space="preserve">
+    <value>Import</value>
   </data>
-  <data name="Email" xml:space="preserve">
-    <value>Email</value>
-  </data>
-  <data name="NoUserFound" xml:space="preserve">
-    <value>Geen gebruiker gevonden</value>
-  </data>
-  <data name="ResetPassword" xml:space="preserve">
-    <value>Herstel wachtwoord</value>
-  </data>
-  <data name="Update" xml:space="preserve">
-    <value>Wijzigen</value>
+  <data name="Upload" xml:space="preserve">
+    <value>Upload</value>
   </data>
 </root>

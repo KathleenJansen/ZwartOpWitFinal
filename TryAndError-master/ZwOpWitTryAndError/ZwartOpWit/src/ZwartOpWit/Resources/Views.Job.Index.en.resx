@@ -117,19 +117,64 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Back" xml:space="preserve">
-    <value>Terug</value>
+  <data name="BackToFullList" xml:space="preserve">
+    <value>Back to full list</value>
   </data>
-  <data name="Email" xml:space="preserve">
-    <value>Email</value>
+  <data name="DeliveryDate" xml:space="preserve">
+    <value>Delivery date</value>
   </data>
-  <data name="NoUserFound" xml:space="preserve">
-    <value>Geen gebruiker gevonden</value>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
   </data>
-  <data name="ResetPassword" xml:space="preserve">
-    <value>Herstel wachtwoord</value>
+  <data name="FilterDate" xml:space="preserve">
+    <value>Filter date</value>
   </data>
-  <data name="Update" xml:space="preserve">
-    <value>Wijzigen</value>
+  <data name="FindByName" xml:space="preserve">
+    <value>Find by name</value>
+  </data>
+  <data name="JobNumber" xml:space="preserve">
+    <value>Job number</value>
+  </data>
+  <data name="Jobs" xml:space="preserve">
+    <value>Jobs</value>
+  </data>
+  <data name="Machine" xml:space="preserve">
+    <value>Machine</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="NoJobsFoundForThisFilterType" xml:space="preserve">
+    <value>No jobs found for this filter type</value>
+  </data>
+  <data name="Out" xml:space="preserve">
+    <value>Out</value>
+  </data>
+  <data name="Pages" xml:space="preserve">
+    <value>Pages</value>
+  </data>
+  <data name="PaperCover" xml:space="preserve">
+    <value>Paper cover</value>
+  </data>
+  <data name="PaperInside" xml:space="preserve">
+    <value>Paper inside</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Quantity</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="StartThisJob" xml:space="preserve">
+    <value>Start this job</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="TotalRunningTime" xml:space="preserve">
+    <value>Total running time</value>
   </data>
 </root>

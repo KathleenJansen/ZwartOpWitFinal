@@ -1,13 +1,16 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @model ZwartOpWit.Models.Viewmodels.JobImportVM
 @{
     ViewData["Title"] = "View";
 }
 
-<h1>Import </h1>
-<form method="post" asp-action="doImport" asp-controller="Job" enctype="multipart/form-data">
+<h1>@Localizer["Import"]</h1>
+<form method="post" asp-action="Import" asp-controller="Job" enctype="multipart/form-data">
     <div class="form-group">
         <input type="file" name="files" multiple class="form-control" />
     </div>
-    <input type="submit" value="Upload" class="btn btn-default" />
+	<input asp-for="machineType" type="hidden" value="@Model.machineType" />
+    <input type="submit" value="@Localizer["Upload"]" class="btn btn-default" />
 </form>
 

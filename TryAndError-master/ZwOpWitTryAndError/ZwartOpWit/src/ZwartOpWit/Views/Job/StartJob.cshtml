@@ -1,0 +1,14 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model ZwartOpWit.Models.Viewmodels.JobListVM
+@{
+	ViewData["Title"] = "Start Job";
+}
+
+<h1>@Localizer["JobStarted"]</h1>
+<div>
+    <form asp-controller="Job" asp-action="StopJob" asp-route-jobId="@Model.jobId">
+        <input type="submit" value="@Localizer["Stop"]"/>
+    </form>
+    
+</div>

@@ -63,13 +63,19 @@ namespace ZwartOpWit
             );
 
             //Add identity service
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<User, IdentityRole>(config =>
+                {
+                    config.SignIn.RequireConfirmedEmail = true;
+                })
               .AddEntityFrameworkStores<AppDBContext>()
               .AddDefaultTokenProviders();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            //Configure mail service
+            services.Configure<AuthMessageSenderOptions>(Configuration);
 
             // Adds a default in-memory implementation of IDistributedCache.
             services.AddDistributedMemoryCache();
@@ -97,6 +103,8 @@ namespace ZwartOpWit
             {
                 options.AddPolicy("RequireEmployeeRole", policy => policy.RequireRole("Employee"));
             });
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -134,7 +142,7 @@ namespace ZwartOpWit
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Account}/{action=Login}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

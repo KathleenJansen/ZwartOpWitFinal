@@ -1,5 +1,4 @@
-﻿
-@using ZwartOpWit.Models
+﻿@using ZwartOpWit.Models
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @model ZwartOpWit.Models.Viewmodels.JobLineVM
@@ -7,58 +6,58 @@
 
 }
 
-<h1>Edit Stitch Job</h1>
+<h1>@Localizer["EditJob"]</h1>
 <div>
-    <form asp-controller="Job" asp-action="UpdateStitch">
+    <form asp-controller="Job" asp-action="Update">
         <input type="hidden" value="@Model.jobLine.Id" name="Id"/>
         <input type="hidden" value="@Model.jobLine.Job.Id" name="Job.Id"
         <div class="form-group">
-            <label>Ordernummer</label>
+            <label>@Localizer["JobNumber"]</label>
             <input type="text" value="@Model.jobLine.Job.JobNumber" name="Job.JobNumber" class="form-control" />
             <span class="text-danger" ></span>
         </div>
         <div class="form-group">
-            <label >Papier bw</label>
+            <label>@Localizer["PaperBW"]</label>
             <input type="text" value="@Model.jobLine.Job.PaperBw" name="Job.PaperBw" class="form-control" />
             <span  class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label>Aantal blz.</label>
+            <label>@Localizer["PageQuantity"].</label>
             <input type="text" value="@Model.jobLine.Job.PageQuantity" name="Job.PageQuantity" class="form-control" />
             <span class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="jobLine.Job.DeliveryDate">Leverdatum</label>
+            <label asp-for="jobLine.Job.DeliveryDate">@Localizer["DeliveryDate"]</label>
             <input type="date" value="@Model.date" name="Job.DeliveryDate" class="form-control" />
             <span  class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label >Breedte</label>
+            <label >@Localizer["Width"]</label>
             <input type="text" value="@Model.jobLine.Job.Width" name="Job.Width"  class="form-control" />
             <span  class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label >Hoogte</label>
+            <label >@Localizer["Height"]</label>
             <input type="text" value="@Model.jobLine.Job.Heigth" name="Job.Heigth"  class="form-control" />
             <span  class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label >Machine</label>
+            <label >@Localizer["Machine"]</label>
             <input type="text" value="@Model.jobLine.MachineId" name="MachineId" class="form-control" />
             <span  class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label >Sequence</label>
+            <label >@Localizer["Sequence"]</label>
             <input type="text" value="@Model.jobLine.Sequence" name="Sequence"  class="form-control" />
             <span  class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label >JobsDone</label>
+            <label >@Localizer["Completed"]</label>
             <input type="text" value="@Model.jobLine.Completed.ToString()" name="Completed" class="form-control" />
             <span  class="text-danger"></span>
         </div>
         <div class="form-group">
-            <input type="submit" value="Update" />
+            <input type="submit" value="@Localizer["Update"]" />
         </div>
     </form>
 </div>

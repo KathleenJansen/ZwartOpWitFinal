@@ -39,7 +39,8 @@ namespace ZwartOpWit.Controllers
                                                 int filterMachineId,
                                                 MachineTypes filterMachineType,
                                                 DateTime filterDateTime,
-                                                bool completed)
+                                                bool filterCompleted,
+												bool filterNoMachine)
         {
             JobListVM jobListVm = new JobListVM();
             filterDateTime = handleJobFilterDateTime(filterDateTime);
@@ -78,11 +79,23 @@ namespace ZwartOpWit.Controllers
                 machineList = machineList.Where(m => m.Id == filterMachineId);
             }
 
-            //Filter on date & completed
+            //Filter on date
             if (filterDateTime != DateTime.MinValue)
             {
-                joblines = joblines.Where(jl => jl.Job.DeliveryDate == filterDateTime && jl.Completed == completed);
+                joblines = joblines.Where(jl => jl.Job.DeliveryDate == filterDateTime);
             }
+
+			//filter on completed
+			if (filterCompleted)
+			{
+				joblines = joblines.Where(jl => jl.Completed == true);
+			}
+
+			//Filter on no machine
+			if (filterNoMachine)
+			{
+				joblines = joblines.Where(jl => jl.MachineId == 0);
+			}
 
             switch (sortOrder)
             {
@@ -107,6 +120,7 @@ namespace ZwartOpWit.Controllers
                     break;
             }
 
+			jobListVm.filterMachineId = filterMachineId;
             jobListVm.machineList = machineList.ToList();
             jobListVm.filterDateTime = filterDateTime.ToString("yyyy-MM-dd");
             jobListVm.jobLineList = await PaginatedList<JobLine>.CreateAsync(joblines.AsNoTracking(), page ?? 1, PageSize);
@@ -126,11 +140,78 @@ namespace ZwartOpWit.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Import(MachineTypes machineType,
-                                                    ICollection<IFormFile> files)
-        {
-            return RedirectToAction("Index");
-        }
+        public async Task<IActionResult> Import(MachineTypes machineType, IFormFile files)
+		{
+			var uploads = Path.Combine(_environment.ContentRootPath, "uploads");
+
+			using (var fileStream = new FileStream(Path.Combine(uploads, files.FileName), FileMode.Create))
+			{
+				files.CopyToAsync(fileStream);
+			}
+
+			Job job;
+			string currentLine;
+			string[] splitArray;
+			JobLine jobLine;
+
+			List<string> lines = new List<string>();
+
+			using (StreamReader reader = new StreamReader(new FileStream(Path.Combine(uploads, files.FileName), FileMode.Open)))
+			{
+				currentLine = reader.ReadLine();
+
+				while (!reader.EndOfStream)
+				{
+					currentLine = reader.ReadLine();
+					lines.Add(currentLine);
+				}
+			}
+
+			foreach (string line in lines)
+			{
+				splitArray = line.Split(';');
+
+				//Check if job exists with current job number
+				job = _context.Jobs.FirstOrDefault(z => z.JobNumber == splitArray[1]);
+
+				//Create Job & JobLine
+				if (job == null)
+				{
+					//Create Job
+					job = new Job();
+
+					job.DeliveryDate = DateTime.ParseExact(splitArray[4], "dd/MM/yyyy", null);
+					job.JobNumber = splitArray[1];
+
+					double aantal = double.Parse(splitArray[2]);
+					job.Quantity = Convert.ToInt16(aantal);
+
+					job.PaperBw = splitArray[8];
+					job.Cover = 0;
+					job.PaperCover = "no cover";
+					job.Heigth = 297;
+					job.Width = 210;
+					job.PageQuantity = int.Parse(splitArray[6].Remove(2));
+
+					_context.Jobs.Add(job);
+				}
+
+				//Create JobLine
+				jobLine = new JobLine();
+
+				jobLine.JobId = job.Id;
+				jobLine.Job = job;
+				jobLine.Sequence = 1;
+				jobLine.MachineType = machineType;
+				jobLine.Completed = false;
+
+				_context.JobLines.Add(jobLine);
+			}
+
+			_context.SaveChanges();
+
+			return RedirectToAction("Index");
+		}
 
 
         public IActionResult AssignJobLine(int jobLineId,
@@ -163,86 +244,7 @@ namespace ZwartOpWit.Controllers
                         new { sortOrder = sortOrder, currentFilter = currentFilter, searchString = searchString, page = page, filterMachineId = filterMachineId, filterMachineType = filterMachineType, filterDateTime = filterDateTime });
         }
 
-        public IActionResult doImport(MachineTypes machineType, IFormFile files)
-        {
-            var uploads = Path.Combine(_environment.ContentRootPath, "uploads");
-
-            using (var fileStream = new FileStream(Path.Combine(uploads, files.FileName), FileMode.Create))
-            {
-                files.CopyToAsync(fileStream);
-            }
-
-            Job job;
-            string currentLine;
-            string[] splitArray;
-            JobLine jobLine;
-
-            List<string> lines = new List<string>();
-
-            using (StreamReader reader = new StreamReader(new FileStream(Path.Combine(uploads, files.FileName), FileMode.Open)))
-            {
-                currentLine = reader.ReadLine();
-
-                while (!reader.EndOfStream)
-                {
-                    currentLine = reader.ReadLine();
-                    lines.Add(currentLine);
-                }
-            }
-
-            foreach (string line in lines)
-            {
-                splitArray = line.Split(';');
-
-                //Check if job exists with current job number
-                job = _context.Jobs.FirstOrDefault(z => z.JobNumber == splitArray[1]);
-
-                //Create Job & JobLine
-                if (job == null)
-                {
-                    //Create Job
-                    job = new Job();
-
-                    job.DeliveryDate = DateTime.ParseExact(splitArray[4], "dd/MM/yyyy", null);
-                    job.JobNumber = splitArray[1];
-
-                    double aantal = double.Parse(splitArray[2]);
-                    job.Quantity = Convert.ToInt16(aantal);
-
-                    job.PaperBw = splitArray[8];
-                    job.Cover = 0;
-                    job.PaperCover = "no cover";
-                    job.Heigth = 297;
-                    job.Width = 210;
-                    job.PageQuantity = int.Parse(splitArray[6].Remove(2));
-
-                    _context.Jobs.Add(job);
-
-                    //Create JobLine
-                    jobLine = new JobLine();
-
-                    jobLine.JobId = job.Id;
-                    jobLine.Job = job;
-                    jobLine.MachineId = 1;
-                    jobLine.Sequence = 1;
-                    jobLine.UserId = _userManager.GetUserId(User);
-                    //jobLine.UserId = "2aff4902-2ab4-4e25-88fc-4765d661e8f2";
-                    jobLine.MachineType = MachineTypes.Stitch;
-                    jobLine.DepartmentId = 1;
-                    jobLine.Completed = false;
-                    jobLine.CalculatedTime = CalculatePlannedTime(jobLine);
-
-                    _context.JobLines.Add(jobLine);
-                }
-            }
-
-            _context.SaveChanges();
-
-            return RedirectToAction("Index");
-            
-        }
-
-        public async Task<IActionResult> StartStitchAsync(int jobId)
+        public async Task<IActionResult> StartJobAsync(int jobId)
         {
             TimeRegister start = new TimeRegister();
             start.Start = DateTime.Now;
@@ -257,10 +259,10 @@ namespace ZwartOpWit.Controllers
            
             jobListVm.jobId = start.Id;
 
-            return View("StartStitch", jobListVm);
+            return View("StartJob", jobListVm);
         }
 
-        public IActionResult StopStitch(int jobId)
+        public IActionResult StopJob(int jobId)
         {
             TimeRegister stop = new TimeRegister();
             stop = _context.TimeRegisters.FirstOrDefault(e => e.Id == jobId);
@@ -282,16 +284,6 @@ namespace ZwartOpWit.Controllers
             jobLine.Completed = yes;
             _context.Entry(jobLine).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             _context.SaveChanges();
-
-            //DateTime date = new DateTime();
-            //date = jobLine.Job.DeliveryDate;
-
-            //JobListVM jobListVm = new JobListVM();
-
-            //OK, hard to handle from here
-
-            //jobListVm = CreateJobListViewModelByMachineId(date, jobLine.MachineId);
-            //ViewBag.date = jobListVm.date;
 
             return RedirectToAction("Index");
         }
@@ -317,13 +309,6 @@ namespace ZwartOpWit.Controllers
 
             return totalTime;
         }
-
-        //public TimeSpan calculateTotalTime(int machineId, MachineTypes machineType, string searchString)
-        //{
-        //    TimeSpan totalTime = new TimeSpan(1,1,1);
-
-        //    return totalTime;
-        //}
 
         private DateTime handleJobFilterDateTime()
         {
@@ -388,20 +373,23 @@ namespace ZwartOpWit.Controllers
             return planned;
         }
 
-        public IActionResult ReadStitch(int jobId)
+		[HttpGet]
+        public IActionResult Update(int jobId)
         {
             JobLineVM jobLineVm = new JobLineVM();
             jobLineVm.jobLine = _context.JobLines.Include(j => j.Job).FirstOrDefault(j => j.Id == jobId);
             jobLineVm.date = jobLineVm.jobLine.Job.DeliveryDate.ToString("yyyy-MM-dd");
 
-            return View("ReadStitch", jobLineVm);
+            return View("Update", jobLineVm);
         }
 
-        public IActionResult UpdateStitch(JobLine jobLine)
+		[HttpPost]
+        public IActionResult Update(JobLine jobLine)
         {
             Job job = jobLine.Job;
+
             _context.Entry(job).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            //_context.Entry(jobLine).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _context.Entry(jobLine).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             _context.SaveChanges();
             return RedirectToAction("Index");
         }

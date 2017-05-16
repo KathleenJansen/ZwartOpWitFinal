@@ -117,19 +117,64 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Back" xml:space="preserve">
-    <value>Terug</value>
+  <data name="BackToFullList" xml:space="preserve">
+    <value>Terug naar volledige lijst</value>
   </data>
-  <data name="Email" xml:space="preserve">
-    <value>Email</value>
+  <data name="DeliveryDate" xml:space="preserve">
+    <value>Leverdatum</value>
   </data>
-  <data name="NoUserFound" xml:space="preserve">
-    <value>Geen gebruiker gevonden</value>
+  <data name="Edit" xml:space="preserve">
+    <value>Wijzig</value>
   </data>
-  <data name="ResetPassword" xml:space="preserve">
-    <value>Herstel wachtwoord</value>
+  <data name="FilterDate" xml:space="preserve">
+    <value>Filter datum</value>
   </data>
-  <data name="Update" xml:space="preserve">
-    <value>Wijzigen</value>
+  <data name="FindByName" xml:space="preserve">
+    <value>Zoeken op naam</value>
+  </data>
+  <data name="JobNumber" xml:space="preserve">
+    <value>Job nummer</value>
+  </data>
+  <data name="Jobs" xml:space="preserve">
+    <value>Jobs</value>
+  </data>
+  <data name="Machine" xml:space="preserve">
+    <value>Machine</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Volgende</value>
+  </data>
+  <data name="NoJobsFoundForThisFilterType" xml:space="preserve">
+    <value>Geen jobs gevonden voor dit filter type</value>
+  </data>
+  <data name="Out" xml:space="preserve">
+    <value>Out</value>
+  </data>
+  <data name="Pages" xml:space="preserve">
+    <value>Pagina's</value>
+  </data>
+  <data name="PaperCover" xml:space="preserve">
+    <value>Papieren cover</value>
+  </data>
+  <data name="PaperInside" xml:space="preserve">
+    <value>Papier inside</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>Vorige</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Hoeveelheid</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Zoek</value>
+  </data>
+  <data name="StartThisJob" xml:space="preserve">
+    <value>Start Job</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Tijd</value>
+  </data>
+  <data name="TotalRunningTime" xml:space="preserve">
+    <value>Totale doorlooptijd</value>
   </data>
 </root>
