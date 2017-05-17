@@ -15,135 +15,165 @@ using ZwartOpWit.Models.Services;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace ZwartOpWit
 {
-    public class Startup
-    {
-        public static string defaultCulture = "nl-BE";
+	public class Startup
+	{
+		public static string defaultCulture = "nl-BE";
 
-        public static List<CultureInfo> supportedCultures
-        {
-            get
-            {
-                return new List<CultureInfo> {
-                    new CultureInfo("nl-BE"),
-                    new CultureInfo("en-US")
-                };
-            }
-        }
+		public static List<CultureInfo> supportedCultures
+		{
+			get
+			{
+				return new List<CultureInfo> {
+					new CultureInfo("nl-BE"),
+					new CultureInfo("en-US")
+				};
+			}
+		}
 
-        public Startup(IHostingEnvironment env)
-        {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-            Configuration = builder.Build();
-        }
+		public Startup(IHostingEnvironment env)
+		{
+			var builder = new ConfigurationBuilder()
+				.SetBasePath(env.ContentRootPath)
+				.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+				.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+				.AddEnvironmentVariables();
+			Configuration = builder.Build();
+		}
 
-        public IConfigurationRoot Configuration { get; }
+		public IConfigurationRoot Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            // Add framework services.
-            services.AddMvc();
-            
-            //Connection string ophalen (Zie appsettings.json)
-            var sqlConnectionString = Configuration.GetConnectionString("ConnectionString");
+		// This method gets called by the runtime. Use this method to add services to the container.
+		public void ConfigureServices(IServiceCollection services)
+		{
+			// Add framework services.
+			services.AddMvc();
 
-            //Add entity framework service
-            services.AddEntityFramework().AddDbContext<AppDBContext>(options =>
-                options.UseMySQL(
-                    sqlConnectionString,
-                    b => b.MigrationsAssembly("ZwartOpWit")
-                )
-            );
+			//Connection string ophalen (Zie appsettings.json)
+			var sqlConnectionString = Configuration.GetConnectionString("ConnectionString");
 
-            //Add identity service
-            services.AddIdentity<User, IdentityRole>(config =>
-                {
-                    config.SignIn.RequireConfirmedEmail = true;
-                })
-              .AddEntityFrameworkStores<AppDBContext>()
-              .AddDefaultTokenProviders();
+			//Add entity framework service
+			services.AddEntityFramework().AddDbContext<AppDBContext>(options =>
+				options.UseMySQL(
+					sqlConnectionString,
+					b => b.MigrationsAssembly("ZwartOpWit")
+				)
+			);
 
-            // Add application services.
-            services.AddTransient<IEmailSender, AuthMessageSender>();
-            services.AddTransient<ISmsSender, AuthMessageSender>();
+			//Add identity service
+			services.AddIdentity<User, IdentityRole>()
+			  .AddEntityFrameworkStores<AppDBContext>()
+			  .AddDefaultTokenProviders();
 
-            //Configure mail service
-            services.Configure<AuthMessageSenderOptions>(Configuration);
+			// Add application services.
+			services.AddTransient<IEmailSender, AuthMessageSender>();
+			services.AddTransient<ISmsSender, AuthMessageSender>();
 
-            // Adds a default in-memory implementation of IDistributedCache.
-            services.AddDistributedMemoryCache();
+			//Configure mail service
+			services.Configure<AuthMessageSenderOptions>(Configuration);
 
-            //Add session services
-            services.AddSession(options =>
-            {
-                options.IdleTimeout = TimeSpan.FromSeconds(120);
-                options.CookieHttpOnly = true;
-            });
+			// Adds a default in-memory implementation of IDistributedCache.
+			services.AddDistributedMemoryCache();
 
-            //Translation services
-            services
-             .AddLocalization(options => options.ResourcesPath = "Resources")
-             .AddMvc()
-             .AddViewLocalization()
-             .AddDataAnnotationsLocalization();
+			//Add session services
+			services.AddSession(options =>
+			{
+				options.IdleTimeout = TimeSpan.FromSeconds(120);
+				options.CookieHttpOnly = true;
+			});
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
-            });
+			//Translation services
+			services
+			 .AddLocalization(options => options.ResourcesPath = "Resources")
+			 .AddMvc()
+			 .AddViewLocalization()
+			 .AddDataAnnotationsLocalization();
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("RequireEmployeeRole", policy => policy.RequireRole("Employee"));
-            });
+			services.AddAuthorization(options =>
+			{
+				options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+			});
 
-            
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
-        {
+			services.AddAuthorization(options =>
+			{
+				options.AddPolicy("RequireEmployeeRole", policy => policy.RequireRole("Employee"));
+			});
 
 
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+		}
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
+		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+		{
 
-            //Translations
-            app.UseRequestLocalization(new RequestLocalizationOptions
-            {
-                DefaultRequestCulture = new RequestCulture(defaultCulture),
-                // Formatting numbers, dates, etc.
-                SupportedCultures = supportedCultures,
-                // UI strings that we have localized.
-                SupportedUICultures = supportedCultures
-            });
 
-            app.UseStaticFiles();
-            app.UseIdentity();
-            app.UseSession();
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
-        }
-    }
+			loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+			loggerFactory.AddDebug();
+
+			if (env.IsDevelopment())
+			{
+				app.UseDeveloperExceptionPage();
+				app.UseBrowserLink();
+			}
+			else
+			{
+				app.UseExceptionHandler("/Home/Error");
+			}
+
+			//Translations
+			app.UseRequestLocalization(new RequestLocalizationOptions
+			{
+				DefaultRequestCulture = new RequestCulture(defaultCulture),
+				// Formatting numbers, dates, etc.
+				SupportedCultures = supportedCultures,
+				// UI strings that we have localized.
+				SupportedUICultures = supportedCultures
+			});
+
+			//Roles
+			RolesData.SeedRoles(app.ApplicationServices).Wait();
+
+			app.UseStaticFiles();
+			app.UseIdentity();
+			app.UseSession();
+			app.UseMvc(routes =>
+			{
+				routes.MapRoute(
+					name: "default",
+					template: "{controller=Account}/{action=Login}/{id?}");
+			});
+		}
+	}
+
+	public static class RolesData
+	{
+		private static readonly string[] Roles = new string[] { "Admin", "Employee" };
+
+		public static async Task SeedRoles(IServiceProvider serviceProvider)
+		{
+			using (var serviceScope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
+			{
+				var dbContext = serviceScope.ServiceProvider.GetService<AppDBContext>();
+
+				if (dbContext.Database.GetPendingMigrations().Any())
+				{
+					await dbContext.Database.MigrateAsync();
+
+					var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+					foreach (var role in Roles)
+					{
+						if (!await roleManager.RoleExistsAsync(role))
+						{
+							await roleManager.CreateAsync(new IdentityRole(role));
+						}
+					}
+				}
+			}
+		}
+	}
 }

@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
   <data name="ForgotPassword" xml:space="preserve">
     <value>Wachtwoord vergeten?</value>
   </data>
@@ -125,5 +128,11 @@
   </data>
   <data name="LoginInfo" xml:space="preserve">
     <value>Gebruik een lokale account om in te loggen</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Wachtwoord</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Herriner mij</value>
   </data>
 </root>

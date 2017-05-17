@@ -57,10 +57,9 @@ header{
 
 .login-content {
     background-color: #82CDE4;
-    color: white;
+    color: black;
     margin-top: 10%;
     border-radius: 25px;
-    padding: 10px;
 }
 
 .login-logo {
@@ -74,7 +73,8 @@ header{
     text-align:right;
     clear:both;
     float:left;
-    margin-right:25%;
+    padding-right:2%;
+	padding-top:1%;
     width: 25%;
     
 }
@@ -90,4 +90,17 @@ header{
 
 .form-right {
     float:right;
+}
+
+.login-submit {
+	padding-bottom:4px;
+	padding-right:15px;
+}
+
+login-forgot-password {
+	padding-right: 30px;
+}
+
+.login-checkbox {
+	margin: auto;
 }

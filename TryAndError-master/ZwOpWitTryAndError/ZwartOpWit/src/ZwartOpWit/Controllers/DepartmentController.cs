@@ -7,10 +7,11 @@ using ZwartOpWit.Models;
 using ZwartOpWit.Models.Viewmodels;
 using ZwartOpWit.Helpers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ZwartOpWit.Controllers
 {
-    public class DepartmentController: Controller
+	public class DepartmentController: Controller
     {
         private readonly AppDBContext _context;
         const int PageSize = 3;
