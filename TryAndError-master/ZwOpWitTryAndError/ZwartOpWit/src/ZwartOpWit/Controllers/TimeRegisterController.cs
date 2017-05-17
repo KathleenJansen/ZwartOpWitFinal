@@ -45,7 +45,7 @@ namespace ZwartOpWit.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                timeRegisters = timeRegisters.Where(s => s.User.UserName.Contains(searchString));
+                timeRegisters = timeRegisters.Where(s => s.User.Email.Contains(searchString));
             }
 
             switch (sortOrder)
@@ -112,6 +112,7 @@ namespace ZwartOpWit.Controllers
         [HttpPost]
         public IActionResult Update(TimeRegister timeRegister)
         {
+			timeRegister.UserId = timeRegister.User.Id;
             _context.Entry(timeRegister).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             _context.SaveChanges();
             return RedirectToAction("Index");

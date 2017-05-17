@@ -8,7 +8,7 @@
 <div>
     <div>
         <h2>@Localizer["Title"]</h2>
-        <p><a asp-controller="Department" asp-action="Create" class="btn btn-info">@Localizer["New"]</a></p>
+        <p><a asp-controller="TimeRegister" asp-action="Create" class="btn btn-info">@Localizer["New"]</a></p>
     </div>
     <form asp-action="Index" method="get">
         <div class="form-actions no-color">
@@ -35,7 +35,15 @@
             {
                         <tr>
                             <td>@d.JobLine.JobId</td>
-                            <td>@d.UserId</td>
+                            @if (d.User != null)
+							{
+								<td>@d.User.Email</td>
+							}
+							else
+							{
+								<td></td>
+							}
+						
                             <td>@d.Start</td>
                             <td>@d.Stop</td>
                             <td>

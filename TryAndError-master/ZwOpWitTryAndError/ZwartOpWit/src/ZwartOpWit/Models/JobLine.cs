@@ -31,9 +31,7 @@ namespace ZwartOpWit.Models
 
         public void calculateTime(Machine machine)
         {
-            Always1Hour always1hour = new Always1Hour();
-            Always5000Ticks always5000ticks = new Always5000Ticks();
-            StichMainCalculationMethod stichMainCalculationMethod = new StichMainCalculationMethod();
+			ICalculationMethod calcMethod = null;
 
             if (machine != null)
             {
@@ -42,16 +40,22 @@ namespace ZwartOpWit.Models
                 switch (machine.CalculationMethod)
                 {
                     case CalculationMethodTypes.StichMain:
-                        CalculatedTime = stichMainCalculationMethod.calculacte(this);
+						calcMethod = new StichMainCalculationMethod();
                         break;
                     case CalculationMethodTypes.Always1Hour:
-                        CalculatedTime = always1hour.calculacte(this);
+						calcMethod = new Always1Hour();
                         break;
                     case CalculationMethodTypes.Always5000Ticks:
-                        CalculatedTime = always5000ticks.calculacte(this);
-                        break;
+						calcMethod = new Always5000Ticks();
+
+						break;
                 }
-            }
+
+				if (calcMethod != null)
+				{
+					CalculatedTime = calcMethod.calculacte(this);
+				}
+			}
         }
     }
 }

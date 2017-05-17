@@ -74,7 +74,12 @@ namespace ZwartOpWit
 			services.AddTransient<ISmsSender, AuthMessageSender>();
 
 			//Configure mail service
-			services.Configure<AuthMessageSenderOptions>(Configuration);
+			services.Configure<AuthMessageSenderOptions>(myOptions =>
+			{
+				myOptions.SendGridKey = "GridKey";
+				myOptions.SendGridUser = "GridUser";
+			});
+
 
 			// Adds a default in-memory implementation of IDistributedCache.
 			services.AddDistributedMemoryCache();
