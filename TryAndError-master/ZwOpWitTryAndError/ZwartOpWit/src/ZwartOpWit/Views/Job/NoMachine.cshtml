@@ -1,0 +1,97 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model ZwartOpWit.Models.Viewmodels.JobListNoMachineVM
+@{
+	ViewData["Title"] = "No Machine";
+	var prevDisabled = !Model.jobLineList.HasPreviousPage ? "disabled" : "";
+	var nextDisabled = !Model.jobLineList.HasNextPage ? "disabled" : "";
+}
+
+
+<div>
+	<form asp-controller="Job" asp-action="NoMachine" method="get"  asp-route-filterMachineType="@Model.filterMachineType" asp-route-currentFilter="@Model.currentFilter">
+		@Localizer["DeliveryDate"]:
+		<input type="date" name="filterDateTime" value="@Model.filterDateTime" />
+		<input type="submit" value="@Localizer["FilterDate"]" class="btn btn-default" />
+	</form>
+</div>
+<hr />
+<div>
+	<form asp-controller="Job" asp-action="NoMachine" method="get"  asp-route-jobFilterDateTime="@Model.filterDateTime" asp-route-filterMachineType="@Model.filterMachineType" asp-route-currentFilter="@Model.currentFilter">
+		<div class="form-actions no-color">
+			<p>
+				@Localizer["FindByName"]: <input type="text" name="SearchString" value="@Model.currentFilter" />
+				<input type="submit" value="@Localizer["Search"]" class="btn btn-default" /> |
+				<a asp-action="NoMachine">@Localizer["BackToFullList"]</a>
+			</p>
+		</div>
+	</form>
+</div>
+<h1> @Localizer["JobsTodo"] @Model.filterMachineType</h1>
+<div>
+	@if (@Model.jobLineList.Count() == 0)
+	{
+		<p>@Localizer["NoJobsFoundForThisFilterType"]</p>
+	}
+	else
+	{
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th><a asp-action="NoMachine" asp-route-sortOrder="@Model.jobNumberSortParm" asp-route-currentFilter="@Model.currentFilter" asp-route-jobFilterDateTime="@Model.filterDateTime"  asp-route-filterMachineType="@Model.filterMachineType">@Localizer["JobNumber"]</a></th>
+					<th><a asp-action="NoMachine" asp-route-sortOrder="@Model.quantitySortParm" asp-route-currentFilter="@Model.currentFilter" asp-route-jobFilterDateTime="@Model.filterDateTime"  asp-route-filterMachineType="@Model.filterMachineType">@Localizer["Quantity"]</a></th>
+					<th><a asp-action="NoMachine" asp-route-sortOrder="@Model.pageQuantitySortParm" asp-route-currentFilter="@Model.currentFilter" asp-route-jobFilterDateTime="@Model.filterDateTime"  asp-route-filterMachineType="@Model.filterMachineType">@Localizer["Pages"]</a></th>
+					<th>@Localizer["PaperInside"]</th>
+					<th>@Localizer["PaperCover"]</th>
+					@foreach (var machine in Model.machineList)
+                    {
+						<th>@machine.Name</th>
+                    }
+					<th>@Localizer["Out"]</th>
+					<th>@Localizer["Edit"]</th>
+				</tr>
+			</thead>
+			<tbody>
+				@{ foreach (var jobLine in Model.jobLineList)
+					{
+						<tr>
+							<td>@jobLine.Job.JobNumber / Id = @jobLine.Id</td>
+							<td>@jobLine.Job.Quantity</td>
+							<td>@jobLine.Job.PageQuantity</td>
+							<td>@jobLine.Job.PaperBw</td>
+							<td>@jobLine.Job.PaperCover</td>
+							@foreach (var machine in Model.machineList)
+                                {
+								<td>
+									<a asp-controller="Job" asp-action="AssignJobLine" asp-route-jobLineId="@jobLine.Id" asp-route-machineId="@machine.Id" asp-route-filterMachineType="@Model.filterMachineType" asp-route-currentFilter="@Model.currentFilter" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
+								</td>
+                                }
+							<td>
+								<a asp-controller="Job" asp-action="AssignJobLine" asp-route-jobLineId="@jobLine.Id" asp-route-machineId="1" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
+							</td>
+							<td>
+								<a asp-controller="Job" asp-action="Update" asp-route-jobId="@jobLine.Id" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
+							</td>
+						</tr>
+					}
+				}
+			</tbody>
+		</table>
+		<a asp-action="NoMachine"
+		   asp-route-sortOrder="@ViewData["CurrentSort"]"
+		   asp-route-page="@(Model.jobLineList.PageIndex - 1)"
+		   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+		   class="btn btn-default @prevDisabled">
+			@Localizer["Previous"]
+		</a>
+		<a asp-action="NoMachine"
+		   asp-route-sortOrder="@ViewData["CurrentSort"]"
+		   asp-route-page="@(Model.jobLineList.PageIndex + 1)"
+		   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+		   class="btn btn-default @nextDisabled">
+			@Localizer["Next"]
+		</a>
+					}
+
+</div>
+

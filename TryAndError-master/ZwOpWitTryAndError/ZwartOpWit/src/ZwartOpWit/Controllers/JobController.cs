@@ -11,10 +11,12 @@ using Microsoft.AspNetCore.Http;
 using ZwartOpWit.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ZwartOpWit.Controllers
 {
-    public class JobController : Controller
+	[Authorize(Policy = "RequireAdminRole, RequireEmployeeRole")]
+	public class JobController : Controller
     {
         //Constant to determine session filter date time
         const string SessionKeyJobFilterDatetime = "JobFilterDatetime";
@@ -31,6 +33,7 @@ namespace ZwartOpWit.Controllers
             _userManager = userManager;
             _environment = envivornment;
         }
+
         [HttpGet]
         public async Task<IActionResult> Index(string sortOrder,
                                                 string currentFilter,
@@ -129,9 +132,327 @@ namespace ZwartOpWit.Controllers
             return View(jobListVm);
         }
 
+		[HttpGet]
+		public async Task<IActionResult> ToDo(string sortOrder,
+											   string currentFilter,
+											   string searchString,
+											   int? page,
+											   MachineTypes filterMachineType,
+											   DateTime filterDateTime)
+		{
+			JobListToDoVM jobListVm = new JobListToDoVM();
+			filterDateTime = handleJobFilterDateTime(filterDateTime);
 
-        [HttpGet]
-        public async Task<IActionResult> Import(MachineTypes machineType)
+			jobListVm.currentSort = sortOrder;
+			jobListVm.currentFilter = searchString;
+			jobListVm.jobNumberSortParm = String.IsNullOrEmpty(sortOrder) ? "jobNumber_desc" : "";
+			jobListVm.quantitySortParm = sortOrder == "quantity" ? "quantity_desc" : "quantity";
+			jobListVm.pageQuantitySortParm = sortOrder == "pageQuantity" ? "pageQuantity_desc" : "pageQuantity";
+
+			if (searchString != currentFilter)
+			{
+				page = 1;
+			}
+
+			var joblines = _context.JobLines.Include(j => j.Job).Include(j => j.Machine).AsQueryable();
+
+			//Add filters
+			if (!String.IsNullOrEmpty(searchString))
+			{
+				joblines = joblines.Where(jl => jl.Job.JobNumber.Contains(searchString));
+			}
+
+			//Machine type filter is set
+			if (System.Enum.IsDefined(typeof(MachineTypes), filterMachineType))
+			{
+				joblines = joblines.Where(jl => jl.MachineType == filterMachineType);
+			}
+
+			//Filter on date
+			if (filterDateTime != DateTime.MinValue)
+			{
+				joblines = joblines.Where(jl => jl.Job.DeliveryDate == filterDateTime);
+			}
+
+			//filter on completed
+			joblines = joblines.Where(jl => jl.Completed == false);
+
+
+			//Filter on no machine
+			joblines = joblines.Where(jl => jl.MachineId != 0);
+
+
+			switch (sortOrder)
+			{
+				case "jobNumber_desc":
+					joblines = joblines.OrderByDescending(u => u.Job.JobNumber);
+					break;
+				case "quantity":
+					joblines = joblines.OrderBy(jl => jl.Job.Quantity);
+					break;
+				case "quantity_desc":
+					joblines = joblines.OrderByDescending(jl => jl.Job.Quantity);
+					break;
+
+				case "pageQuantity":
+					joblines = joblines.OrderBy(jl => jl.Job.PageQuantity);
+					break;
+				case "pageQuantity_desc":
+					joblines = joblines.OrderByDescending(jl => jl.Job.PageQuantity);
+					break;
+				default:
+					joblines = joblines.OrderBy(u => u.Job.JobNumber);
+					break;
+			}
+
+			jobListVm.filterDateTime = filterDateTime.ToString("yyyy-MM-dd");
+			jobListVm.jobLineList = await PaginatedList<JobLine>.CreateAsync(joblines.AsNoTracking(), page ?? 1, PageSize);
+
+			return View(jobListVm);
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> Machine(string sortOrder,
+												string currentFilter,
+												string searchString,
+												int? page,
+												int filterMachineId,
+												MachineTypes filterMachineType,
+												DateTime filterDateTime)
+		{
+			JobListMachineVM jobListVm = new JobListMachineVM();
+			filterDateTime = handleJobFilterDateTime(filterDateTime);
+
+			jobListVm.currentSort = sortOrder;
+			jobListVm.currentFilter = searchString;
+			jobListVm.jobNumberSortParm = String.IsNullOrEmpty(sortOrder) ? "jobNumber_desc" : "";
+			jobListVm.quantitySortParm = sortOrder == "quantity" ? "quantity_desc" : "quantity";
+			jobListVm.pageQuantitySortParm = sortOrder == "pageQuantity" ? "pageQuantity_desc" : "pageQuantity";
+
+			if (searchString != currentFilter)
+			{
+				page = 1;
+			}
+
+			var joblines = _context.JobLines.Include(j => j.Job).Include(j => j.Machine).AsQueryable();
+
+			//Add filters
+			if (!String.IsNullOrEmpty(searchString))
+			{
+				joblines = joblines.Where(jl => jl.Job.JobNumber.Contains(searchString));
+			}
+
+			//Machine type filter is set
+			if (System.Enum.IsDefined(typeof(MachineTypes), filterMachineType))
+			{
+				joblines = joblines.Where(jl => jl.MachineType == filterMachineType);
+			}
+
+			//Machine id is set
+			joblines = joblines.Where(jl => jl.MachineId == filterMachineId);
+
+			//Filter on date
+			if (filterDateTime != DateTime.MinValue)
+			{
+				joblines = joblines.Where(jl => jl.Job.DeliveryDate == filterDateTime);
+			}
+
+
+			joblines = joblines.Where(jl => jl.Completed == false);
+
+			switch (sortOrder)
+			{
+				case "jobNumber_desc":
+					joblines = joblines.OrderByDescending(u => u.Job.JobNumber);
+					break;
+				case "quantity":
+					joblines = joblines.OrderBy(jl => jl.Job.Quantity);
+					break;
+				case "quantity_desc":
+					joblines = joblines.OrderByDescending(jl => jl.Job.Quantity);
+					break;
+
+				case "pageQuantity":
+					joblines = joblines.OrderBy(jl => jl.Job.PageQuantity);
+					break;
+				case "pageQuantity_desc":
+					joblines = joblines.OrderByDescending(jl => jl.Job.PageQuantity);
+					break;
+				default:
+					joblines = joblines.OrderBy(u => u.Job.JobNumber);
+					break;
+			}
+
+			jobListVm.filterMachineId = filterMachineId;
+			jobListVm.filterDateTime = filterDateTime.ToString("yyyy-MM-dd");
+			jobListVm.jobLineList = await PaginatedList<JobLine>.CreateAsync(joblines.AsNoTracking(), page ?? 1, PageSize);
+			jobListVm.totalTime = calculateTotalTime(filterMachineId, filterDateTime);
+
+			return View(jobListVm);
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> NoMachine(string sortOrder,
+										string currentFilter,
+										string searchString,
+										int? page,
+										MachineTypes filterMachineType,
+										DateTime filterDateTime)
+		{
+			JobListNoMachineVM jobListVm = new JobListNoMachineVM();
+			filterDateTime = handleJobFilterDateTime(filterDateTime);
+
+			jobListVm.currentSort = sortOrder;
+			jobListVm.currentFilter = searchString;
+			jobListVm.jobNumberSortParm = String.IsNullOrEmpty(sortOrder) ? "jobNumber_desc" : "";
+			jobListVm.quantitySortParm = sortOrder == "quantity" ? "quantity_desc" : "quantity";
+			jobListVm.pageQuantitySortParm = sortOrder == "pageQuantity" ? "pageQuantity_desc" : "pageQuantity";
+
+			if (searchString != currentFilter)
+			{
+				page = 1;
+			}
+
+			var joblines = _context.JobLines.Include(j => j.Job).Include(j => j.Machine).AsQueryable();
+			var machineList = _context.Machines.AsQueryable();
+
+			//Add filters
+			if (!String.IsNullOrEmpty(searchString))
+			{
+				joblines = joblines.Where(jl => jl.Job.JobNumber.Contains(searchString));
+			}
+
+			//Machine type filter is set
+			if (System.Enum.IsDefined(typeof(MachineTypes), filterMachineType))
+			{
+				joblines = joblines.Where(jl => jl.MachineType == filterMachineType);
+				machineList = machineList.Where(m => m.Type == filterMachineType);
+			}
+
+			//Filter on date
+			if (filterDateTime != DateTime.MinValue)
+			{
+				joblines = joblines.Where(jl => jl.Job.DeliveryDate == filterDateTime);
+			}
+
+			//filter on completed
+			joblines = joblines.Where(jl => jl.Completed == false);
+
+
+			//Filter on no machine
+			//joblines = joblines.Where(jl => jl.MachineId == null);
+
+
+			switch (sortOrder)
+			{
+				case "jobNumber_desc":
+					joblines = joblines.OrderByDescending(u => u.Job.JobNumber);
+					break;
+				case "quantity":
+					joblines = joblines.OrderBy(jl => jl.Job.Quantity);
+					break;
+				case "quantity_desc":
+					joblines = joblines.OrderByDescending(jl => jl.Job.Quantity);
+					break;
+
+				case "pageQuantity":
+					joblines = joblines.OrderBy(jl => jl.Job.PageQuantity);
+					break;
+				case "pageQuantity_desc":
+					joblines = joblines.OrderByDescending(jl => jl.Job.PageQuantity);
+					break;
+				default:
+					joblines = joblines.OrderBy(u => u.Job.JobNumber);
+					break;
+			}
+
+			jobListVm.machineList = machineList.ToList();
+			jobListVm.filterDateTime = filterDateTime.ToString("yyyy-MM-dd");
+			jobListVm.jobLineList = await PaginatedList<JobLine>.CreateAsync(joblines.AsNoTracking(), page ?? 1, PageSize);
+
+			return View(jobListVm);
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> Completed(string sortOrder,
+											   string currentFilter,
+											   string searchString,
+											   int? page,
+											   MachineTypes filterMachineType,
+											   DateTime filterDateTime)
+		{
+			JobListCompletedVM jobListVm = new JobListCompletedVM();
+			filterDateTime = handleJobFilterDateTime(filterDateTime);
+
+			jobListVm.currentSort = sortOrder;
+			jobListVm.currentFilter = searchString;
+			jobListVm.jobNumberSortParm = String.IsNullOrEmpty(sortOrder) ? "jobNumber_desc" : "";
+			jobListVm.quantitySortParm = sortOrder == "quantity" ? "quantity_desc" : "quantity";
+			jobListVm.pageQuantitySortParm = sortOrder == "pageQuantity" ? "pageQuantity_desc" : "pageQuantity";
+
+			if (searchString != currentFilter)
+			{
+				page = 1;
+			}
+
+			var joblines = _context.JobLines.Include(j => j.Job).Include(j => j.Machine).AsQueryable();
+			var machineList = _context.Machines.AsQueryable();
+
+			//Add filters
+			if (!String.IsNullOrEmpty(searchString))
+			{
+				joblines = joblines.Where(jl => jl.Job.JobNumber.Contains(searchString));
+			}
+
+			//Machine type filter is set
+			if (System.Enum.IsDefined(typeof(MachineTypes), filterMachineType))
+			{
+				joblines = joblines.Where(jl => jl.MachineType == filterMachineType);
+				machineList = machineList.Where(m => m.Type == filterMachineType);
+			}
+
+			//Filter on date
+			if (filterDateTime != DateTime.MinValue)
+			{
+				joblines = joblines.Where(jl => jl.Job.DeliveryDate == filterDateTime);
+			}
+
+			//filter on completed
+			joblines = joblines.Where(jl => jl.Completed == true);
+
+			switch (sortOrder)
+			{
+				case "jobNumber_desc":
+					joblines = joblines.OrderByDescending(u => u.Job.JobNumber);
+					break;
+				case "quantity":
+					joblines = joblines.OrderBy(jl => jl.Job.Quantity);
+					break;
+				case "quantity_desc":
+					joblines = joblines.OrderByDescending(jl => jl.Job.Quantity);
+					break;
+
+				case "pageQuantity":
+					joblines = joblines.OrderBy(jl => jl.Job.PageQuantity);
+					break;
+				case "pageQuantity_desc":
+					joblines = joblines.OrderByDescending(jl => jl.Job.PageQuantity);
+					break;
+				default:
+					joblines = joblines.OrderBy(u => u.Job.JobNumber);
+					break;
+			}
+
+			jobListVm.machineList = machineList.ToList();
+			jobListVm.filterDateTime = filterDateTime.ToString("yyyy-MM-dd");
+			jobListVm.jobLineList = await PaginatedList<JobLine>.CreateAsync(joblines.AsNoTracking(), page ?? 1, PageSize);
+
+			return View(jobListVm);
+		}
+
+
+		[HttpGet]
+        public  IActionResult Import(MachineTypes machineType)
         {
             JobImportVM jobImportVM = new JobImportVM();
             jobImportVM.machineType = machineType;
@@ -140,7 +461,7 @@ namespace ZwartOpWit.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Import(MachineTypes machineType, IFormFile files)
+        public IActionResult Import(MachineTypes machineType, IFormFile files)
 		{
 			var uploads = Path.Combine(_environment.ContentRootPath, "uploads");
 
@@ -210,7 +531,7 @@ namespace ZwartOpWit.Controllers
 
 			_context.SaveChanges();
 
-			return RedirectToAction("Index");
+			return RedirectToAction("Todo");
 		}
 
 
@@ -285,7 +606,7 @@ namespace ZwartOpWit.Controllers
             _context.Entry(jobLine).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             _context.SaveChanges();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Todo");
         }
 
         public TimeSpan calculateTotalTime(int machineId, DateTime deliveryDate)
@@ -391,7 +712,7 @@ namespace ZwartOpWit.Controllers
             _context.Entry(job).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             _context.Entry(jobLine).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             _context.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("ToDo");
         }
     }
 }

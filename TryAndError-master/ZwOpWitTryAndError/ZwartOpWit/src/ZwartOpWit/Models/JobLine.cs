@@ -14,7 +14,7 @@ namespace ZwartOpWit.Models
         public int Id { get; set; }
         [ForeignKey("MachineId")]
         public Machine Machine { get; set; }
-        public int MachineId { get; set; }
+        public int? MachineId { get; set; }
         [ForeignKey("JobId")]
         public Job Job { get; set; }
         public int JobId { get; set; }

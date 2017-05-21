@@ -16840,10 +16840,10 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\ZwOpWit\\TryAndError-master\\ZwOpWitTryAndError\\ZwartOpWit\\src\\ZwartOpWit\\ZwartOpWit.csproj",
+      "projectUniqueName": "C:\\ZwOpWitJo2\\TryAndError-master\\ZwOpWitTryAndError\\ZwartOpWit\\src\\ZwartOpWit\\ZwartOpWit.csproj",
       "projectName": "ZwartOpWit",
-      "projectPath": "C:\\ZwOpWit\\TryAndError-master\\ZwOpWitTryAndError\\ZwartOpWit\\src\\ZwartOpWit\\ZwartOpWit.csproj",
-      "outputPath": "C:\\ZwOpWit\\TryAndError-master\\ZwOpWitTryAndError\\ZwartOpWit\\src\\ZwartOpWit\\obj\\",
+      "projectPath": "C:\\ZwOpWitJo2\\TryAndError-master\\ZwOpWitTryAndError\\ZwartOpWit\\src\\ZwartOpWit\\ZwartOpWit.csproj",
+      "outputPath": "C:\\ZwOpWitJo2\\TryAndError-master\\ZwOpWitTryAndError\\ZwartOpWit\\src\\ZwartOpWit\\obj\\",
       "projectStyle": "PackageReference",
       "originalTargetFrameworks": [
         "netcoreapp1.1"

@@ -61,7 +61,39 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Resources\Views..Job.Update.nl.resx">
+    <EmbeddedResource Update="Resources\Views.Job.ToDo.en.resx">
+      <LastGenOutput>Views.Job.Index.en.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Views.Job.ToDo.nl.resx">
+      <LastGenOutput>Views.Job.Index.en.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Views.Job.Machine.en.resx">
+      <LastGenOutput>Views.Job.Index.en.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Views.Job.Machine.nl.resx">
+      <LastGenOutput>Views.Job.Index.en.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Views.Job.NoMachine.en.resx">
+      <LastGenOutput>Views.Job.Index.en.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Views.Job.NoMachine.nl.resx">
+      <LastGenOutput>Views.Job.Index.en.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Views.Job.Completed.en.resx">
+      <LastGenOutput>Views.Job.Index.en.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Views.Job.Completed.nl.resx">
+      <LastGenOutput>Views.Job.Index.en.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Views.Job.Update.nl.resx">
       <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Views.Job.Import.nl.resx">

@@ -12,10 +12,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ZwartOpWit.Helpers;
 using ZwartOpWit.Models.Viewmodels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ZwartOpWit.Controllers
 {
-    public class UserController : Controller
+	[Authorize(Policy = "RequireAdminRole")]
+	public class UserController : Controller
     {
         private readonly AppDBContext _context;
         private readonly UserManager<User> _userManager;

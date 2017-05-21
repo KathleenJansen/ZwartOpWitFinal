@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 using ZwartOpWit.Models;
 using ZwartOpWit.Models.Viewmodels;
 using ZwartOpWit.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ZwartOpWit.Controllers
 {
-    public class MachineController: Controller
+	[Authorize(Policy = "RequireAdminRole")]
+	public class MachineController: Controller
     {
         private readonly AppDBContext _context;
         const int PageSize = 3;

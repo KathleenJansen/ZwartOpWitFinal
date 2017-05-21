@@ -8,10 +8,12 @@ using ZwartOpWit.Models.Viewmodels;
 using ZwartOpWit.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ZwartOpWit.Controllers
 {
-    public class TimeRegisterController: Controller
+	[Authorize(Policy = "RequireAdminRole")]
+	public class TimeRegisterController: Controller
     {
         private readonly AppDBContext _context;
         const int PageSize = 3;

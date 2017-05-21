@@ -32,6 +32,6 @@ namespace ZwartOpWit.Models
             builder.Entity<Department>().HasKey(m => m.Id);
             builder.Entity<JobLine>().HasKey(m => m.Id);
             builder.Entity<TimeRegister>().HasKey(m => m.Id);
-        }
+		}
     }
 }
