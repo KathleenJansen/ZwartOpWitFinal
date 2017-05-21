@@ -184,3 +184,4 @@ C:\ZwOpWitJo2\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\ob
 C:\ZwOpWitJo2\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\obj\Debug\netcoreapp1.1\ZwartOpWit.Resources.Views.Job.NoMachine.nl.resources
 C:\ZwOpWitJo2\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\obj\Debug\netcoreapp1.1\ZwartOpWit.Resources.Views.Job.ToDo.en.resources
 C:\ZwOpWitJo2\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\obj\Debug\netcoreapp1.1\ZwartOpWit.Resources.Views.Job.ToDo.nl.resources
+C:\ZwOpWitJo2\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\obj\Debug\netcoreapp1.1\ZwartOpWit.csprojResolveAssemblyReference.cache

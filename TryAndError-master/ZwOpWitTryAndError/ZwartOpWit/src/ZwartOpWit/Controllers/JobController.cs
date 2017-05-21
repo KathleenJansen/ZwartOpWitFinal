@@ -15,7 +15,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ZwartOpWit.Controllers
 {
-	[Authorize(Policy = "RequireAdminRole, RequireEmployeeRole")]
+	[Authorize(Policy = "RequireEmployeeRole")]
+	[Authorize(Policy = "RequireAdminRole")]
 	public class JobController : Controller
     {
         //Constant to determine session filter date time

@@ -19,12 +19,12 @@
         </div>
         <div class="form-group">
             <label asp-for="timeRegister.Start">@Localizer["StartTime"]:</label>
-            <input asp-for="timeRegister.Start" type="text" value="@Model.timeRegister.Start" class="form-control" />
+            <input asp-for="timeRegister.Start" type="text"  class="form-control" />
             <span asp-validation-for="timeRegister.Start" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="timeRegister.Stop">@Localizer["StopTime"]:</label>
-            <input asp-for="timeRegister.Stop" type="text" value="@Model.timeRegister.Stop" class="form-control" />
+            <input asp-for="timeRegister.Stop" type="text" class="form-control" />
             <span asp-validation-for="timeRegister.Stop" class="text-danger"></span>
         </div>
         <a class="btn btn-default" asp-area="" asp-controller="TimeRegister" asp-action="Index">@Localizer["Back"]</a>

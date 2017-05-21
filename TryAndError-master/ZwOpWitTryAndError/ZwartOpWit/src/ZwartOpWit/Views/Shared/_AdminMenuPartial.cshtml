@@ -3,8 +3,8 @@
 @inject IAuthorizationService AuthorizationService
 @inject IViewLocalizer Localizer
 
-@*@if (await AuthorizationService.AuthorizeAsync(User, "RequireAdminRole"))
-{*@
+@if (await AuthorizationService.AuthorizeAsync(User, "RequireAdminRole"))
+{
 <div class="navbar navbar-inverse navbar-default">
     <div class="container">
         <div class="navbar-header">
@@ -25,4 +25,4 @@
         </div>
     </div>
 </div>
-@*}*@
+}
