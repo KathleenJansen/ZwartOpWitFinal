@@ -87,7 +87,7 @@ namespace ZwartOpWit.Controllers
         public async Task<IActionResult> Read(string id)
         {
             User user = await _userManager.FindByIdAsync(id);
-            UserVM userVM = new UserVM(_roleManager, _userManager, user);
+            UserUpdateVM userVM = new UserUpdateVM(_roleManager, _userManager, user);
 
             return View(userVM);
         }
@@ -127,31 +127,31 @@ namespace ZwartOpWit.Controllers
         public async Task<IActionResult> Update(string id)
         {
             User user = await _userManager.FindByIdAsync(id);
-            UserVM userVM = new UserVM(_roleManager, _userManager, user);
+            UserUpdateVM userVM = new UserUpdateVM(_roleManager, _userManager, user);
 
             return View(userVM);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(string id, UserVM model)
+        public async Task<IActionResult> Update(User _userTmp, String ApplicationRoleId)
         {
             if (ModelState.IsValid)
             {
-                User user = await _userManager.FindByIdAsync(id);
+                User user = await _userManager.FindByIdAsync(_userTmp.Id);
                 if (user != null)
                 {
-                    user.Email = model.Email;
+                    user.Email = _userTmp.Email;
                     string existingRole = _userManager.GetRolesAsync(user).Result.Single();
                     string existingRoleId = _roleManager.Roles.Single(r => r.Name == existingRole).Id;
                     IdentityResult result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
                     {
-                        if (existingRoleId != model.ApplicationRoleId)
+                        if (existingRoleId != ApplicationRoleId)
                         {
                             IdentityResult roleResult = await _userManager.RemoveFromRoleAsync(user, existingRole);
                             if (roleResult.Succeeded)
                             {
-                                IdentityRole applicationRole = await _roleManager.FindByIdAsync(model.ApplicationRoleId);
+                                IdentityRole applicationRole = await _roleManager.FindByIdAsync(ApplicationRoleId);
                                 if (applicationRole != null)
                                 {
                                     IdentityResult newRoleResult = await _userManager.AddToRoleAsync(user, applicationRole.Name);
@@ -164,6 +164,12 @@ namespace ZwartOpWit.Controllers
                         }
                     }
                 }
+            }
+            else
+            {
+                var errors = ModelState.Select(x => x.Value.Errors)
+                                       .Where(y => y.Count > 0)
+                                       .ToList();
             }
 
 

@@ -124,6 +124,7 @@ namespace ZwartOpWit.Controllers
 
 			jobListVm.filterMachineId = filterMachineId;
             jobListVm.machineList = machineList.ToList();
+            jobListVm.filterMachineType = filterMachineType;
             jobListVm.filterDateTime = filterDateTime.ToString("yyyy-MM-dd");
             jobListVm.jobLineList = await PaginatedList<JobLine>.CreateAsync(joblines.AsNoTracking(), page ?? 1, PageSize);
             jobListVm.totalTime = calculateTotalTime(filterMachineId, filterDateTime);
@@ -207,8 +208,10 @@ namespace ZwartOpWit.Controllers
 
 			jobListVm.filterDateTime = filterDateTime.ToString("yyyy-MM-dd");
 			jobListVm.jobLineList = await PaginatedList<JobLine>.CreateAsync(joblines.AsNoTracking(), page ?? 1, PageSize);
+            jobListVm.filterMachineType = filterMachineType;
 
-			return View(jobListVm);
+
+            return View(jobListVm);
 		}
 
 		[HttpGet]
@@ -287,8 +290,9 @@ namespace ZwartOpWit.Controllers
 			jobListVm.filterDateTime = filterDateTime.ToString("yyyy-MM-dd");
 			jobListVm.jobLineList = await PaginatedList<JobLine>.CreateAsync(joblines.AsNoTracking(), page ?? 1, PageSize);
 			jobListVm.totalTime = calculateTotalTime(filterMachineId, filterDateTime);
+            jobListVm.filterMachineType = filterMachineType;
 
-			return View(jobListVm);
+            return View(jobListVm);
 		}
 
 		[HttpGet]
@@ -369,8 +373,9 @@ namespace ZwartOpWit.Controllers
 			jobListVm.machineList = machineList.ToList();
 			jobListVm.filterDateTime = filterDateTime.ToString("yyyy-MM-dd");
 			jobListVm.jobLineList = await PaginatedList<JobLine>.CreateAsync(joblines.AsNoTracking(), page ?? 1, PageSize);
+            jobListVm.filterMachineType = filterMachineType;
 
-			return View(jobListVm);
+            return View(jobListVm);
 		}
 
 		[HttpGet]
@@ -446,8 +451,9 @@ namespace ZwartOpWit.Controllers
 			jobListVm.machineList = machineList.ToList();
 			jobListVm.filterDateTime = filterDateTime.ToString("yyyy-MM-dd");
 			jobListVm.jobLineList = await PaginatedList<JobLine>.CreateAsync(joblines.AsNoTracking(), page ?? 1, PageSize);
+            jobListVm.filterMachineType = filterMachineType;
 
-			return View(jobListVm);
+            return View(jobListVm);
 		}
 
 
