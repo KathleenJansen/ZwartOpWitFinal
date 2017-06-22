@@ -97,7 +97,7 @@ namespace ZwartOpWit.Controllers
 			if (filterNoMachine)
 			{
 				joblines = joblines.Where(jl => jl.MachineId == 0);
-			}
+            }
 
             switch (sortOrder)
             {
@@ -179,9 +179,10 @@ namespace ZwartOpWit.Controllers
 
 			//Filter on no machine
 			joblines = joblines.Where(jl => jl.MachineId != 0);
+            joblines = joblines.Where(jl => jl.MachineId != null);
 
 
-			switch (sortOrder)
+            switch (sortOrder)
 			{
 				case "jobNumber_desc":
 					joblines = joblines.OrderByDescending(u => u.Job.JobNumber);
@@ -560,7 +561,7 @@ namespace ZwartOpWit.Controllers
             }
 
             return RedirectToAction(
-                        "Index",
+                        "NoMachine",
                         new { sortOrder = sortOrder, currentFilter = currentFilter, searchString = searchString, page = page, filterMachineId = filterMachineId, filterMachineType = filterMachineType, filterDateTime = filterDateTime });
         }
 
