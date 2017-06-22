@@ -15,8 +15,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ZwartOpWit.Controllers
 {
-	[Authorize(Policy = "RequireEmployeeRole")]
-	[Authorize(Policy = "RequireAdminRole")]
 	public class JobController : Controller
     {
         //Constant to determine session filter date time
@@ -513,7 +511,7 @@ namespace ZwartOpWit.Controllers
 					job.PaperCover = "no cover";
 					job.Heigth = 297;
 					job.Width = 210;
-					job.PageQuantity = int.Parse(splitArray[6].Remove(2));
+					//job.PageQuantity = int.Parse(splitArray[6]);
 
 					_context.Jobs.Add(job);
 				}

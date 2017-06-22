@@ -45,7 +45,6 @@
 					<th>@Localizer["PaperCover"]</th>
 					<th>@Localizer["Machine"]</th>
 					<th>@Localizer["Time"]</th>
-					<th>@Localizer["Out"]</th>
 					<th>@Localizer["Edit"]</th>
 				</tr>
 			</thead>
@@ -60,9 +59,6 @@
 							<td>@jobLine.Job.PaperCover</td>
 							<td>@jobLine.Machine.Name</td>
 							<td>@jobLine.CalculatedTime</td>
-							<td>
-								<a asp-controller="Job" asp-action="AssignJobLine" asp-route-jobLineId="@jobLine.Id" asp-route-machineId="1" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
-							</td>
 							<td>
 								<a asp-controller="Job" asp-action="Update" asp-route-jobId="@jobLine.Id" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
 							</td>

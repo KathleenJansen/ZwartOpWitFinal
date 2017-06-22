@@ -23,9 +23,6 @@ namespace ZwartOpWit.Models
         public string UserId { get; set; }
         public MachineTypes MachineType { get; set; }
         public int Sequence { get; set; }
-        [ForeignKey("DepartmentId")]
-        public int DepartmentId { get; set; }
-        public Department Department { get; set; }
         public bool Completed { get; set; }
         public TimeSpan CalculatedTime { get; set; }
 

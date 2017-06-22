@@ -53,7 +53,6 @@
                             <th>@machine.Name</th>
                         }
                     }
-                    <th>@Localizer["Out"]</th>
                     <th>@Localizer["Edit"]</th>
                 </tr>
             </thead>
@@ -81,10 +80,7 @@
                                 }
                             }
                             <td>
-                                <a asp-controller="Job" asp-action="AssignJobLine" asp-route-jobLineId="@jobLine.Id" asp-route-machineId="1" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
-                            </td>
-                            <td>
-                                <a asp-controller="Job" asp-action="Update" asp-route-jobId="@jobLine.Id" class="btn btn-default"><span class="glyphicon glyphicon-record"></span></a>
+                                <a asp-controller="Job" asp-action="Update" asp-route-jobId="@jobLine.Id" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span></a>
                             </td>
                         </tr>
                     }

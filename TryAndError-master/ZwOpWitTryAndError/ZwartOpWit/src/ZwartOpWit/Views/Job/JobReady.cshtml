@@ -8,7 +8,7 @@
 <div>
     <form asp-controller="Job" >
         <input type="submit" value="@Localizer["Yes"]" asp-action="JobReady" asp-route-jobId="@Model.jobId" asp-route-yes ="true"/>
-        <input type="submit" value="@Localizer["Stop"]" asp-action="JobReady" asp-route-jobId="@Model.jobId" asp-route-yes ="false"/>
+        <input type="submit" value="@Localizer["No"]" asp-action="JobReady" asp-route-jobId="@Model.jobId" asp-route-yes ="false"/>
     </form>
     
 </div>

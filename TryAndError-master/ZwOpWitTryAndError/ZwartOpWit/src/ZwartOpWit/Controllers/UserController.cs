@@ -16,7 +16,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ZwartOpWit.Controllers
 {
-	[Authorize(Policy = "RequireAdminRole")]
 	public class UserController : Controller
     {
         private readonly AppDBContext _context;
@@ -171,7 +170,7 @@ namespace ZwartOpWit.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
             if (!String.IsNullOrEmpty(id))

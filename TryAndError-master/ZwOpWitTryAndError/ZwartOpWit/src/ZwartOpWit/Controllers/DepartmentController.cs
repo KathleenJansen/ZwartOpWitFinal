@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ZwartOpWit.Controllers
 {
-	[Authorize(Policy = "RequireAdminRole")]
 	public class DepartmentController: Controller
     {
         private readonly AppDBContext _context;

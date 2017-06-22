@@ -120,8 +120,8 @@
   <data name="JobReady" xml:space="preserve">
     <value>Job ready?</value>
   </data>
-  <data name="Stop" xml:space="preserve">
-    <value>Stop</value>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
