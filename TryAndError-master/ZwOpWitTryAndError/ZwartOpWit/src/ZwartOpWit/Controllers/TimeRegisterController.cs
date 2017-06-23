@@ -42,7 +42,7 @@ namespace ZwartOpWit.Controllers
             }
 
             var timeRegisters = _context.TimeRegisters.Include(u => u.User).AsQueryable();
-            timeRegisters = _context.TimeRegisters.Include(jl => jl.JobLine).AsQueryable();
+            timeRegisters = timeRegisters.Include(jl => jl.JobLine).AsQueryable();
 
             if (!String.IsNullOrEmpty(searchString))
             {

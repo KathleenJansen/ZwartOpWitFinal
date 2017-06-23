@@ -193,7 +193,6 @@ C:\EindwerkDemoTest\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOp
 C:\EindwerkDemoTest\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\bin\Debug\netcoreapp1.1\ZwartOpWit.pdb
 C:\EindwerkDemoTest\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\bin\Debug\netcoreapp1.1\en\ZwartOpWit.resources.dll
 C:\EindwerkDemoTest\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\bin\Debug\netcoreapp1.1\nl\ZwartOpWit.resources.dll
-C:\EindwerkDemoTest\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\obj\Debug\netcoreapp1.1\ZwartOpWit.csprojResolveAssemblyReference.cache
 C:\EindwerkDemoTest\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\obj\Debug\netcoreapp1.1\ZwartOpWit.Resources.Views.Account.Login.en.resources
 C:\EindwerkDemoTest\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\obj\Debug\netcoreapp1.1\ZwartOpWit.Resources.Views.Account.Login.nl.resources
 C:\EindwerkDemoTest\TryAndError-master\ZwOpWitTryAndError\ZwartOpWit\src\ZwartOpWit\obj\Debug\netcoreapp1.1\ZwartOpWit.Resources.Views.Department.Create.en.resources

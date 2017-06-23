@@ -6,11 +6,11 @@ using ZwartOpWit.Models;
 
 namespace ZwartOpWit.Helpers.CalculationMethods
 {
-    public class Always5000Ticks : ICalculationMethod
+    public class Always30Min : ICalculationMethod
     {
         public TimeSpan calculacte(JobLine jobLine)
         {
-            return new TimeSpan(5000);
+            return new TimeSpan(0, 30,0);
         }
     }
 }

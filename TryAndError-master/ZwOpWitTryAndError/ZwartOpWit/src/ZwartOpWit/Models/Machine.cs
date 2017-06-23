@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ZwartOpWit.Models
 {
     public enum MachineTypes { Stitch, Typo, Fold, Score, Busch };
-    public enum CalculationMethodTypes { None, StichMain, Always5000Ticks, Always1Hour }
+    public enum CalculationMethodTypes { None, StichMain, Always30Min, Always1Hour }
 
     public class Machine
     {

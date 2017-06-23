@@ -33,105 +33,7 @@ namespace ZwartOpWit.Controllers
             _environment = envivornment;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Index(string sortOrder,
-                                                string currentFilter,
-                                                string searchString,
-                                                int? page,
-                                                int filterMachineId,
-                                                MachineTypes filterMachineType,
-                                                DateTime filterDateTime,
-                                                bool filterCompleted,
-												bool filterNoMachine)
-        {
-            JobListVM jobListVm = new JobListVM();
-            filterDateTime = handleJobFilterDateTime(filterDateTime);
-
-            jobListVm.currentSort = sortOrder;
-            jobListVm.currentFilter = searchString;
-            jobListVm.jobNumberSortParm = String.IsNullOrEmpty(sortOrder) ? "jobNumber_desc" : "";
-            jobListVm.quantitySortParm = sortOrder == "quantity" ? "quantity_desc" : "quantity";
-            jobListVm.pageQuantitySortParm = sortOrder == "pageQuantity" ? "pageQuantity_desc" : "pageQuantity";
-
-            if (searchString != currentFilter)
-            {
-                page = 1;
-            }
-
-            var joblines = _context.JobLines.Include(j => j.Job).Include(j => j.Machine).AsQueryable();
-            var machineList = _context.Machines.AsQueryable();
-
-            //Add filters
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                joblines = joblines.Where(jl => jl.Job.JobNumber.Contains(searchString));
-            }
-
-            //Machine type filter is set
-            if (System.Enum.IsDefined(typeof(MachineTypes), filterMachineType))
-            {
-                joblines = joblines.Where(jl => jl.MachineType == filterMachineType);
-                machineList = machineList.Where(m => m.Type == filterMachineType);
-            }
-
-            //Machine id is set
-            if (filterMachineId != 0)
-            {
-                joblines = joblines.Where(jl => jl.MachineId == filterMachineId);
-                machineList = machineList.Where(m => m.Id == filterMachineId);
-            }
-
-            //Filter on date
-            if (filterDateTime != DateTime.MinValue)
-            {
-                joblines = joblines.Where(jl => jl.Job.DeliveryDate == filterDateTime);
-            }
-
-			//filter on completed
-			if (filterCompleted)
-			{
-				joblines = joblines.Where(jl => jl.Completed == true);
-			}
-
-			//Filter on no machine
-			if (filterNoMachine)
-			{
-				joblines = joblines.Where(jl => jl.MachineId == 0);
-            }
-
-            switch (sortOrder)
-            {
-                case "jobNumber_desc":
-                    joblines = joblines.OrderByDescending(u => u.Job.JobNumber);
-                    break;
-                case "quantity":
-                    joblines = joblines.OrderBy(jl => jl.Job.Quantity);
-                    break;
-                case "quantity_desc":
-                    joblines = joblines.OrderByDescending(jl => jl.Job.Quantity);
-                    break;
-
-                case "pageQuantity":
-                    joblines = joblines.OrderBy(jl => jl.Job.PageQuantity);
-                    break;
-                case "pageQuantity_desc":
-                    joblines = joblines.OrderByDescending(jl => jl.Job.PageQuantity);
-                    break;
-                default:
-                    joblines = joblines.OrderBy(u => u.Job.JobNumber);
-                    break;
-            }
-
-			jobListVm.filterMachineId = filterMachineId;
-            jobListVm.machineList = machineList.ToList();
-            jobListVm.filterMachineType = filterMachineType;
-            jobListVm.filterDateTime = filterDateTime.ToString("yyyy-MM-dd");
-            jobListVm.jobLineList = await PaginatedList<JobLine>.CreateAsync(joblines.AsNoTracking(), page ?? 1, PageSize);
-            jobListVm.totalTime = calculateTotalTime(filterMachineId, filterDateTime);
-
-            return View(jobListVm);
-        }
-
+       
 		[HttpGet]
 		public async Task<IActionResult> ToDo(string sortOrder,
 											   string currentFilter,
@@ -344,7 +246,7 @@ namespace ZwartOpWit.Controllers
 
 
 			//Filter on no machine
-			//joblines = joblines.Where(jl => jl.MachineId == null);
+			joblines = joblines.Where(jl => jl.MachineId == null);
 
 
 			switch (sortOrder)

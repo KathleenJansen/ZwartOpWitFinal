@@ -42,8 +42,8 @@ namespace ZwartOpWit.Models
                     case CalculationMethodTypes.Always1Hour:
 						calcMethod = new Always1Hour();
                         break;
-                    case CalculationMethodTypes.Always5000Ticks:
-						calcMethod = new Always5000Ticks();
+                    case CalculationMethodTypes.Always30Min:
+						calcMethod = new Always30Min();
 
 						break;
                 }
